@@ -1,0 +1,19 @@
+https://www.chinadaily.com.cn/a/202308/06/WS64cf3109a31035260b81a83a.html
+
+Huawei stresses security as it unveils new OS
+By Zhou Mo | chinadaily.com.cn | Updated: 2023-08-06 14:07
+
+Customers try out Huawei products powered by HarmonyOS at a Huawei outlet in Shanghai in June. [Photo by Wang Gang/For China Daily]
+Huawei Technologies Co said it is committed to safeguarding cybersecurity and privacy protection as the Chinese telecom equipment and smartphone maker officially launched a new version of its self-developed operating system on Friday with artificial intelligence capabilities.
+
+The Shenzhen-headquartered tech giant released HarmonyOS 4 at the Huawei Developer Conference 2023, which is being held in Dongguan, southern Guangdong province, from Friday to Sunday.
+
+"Huawei has always placed cybersecurity and privacy protection as its guiding principle. We are committed to safeguarding the privacy of users with leading innovative technologies," He Gang, chief operating officer of Huawei consumer business group, said.
+
+Yu Chengdong, CEO of Huawei's consumer business group, said security and privacy protection is the "primary principle" for all the company's innovations based on AI, pledging to use the advanced technology in a "responsible" way.
+
+According to the company, it has updated the privacy function in the latest version of HarmonyOS operating system, which will provide a cleaner and safer environment for its users. That includes intercepting the installation of risky mobile applications, risk warning, strict management of app permission, etc.
+
+A survey by market research firm Ipsos shows that the level of satisfaction for HarmonyOS in terms of privacy security is the highest compared to the other two major operating systems.
+
+While 76 percent of users are highly satisfied with the privacy protection of Huawei's operating system, the percentage for iOS and Android is 75 percent and 69 percent, respectively.

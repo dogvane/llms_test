@@ -1,0 +1,43 @@
+https://www.chinadaily.com.cn/a/202307/19/WS64b730d4a31035260b817322.html
+
+Timely steps seen facilitating breakthroughs in generative AI
+By MA SI | China Daily | Updated: 2023-07-19 09:11
+
+A robot throws a basketball during the World Artificial Intelligence Conference 2023 in Shanghai on July 6, 2023. [Photo/Xinhua]
+China's timely measures for managing generative artificial intelligence services will give a strong boost to the technology's healthy development and help nurture key future economic growth drivers to hedge against external uncertainties, executives and experts said.
+
+Acknowledging that generative AI will create many new security challenges and ethical risks, they said China's moves highlight an emphasis on balancing development and security of new technologies, and are in line with international practices of bettering governance over AI.
+
+The comments came as China's 24-item interim measures for managing generative AI services are scheduled to take effect on Aug 15.
+
+Wu Shenkuo, a law professor at Beijing Normal University and deputy director of the Internet Society of China's Research Center, said, "The measures, unveiled by seven authorities last week, are in sync with the latest technological trends and reflect the agility and efficiency of China's cyberspace supervision mechanism."
+
+Generative AI refers to computer algorithms that produce new text, images, code, video or audio in a humanlike fashion. It is the key technology behind ChatGPT, an AI chatbot that has taken the world by storm.
+
+The Associated Press reported on Friday that the US Federal Trade Commission has launched an investigation into ChatGPT's developer OpenAI on whether it violates consumer protection laws by scraping public data and publishing false information through ChatGPT.
+
+Zhang Yong, chairman and CEO of Alibaba's Cloud Intelligence Group, said developing safe and reliable AI has become an industry consensus, and the improvement of relevant laws and regulations will cultivate "good soil" for its sustainable development.
+
+Zhou Hongyi, founder of Chinese cybersecurity company 360 Security Group, said the measures signal the government's positive attitude toward innovation in generative AI, and inject strong confidence into tech companies.
+
+"The document values coordination between development and security. While encouraging innovation, it also highlights the responsibilities companies must bear as online content producers in accordance with the law," Zhou said.
+
+He added that "the real opportunity of generative AI" lies in business applications rather than consumer-oriented uses.
+
+His views were echoed by Goldman Sachs Research, which predicted in a report that generative AI could drive a 7 percent increase in global GDP, or almost $7 trillion, over a 10-year period.
+
+Kash Rangan, senior software analyst at Goldman Sachs Research, said generative AI is making inroads in business applications, improving the day-to-day efficiency of knowledge workers, helping scientists develop drugs faster and accelerating the development of software code among others.
+
+Li Shuchong, vice-president of CEC Cloud, the cloud computing arm of China Electronics Corp, said "the measures come just at the right time", and he was most excited by the measure that highlights the need to encourage independent innovation in foundational technologies such as AI chips.
+
+"Now, it is very difficult to get a chip from US company Nvidia to do AI training. We should not let our innovation in generative AI be blocked by others," Li said.
+
+AI chips are crucial to the development of the ongoing AI boom, but Washington has placed tough restrictions on exports of US companies' most powerful AI chips to China.
+
+Eager to break the US restrictions, the Ministry of Industry and Information Technology, the country's top industry regulator, said at a news conference on Monday that more efforts will be made to accelerate the research and development of key chips such as graphics processing units, or GPUs, that are the most efficient in training data for AI.
+
+Progress on this front is underway. Advanced Technology Stellar, a Shanghai-based startup, for instance, unveiled its self-developed chip design architecture for GPU in June.
+
+Liu Qingfeng, chairman of Chinese AI company iFlytek Co Ltd, said, "Chinese companies must devote big, real money to R&D in fundamental technologies to achieve breakthroughs in AI."
+
+The firm has self-developed all key technologies for its AI model SparkDesk to challenge ChatGPT, it said, adding that it has participated in discussions on drafting the measures.

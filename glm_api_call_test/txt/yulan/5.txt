@@ -1,0 +1,6 @@
+专家表示，中国央行制定的数据安全规则将有助于金融部门。周四，中国央行发布了最新的数据安全规则草案，专家表示，这些规则不会给企业带来额外的合规负担，而是会鼓励数据驱动的金融创新，同时确保数据安全。
+----总结----
+The Central Bank of China has recently released the latest draft of data security regulations that are expected to promote financial innovation driven by data while ensuring data security. According to experts, these regulations will not impose additional compliance burdens on enterprises and will encourage the use of data-driven finance while ensuring data security.
+----性能----
+原文长度:4640    译文长度:97 总结长度: 369
+翻译耗时: 32.0215118sec  总结耗时:35.1541022sec

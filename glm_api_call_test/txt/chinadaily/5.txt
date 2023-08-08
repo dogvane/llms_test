@@ -1,0 +1,41 @@
+https://www.chinadaily.com.cn/a/202308/04/WS64cc30b6a31035260b81a34b.html
+
+Experts: Data rules will help financial sector
+By ZHOU LANXU | CHINA DAILY | Updated: 2023-08-04 07:28
+
+A pedestrian walks past the headquarters of the PBOC in Beijing. JIANG QIMING/CHINA NEWS SERVICE
+Central bank move wouldn't place extra burden on firms but spur innovation
+
+China's latest draft data security rules for the financial sector show policymakers' resolve to provide a clear, detailed data security regulatory framework that companies would not perceive as additional compliance burden, experts said on Thursday.
+
+The draft rules released last week by the central bank, they clarified, do not impose additional compliance obligations in the area of cross-border data management where the Cybersecurity Law and the Data Security Law apply already.
+
+The draft rules, once effective, will encourage data-based financial innovation while ensuring data security, they said.
+
+The People's Bank of China is keen to get financial institutions to fulfill their obligations of data protection and guide them to process the data generated or collected via their business activities regulated by it, in compliance with laws and regulations, they said.
+
+The draft rules will be in the public domain for public feedback till Aug 24. They have ignited discussions on whether cross-border financial information will be more intensely scrutinized and whether the compliance costs of financial institutions operating in China, both domestic and foreign-funded, will significantly increase.
+
+Alex Roberts, a tech and data counsel at the Shanghai office of Linklaters, a global law firm, said: "The draft measures chiefly seek to further articulate China's existing rules and refine specific provisions for the financial services industry, without materially contradicting previous legislative trends or adding to the industry's compliance burden."
+
+The draft rules impose no additional compliance obligations when it comes to completing China's data export security assessment procedures and follow the requirements of related upper-level laws, including the Cybersecurity Law and the Data Security Law, Roberts said.
+
+According to the draft rules, data collected within the country, if required by laws and regulations, will be stored domestically. If a data processor needs to provide such data to entities overseas and is subject to the circumstances stipulated by cyberspace authorities, it should apply for a data export safety assessment beforehand.
+
+Also, financial institutions shall not provide their data, stored domestically, to international organizations and foreign financial authorities without the approval of the central bank and other relevant regulators, the draft rules state.
+
+Lu Dingliang, a senior partner at Beijing Jingshi Law Firm who specializes in data compliance, said the draft rules' emphasis on cross-border financial data security is in line with global trends, citing that the European Union and the United States also require scrutiny of data exports.
+
+"In this sense, foreign financial institutions in China are expected to adapt to the PBOC's draft rules relatively fast as their home countries may have rolled out similar requirements earlier than China," Lu said.
+
+Besides cross-border data security, the draft rules stress the need for financial institutions to establish a five-tier data classification system and implement data protection that is differentiated accordingly and covers all data-processing activities.
+
+Accountability procedures for non-compliant data processing should be strengthened, the rules state, and security risk monitoring and alert mechanisms for data processing should be established.
+
+Financial institutions, especially small and medium-sized ones that lag behind in data governance, may need to boost investment in their data management system to meet the regulatory requirements, said Tian Jiyun, a security expert at Beijing-based Dingxiang Technologies.
+
+"This will benefit the financial industry in the long run by urging financial institutions to establish a scientific data management system, ensuring financial data security and fully unleashing the potential of data as a key production factor."
+
+Colette Pan, a corporate partner at Shanghai-based Zhao Sheng Law Firm, Linklaters' joint operation partner in China, said it "would not be surprising" to see more Chinese financial regulators introduce their own rules for data security.
+
+"The general trend of increased regulation is in line with international practices — whether you look regionally to the Association of Southeast Asian Nations, Asia-Pacific or more broadly."

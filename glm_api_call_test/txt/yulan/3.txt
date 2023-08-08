@@ -1,0 +1,6 @@
+中国政府采取了一些及时的措施，促进了生成式人工智能领域的突破。专家和高管表示，这些措施将推动这项技术的健康发展，并帮助培养关键的未来经济增长驱动力，以应对外部不确定性。他们承认，生成式人工智能将带来许多新的安全挑战和伦理风险，但中国的举措强调了平衡新技术发展与安全的重要性，并符合改善人工智能治理的国际做法。中国的24项临时管理生成式人工智能服务的措施将于8月15日生效。
+----总结----
+In summary, the Chinese government has taken some timely measures to promote the breakthrough of generative artificial intelligence technology. Experts and high-level officials have indicated that these measures will promote the healthy development of this technology and help foster key drivers for future economic growth in response to external uncertainty. They acknowledge that generative artificial intelligence brings many new security challenges and ethical risks, but emphasize the importance of balancing the development of new technologies with safety, in line with international practices. China's 24 temporary regulations on the governance of generative artificial intelligence services will come into effect on August 15th.
+----性能----
+原文长度:4577    译文长度:186 总结长度: 736
+翻译耗时: 64.2077093sec  总结耗时:66.5155756sec
