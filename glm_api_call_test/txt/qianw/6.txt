@@ -1,0 +1,202 @@
+以下是 GPU 选项的列表，可用于 "--query-gpu" 查询：
+
+  * "timestamp"：查询创建查询的日期和时间，格式为 "YYYY/MM/DD HH:MM:SS.msec"。
+  * "driver_version"：安装的 NVIDIA 显卡驱动程序的版本号。这是一个带数字的可选字符串。
+  * "vgpu_driver_capability"：获取有关驱动程序级别的限制信息。
+  * "vgpu_driver_capability.heterogenous_multivGPU"：判断是否支持异构多 GPU。
+  * "count"：系统中的 NVIDIA GPU 数量。
+  * "name" 或 "gpu_name"：GPU 的官方产品名称。这是一个带数字的可选字符串。所有产品都有此选项。
+  * "serial" 或 "gpu_serial"：该编号匹配物理上打印在每个板上的序列号。这是一个全局唯一的不变的可选字母数字字符串。
+  * "uuid" 或 "gpu_uuid"：此值是 GPU 的全局唯一不变的字母数字标识符，它与物理板上的任何标签无关。
+  * "pci.bus_id" 或 "gpu_bus_id"：PCI 总线 ID，以 "domain:bus:device.function" 的形式表示，以十六进制表示。
+  * "pci.domain"：PCI 域号，以十六进制表示。
+  * "pci.bus"：PCI 总线号，以十六进制表示。
+  * "pci.device"：PCI 设备号，以十六进制表示。
+  * "pci.device_id"：PCI 卸载设备 ID，以十六进制表示。
+  * "pci.sub_system_id"：PCI 子系统 ID，以十六进制表示。
+
+关于 "vgpu_device_capability" 属性的查询信息：
+
+  * "vgpu_device_capability.fractional_multiVgpu"：可使用的 GPU 分配的多 GPU 配置的 GPU 专有配置。
+  * "vgpu_device_capability.heterogeneous_timeSlice_profile"：支持同时执行不同类型的异构 GPU 时切片模式。
+  * "vgpu_device_capability.heterogeneous_timeSlice_sizes"：支持同时执行不同帧缓冲区大小的异构 GPU 时切片模式。
+  * "pcie.link.gen.current"：当前 PCI-E 端口链接生成。当 GPU 不在使用时，这些可能会减少。代替 "pcie.link.gen.gpucurrent"。
+  * "pcie.link.gen.gpucurrent"：当前 PCI-E 端口链接生成。当 GPU 不在使用时，这些可能会减少。
+  * "pcie.link.gen.max"：此 GPU 和系统配置可能支持的最大 PCI-E 端口链接生成。例如，如果 GPU 支持更高的 PCI-E 生成，那么此报告将系统 PCI-E 生成。
+  * "pcie.link.gen.gpumax"：此 GPU 支持的最大 PCI-E 端口链接生成。
+  * "pcie.link.hostmax"：此 GPU 的根端口支持的最大 PCI-E 端口链接生成。
+  * "pcie.link.width.current"：当前 PCI-E 端口宽度。当 GPU 不在使用时，这些可能会减少。
+  * "pcie.link.width.max"：此 GPU 和系统配置可能支持的最大 PCI-E 端口宽度。例如，如果 GPU 支持更高的 PCI-E 生成，那么此报告将系统 PCI-E 生成。
+  * "index"：GPU 的零个整数索引。每次启动时可能都会发生变化。
+  * "display_mode"：指示是否连接到任何 GPU 的物理显示器的标志。如果启用了，则表示已连接。如果未启用，则表示未连接。
+  * "display_active"：指示是否已初始化与 GPU 相关的显示。显示即使没有物理显示器连接也可以启用。如果启用，则表示已启用。如果未启用，则表示未启用。
+  * "persistence_mode"：表示是否启用持久模式的标志。值为 "Enabled" 或 "Disabled"。当持久模式启用时，NVIDIA 驱动程序将保持加载状态，即使没有活跃的 X11 或 nvidia-smi 工作线程存在。这将降低驱动程序加载延迟，与使用计算应用程序时相关的统计信息可以按需计算。仅适用于 Windows。Linux 不支持多个驱动模式，将始终具有值 "N/A"。仅对选定的产品适用。请参阅 NVML 文档中的功能矩阵。
+对象在GPU板信息存储中的版本号。信息存储是小型、持久的状态和配置数据存储，仅适用于GPU。所有inforom版本字段都是数值型。知道这些版本号可能很有用，因为某些GPU功能仅在特定版本或更高版本的inforom上可用。
+
+"infoROM.img"或"infoROM.image"
+全局inforom图像版本。与VBIOS版本一样，inforom图像版本唯一描述了已刷入板上的inforom的精确版本。与inforom对象版本不同，它仅表示支持的特性。
+
+"inforom.oem"
+OEM配置数据版本。
+
+"inforom.ecc"
+ECC记录数据版本。
+
+"inforom.pwr"或"inforom.power"
+电源管理数据版本。
+
+"gom.properties"
+GOM可以减少功耗并优化GPU吞吐量，通过禁用GPU功能来实现。每个GOM都是为特定用户需求而设计的。在“全部启用”模式下，所有功能都启用并以最大速度运行。“计算”模式仅用于运行计算任务。图形操作不被允许。"低双精度"模式是为不需要高带宽双精度的应用程序设计的。GOM可以通过使用“--gom”标志进行更改。
+
+"gom.current"或"gpu_operation_mode.current"
+当前使用的GOM。
+
+"gom.pending"或"gpu_operation_mode.pending"
+将要使用的GOM。
+
+"fan.speed"
+设备风扇的百分比最大噪音容忍度风扇速度。此值可能在某些情况下超过100%。请注意：报告的速度是期望的风扇速度。如果风扇被物理障碍物卡住并无法旋转，此输出将不匹配实际风扇速度。许多部件不报告风扇速度，因为它们依赖于周围机箱中的风扇进行冷却。
+
+"pstate"
+GPU的当前性能状态。状态范围从P0（最高性能）到P12（最低性能）。
+CUDA Compute Capability，用 Major DOT Minor 来表示。有关利用率属性的信息包括：利用率.gpu报告 GPU 在过去一段时间内有多忙，可以用来确定应用程序在系统中使用了多少 GPU。"utilization.gpu"报告过去采样期间 GPU 上执行的一个或多个内核所占用的时间的百分比。采样时间可能在 1 秒到 1/6 秒之间，具体取决于产品。有关 encoder.stats 的属性的信息包括：encoder stats 报告系统中给定 GPU 上的编解码会话数、平均帧率和平均延迟（以 us 为单位）。"encoder.stats.sessionCount"报告正在运行在 GPU 上的编解码会话数量。"encoder.stats.averageFps"报告所有正在运行在 GPU 上的编解码会话的平均帧率。"encoder.stats.averageLatency"报告所有正在运行在 GPU 上的编解码会话的平均延迟（以 us 为单位）。有关 ecc.mode 的属性的信息包括：A 位表示 ECC 支持是否启用。可能为“启用”或“禁用”。更改 ECC 模式需要重新启动。需要 Inforom ECC 对象版本 1.0 或更高版本。"ecc.mode.current"报告 GPU 正在运行的 ECC 模式。"ecc.mode.pending"报告 GPU 下次重新启动后将运行的 ECC 模式。有关 ecc.errors 的属性的信息包括：NVIDIA GPU 可以提供各种类型 ECC 错误的数量。一些 ECC 错误是单个或双位的，其中单位错误可以被纠正，而双位错误不可被纠正。纹理内存错误可以通过重传或重传失败而可恢复。这些错误在两个时间尺度上可用（瞬时和累积）。单位 ECC 错误由硬件自动纠正，不会导致数据损坏。双位错误被检测到，但不能被纠正。请参阅 ECC 文档，了解在双位错误发生时计算应用程序行为的信息。瞬时错误计数器跟踪从上一次驱动加载以来检测到的错误数。累积错误计数器持久存在，因此作为整个芯片的寿命计数器。"ecc.errors.corrected.volatile.device_memory"报告全局设备内存中检测到的错误数。"ecc.errors.corrected.volatile.dram"报告全局设备内存中检测到的错误数。"ecc.errors.corrected.volatile.register_file"报告注册文件内存中检测到的错误数。"ecc.errors.corrected.volatile.l1_cache"报告 L1 缓存中检测到的错误数。"ecc.errors.corrected.volatile.l2_cache"报告 L2 缓存中检测到的错误数。"ecc.errors.corrected.volatile.texture_memory"报告纹理内存中检测到的错误数。"ecc.errors.corrected.volatile.cbu"报告 CBU 中检测到的错误数。"ecc.errors.corrected.volatile.sram"报告全局 SRAM 中检测到的错误数。"ecc.errors.corrected.volatile.total"报告整个芯片中检测到的错误数。"ecc.errors.corrected.aggregate.device_memory"报告全局设备内存中检测到的错误数。"ecc.errors.corrected.aggregate.dram"报告全局设备内存中检测到的错误数。"ecc.errors.corrected.aggregate.register_file"报告注册文件内存中检测到的错误数。"ecc.errors.corrected.aggregate.l1_cache"报告 L1 缓存中检测到的错误数。"ecc.errors.corrected.aggregate.l2_cache"报告 L2 缓存中检测到的错误数。"ecc.errors.corrected.aggregate.texture_memory"报告纹理内存中检测到的错误数。"ecc.errors.corrected.aggregate.cbu"报告 CBU 中检测到的错误数。"
+NVIDIA GPU可以当内存页出现多个单个比特错误或双比特错误时将其退役。当一个页面被退休时，NVIDIA驱动程序将隐藏它，以防止任何驱动程序或应用程序内存分配访问它。
+
+"retired_pages.single_bit_ecc.count"或"retired_pages.sbe"
+包含因同一页面出现多个单个比特错误而被退休的GPU设备内存页数。
+
+"retired_pages.double_bit.count"或"retired_pages.dbe"
+包含因双比特错误而被退休的GPU设备内存页数。
+
+"retired_pages.pending"
+检查下一个重新启动后是否有任何GPU设备内存页面正在等待退休。等待退休的页面仍可以分配，并可能导致进一步的可靠性问题。
+
+"temperature.gpu"
+核心GPU温度，以摄氏度为单位。
+
+"temperature.memory"
+HBM内存温度，以摄氏度为单位。
+
+"power.management"
+一个表示是否启用电源管理的标志。可能是"支持"或"[不支持]"。需要Inforom PWR对象版本3.0或更高或Kepler设备。
+
+"power.draw"
+整个板子的最后一个测量功率消耗，以瓦特为单位。只有在电源管理被启用时才可用。这个读数可以准确到正负5瓦特。
+
+"power.limit"
+软件电源限制，以瓦特为单位。由软件如nvidia-smi设置。在Kepler设备上，Power Limit可以通过使用[-pl | --power-limit=]切换进行调整。
+
+"enforced.power.limit"
+电源管理算法的电源上限，以瓦特为单位。板子的总功率消耗由电源管理算法操纵，使其保持在该值以下。这个值是各种功率限制器的最小值。
+
+"power.default_limit"
+默认电源管理算法的电源上限，以瓦特为单位。电源限制将被设置回Default Power Limit，当驱动程序卸载后。
+
+"power.min_limit"
+电源限制可以设置为最小值的瓦特。
+
+"power.max_limit"
+电源限制可以设置为最大值的瓦特。
+
+"clocks.current.graphics"或"clocks.gr"
+当前图形（着色器）时钟频率。
+
+"clocks.current.sm"或"clocks.sm"
+当前SM（流式多处理器）时钟频率。
+
+"clocks.current.memory"或"clocks.mem"
+当前内存时钟频率。
+
+"clocks.current.video"或"clocks.video"
+当前视频编码/解码时钟频率。
+
+关于clocks.applications属性的段
+用户指定应用程序将运行的频率。可以使用[-ac | --applications-clocks]开关进行更改。
+
+"clocks.applications.graphics"或"clocks.applications.gr"
+用户指定图形（着色器）时钟频率。
+
+"clocks.applications.memory"或"clocks.applications.mem"
+用户指定内存时钟频率。
+
+关于clocks.default_applications属性的段
+默认应用程序将运行的频率。应用程序时钟可以通过使用[-ac | --applications-clocks]开关进行更改。应用程序时钟可以设置为默认值，使用[-rac | --reset-applications-clocks]开关。
+
+"clocks.default_applications.graphics"或"clocks.default_applications.gr"
+默认应用程序图形（着色器）时钟。
+
+"clocks.default_applications.memory"或"clocks.default_applications.mem"
+默认应用程序内存时钟。
+
+关于clocks.max属性的段
+设计用于运行的GPU部分的最大频率。
+
+"clocks.max.graphics"或"clocks.max.gr"
+图形（着色器）时钟的最大频率。
+
+"clocks.max.sm"或"clocks.max.sm"
+SM（流式多处理器）时钟的最大频率。
+
+"clocks.max.memory"或"clocks.max.mem"
+内存时钟的最大频率。
+
+关于mig.mode属性的段
+一个表示MIG模式是否启用的标志。可能是"启用"或"禁用"。要更改MIG模式，需要GPU重置。
+
+"mig.mode.current"
+GPU当前正在运行的MIG模式。
+
+"mig.mode.pending"
+GPU将在重置后运行的MIG模式。
+
+"fabric.state"
+GPU Fabric注册过程中的当前状态。
+
+"fabric.status"
+仅当GPU Fabric注册状态为"完成"时才有效的错误状态。
+
+----总结----
+以下是GPU选项的列表，可用于 "--query-gpu" 查询：
+
+  * "timestamp"：查询创建查询的日期和时间，格式为 "YYYY/MM/DD HH:MM:SS.msec"
+  * "driver_version"：安装的 NVIDIA 显卡驱动程序的版本号。这是一个带数字的可选字符串。
+  * "vgpu_driver_capability"：获取有关驱动程序级别的限制信息。
+  * "vgpu_driver_capability.heterogenous MultivGPU"：判断是否支持异构多 GPU。
+  * "count"：系统中的 NVIDIA GPU 数量。
+  * "name" 或 "gpu_name"：GPU 的官方产品名称。这是一个带数字的可选字符串。所有产品都有此选项。
+  * "serial" 或 "gpu_serial"：该编号匹配物理上打印在每个板上的序列号。这是一个全局唯一的不变的可选字母数字字符串。
+  * "uuid" 或 "gpu_uuid"：此值是 GPU 的全局唯一不变的字母数字标识符，它与物理板上的任何标签无关。
+  * "pci.bus_id" 或 "gpu_bus_id"：PCI 总线 ID，以 "domain:bus:device.function" 的形式表示，以十六进制表示。
+  * "pci.domain"：PCI 域号，以十六进制表示。
+  * "pci(bus)"：PCI 总线号，以十六进制表示。
+  * "pci.device"：PCI 设备号，以十六进制表示。
+  * "pci.device_id"：PCI 卸载设备 ID，以十六进制表示。
+  * "pci.sub_system_id"：PCI 子系统 ID，以十六进制表示。
+  * "vgpu_device_capability.fractional MultiVgpu"：可使用的 GPU 分配的多 GPU 配置的 GPU 专有配置。
+  * "vgpu_device_capability.heterogeneous TimeSlice Profile"：支持同时执行不同类型的异构 GPU 时切片模式。
+  * "vgpu_device_capability.heterogeneous TimeSlice Sizes"：支持同时执行不同帧缓冲区大小的异构 GPU 时切片模式。
+  * "pcie.link.gen.current"：当前 PCI-E 端口链接生成。当 GPU 不在使用时，这些可能会减少。代替 "pcie.link.gen.gpucurrent"。
+  * "pcie.link.gen.gpucurrent"：当前 PCI-E 端口链接生成。当 GPU 不在使用时，这些可能会减少。
+  * "pcie.link.hostmax"：此 GPU 的根端口支持的最大 PCI-E 端口链接生成。
+  * "pcie.link.width.current"：当前 PCI-E 端口宽度。当 GPU 不在使用时，这些可能会减少。
+  * "pcie.link.width.max"：此 GPU 和系统配置可能支持的最大 PCI-E 端口宽度。例如，如果 GPU 支持更高的 PCI-E 生成，那么此报告将系统 PCI-E 生成。
+  * "index"：GPU 的零个整数索引。每次启动时可能都会发生变化。
+  * "display_mode"：指示是否连接到任何 GPU 的物理显示器的标志。如果启用了，则表示已连接。如果未启用，则表示未连接。
+  * "display_active"：指示是否已初始化与 GPU 相关的显示。显示即使没有物理显示器连接也可以启用。如果启用，则表示已启用。
+  * "persistence_mode"：表示是否启用持久模式的标志。值为 "Enabled" 或 "Disabled"。当持久模式启用时，NVIDIA 驱动程序将保持加载状态，即使没有活跃的 X11 或 nvidia-smi 工作线程存在。这将降低驱动程序加载延迟，与使用计算应用程序时相关的统计信息可以按需计算。仅对选定的产品适用。请参阅 NVML 文档中的功能矩阵。
+  * "infoROM.img"或 "infoROM.image"：全局 inforom 图像版本。与 VBIOS 版本一样，inforom 图像版本唯一描述了已刷入板上的 inforom 的精确版本。与 inforom 对象版本不同，它仅表示支持的特性。
+  * "infoROM.oem"：OEM 配置数据版本。
+  * "infoROM.ecc"：ECC 记录数据版本。
+  * "infoROM.pwr" 或 "infoROM.power"：电源管理数据版本。
+  * "gom.properties"：GOM 可以减少功耗并优化 GPU 吞吐量，通过禁用 GPU 功能来实现。每个 GOM 都为特定用户需求而设计的。在“全部启用”模式下，所有功能都启用并以最大速度运行。“计算”模式仅用于运行计算任务。图形操作不被允许。"low double precision" 模式是为不需要高带宽双精度的应用程序设计的。GOM 可以通过使用“--gom”标志进行更改。
+  * "gom.current" 或 "gpu_operation_mode.current"：当前使用的 GOM。
+  * "gom.pending" 或 "gpu_operation_mode.pending"：将要使用的 GOM。
+  * "fan.speed"：设备风扇的百分比最大噪音容忍度风扇速度。此值可能在某些情况下超过 100%。请注意：报告的速度是期望的风扇速度。如果风扇被物理障碍物卡住并无法旋转，此输出将不匹配实际风扇速度。许多部件不报告风扇速度，因为它们依赖于周围机箱中的风扇进行冷却。
+  * "pstate"：GPU 的当前性能状态。状态范围从 P0（最高性能）到 P12（最低性能）。有关利用率属性的信息包括：利用率.gpu 报告 GPU 在过去一段时间内有多忙，可以用来确定应用程序在系统中使用了多少 GPU。"utilization.gpu" 报告过去采样期间 GPU 上执行的一个或多个内核所占用的时间的百分比。采样时间可能在 1 秒到 1/6 秒之间，具体取决于产品。有关 encoder.stats 的属性的信息包括：encoder stats 报告系统中给定 GPU 上的编解码会话数、平均帧率和平均延迟（以 us 为单位）。"encoder.stats.sessionCount" 报告正在运行在 GPU 上的编解码会话数量。"encoder.stats.averageFps" 报告所有正在运行在 GPU 上的编解码会话的平均帧率。"encoder.stats.averageLatency" 报告所有正在运行在 GPU 上的编解码会话的平均延迟（以 us 为单位）。有关 ecc.mode 的属性的信息包括：A 位表示 ECC 支持是否启用。可能为“启用”或“禁用”。更改 ECC 模式需要重新启动。需要 Inforom ECC 对象版本 1.0 或更高版本。"ecc.mode.current" 报告 GPU 正在运行的 ECC 模式。"ecc.mode.pending" 报告 GPU 下次重新启动后将运行的 ECC 模式。有关 ecc.errors 的属性的信息包括：NVIDIA GPU 可以提供各种类型 ECC 错误的数量。一些 ECC 错误是单个或双位的，其中单位错误可以被纠正，而双位错误不可被纠正。纹理内存错误可以通过重传或重传失败而可恢复。这些错误在两个时间尺度上可用（瞬时和累积）。单位 ECC 错误计数器跟踪从上一次驱动加载以来检测到的错误数。累积错误计数器持久存在，因此作为整个芯片的寿命计数器。"ecc.errors.corrected.volatile.device_memory" 报告全局设备内存中检测到的错误数。"ecc.errors.corrected.volatile.dram" 报告全局设备内存中检测到的错误数。"ecc.errors.corrected.aggregate.device_memory" 报告全局设备内存中检测到的错误数。"ecc.errors.corrected.aggregate.dram" 报告全局设备内存中检测到的错误数。"ecc.errors.corrected.aggregate.register_file" 报告注册文件内存中检测到的错误数。"ecc.errors.corrected.aggregate.l1_cache" 报告 L1 缓存中检测到的错误数。"ecc.errors.corrected.aggregate.l2_cache" 报告 L2 缓存中检测到的错误数。"ecc.errors.corrected.aggregate.texture_memory" 报告纹理内存中检测到的错误数。"ecc.errors.corrected.aggregate.cbu" 报告 CBU 中检测到的错误数。
+Note: The "count" property is a count of unique GPU devices within the system, not including any identical copies of the same GPU model.
+NVIDIA GPU可以检测并退役内存页出现多个单个比特错误或双比特错误时。当一个页面被退休时，NVIDIA驱动程序将隐藏它，以防止任何驱动程序或应用程序内存分配访问它。"retired_pages.single_bit_ecc.count"或"retired_pages.sbe"包含因同一页面出现多个单个比特错误而被退休的GPU设备内存页数。"retired_pages.double_bit.count"或"retired_pages.dbe"包含因双比特错误而被退休的GPU设备内存页数。"retired_pages.pending"检查下一个重新启动后是否有任何GPU设备内存页面正在等待退休。等待退休的页面仍可以分配，并可能导致进一步的可靠性问题。"temperature.gpu"和"temperature.memory"分别表示核心GPU和HBM内存的温度。"power.management"表示是否启用电源管理的标志。"power.draw"表示整个板子的最后一个测量功率消耗。"power.limit"表示软件电源限制，以瓦特为单位。"enforced.power.limit"表示电源管理算法的电源上限，以瓦特为单位。"power.default_limit"表示默认电源管理算法的电源上限，以瓦特为单位。"power.min_limit"表示电源限制可以设置为最小值的瓦特。"power.max_limit"表示电源限制可以设置为最大值的瓦特。"clocks.current.graphics"或"clocks.gr"表示当前图形（着色器）时钟频率。"clocks.current.sm"或"clocks.sm"表示当前SM（流式多处理器）时钟频率。"clocks.current.memory"或"clocks.mem"表示当前内存时钟频率。"clocks.current.video"或"clocks.video"表示当前视频编码/解码时钟频率。"clocks.applications.graphics"或"clocks.applications.gr"表示用户指定图形（着色器）时钟频率。"clocks.applications.memory"或"clocks.applications.mem"表示用户指定内存时钟频率。"clocks.default_applications.graphics"或"clocks.default_applications.gr"表示默认应用程序图形（着色器）时钟。"clocks.default_applications.memory"或"clocks.default_applications.mem"表示默认应用程序内存时钟。"clocks.max"表示设计用于运行的GPU部分的最大频率。"clocks.max.graphics"或"clocks.max.gr"表示图形（着色器）时钟的最大频率。"clocks.max.sm"或"clocks.max.sm"表示SM（流式多处理器）时钟的最大频率。"clocks.max.memory"或"clocks.max.mem"表示内存时钟的最大频率。"mig.mode.current"表示GPU当前正在运行的MIG模式。"mig.mode.pending"表示GPU将在重置后运行的MIG模式。"fabric.state"表示GPU Fabric注册过程中的当前状态。"fabric.status"仅当GPU Fabric注册状态为"完成"时才有效的错误状态。
+
+----性能----
+原文长度:19763    译文长度:6710 总结长度: 5461
+翻译耗时: 365.864328sec 负载:36.818695 已用显存:19417.338 显卡功耗:110.65043
+总结耗时:371.7624244sec 负载:36.598885 已用显存:21078.71 显卡功耗:99.583954
