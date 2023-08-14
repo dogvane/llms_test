@@ -1,0 +1,115 @@
+查询有效的属性以查询交换机 "--query-gpu"：
+
+"timestamp" 
+查询的时间戳，格式为 "YYYY/MM/DD HH:MM:SS.msec"。
+
+"driver_version" 
+安装的 NVIDIA 显示驱动程序的版本号。这是一个字母数字串。
+
+关于 vgpu_driver_capability 属性的段落
+获取有关驱动程序级别上限的信息。
+
+"vgpu_driver_capability.heterogenous_multiGPU" 
+驱动程序是否支持异质多 GPU。
+
+"count" 
+系统中 NVIDIA GPU 的数量。
+
+"name" 或 "gpu_name" 
+GPU 的官方产品名称，这是一个字母数字串。所有产品都适用。
+
+"serial" 或 "gpu_serial" 
+该数字与物理上印在板上的每个板子上的串号匹配。这是一个全局唯一、不可更改的字母数字串。
+
+"uuid" 或 "gpu_uuid" 
+GPU 的全局唯一、不可更改的字母数字标识符。它不对应板子上的任何物理标签。
+
+"pci.bus_id" 或 "gpu_bus_id"
+PCI 总线 ID，以 "Domain:Bus:Device.Function" 的形式，以十六进制表示。
+
+"pci.domain"
+PCI 域号，以十六进制表示。
+
+"pci.bus"
+PCI 总线号，以十六进制表示。
+
+"pci.device"
+PCI 设备号，以十六进制表示。
+
+"pci.device_id"
+PCI 供应商设备 ID，以十六进制表示。
+
+"pci.sub_device_id"
+PCI 子系统 ID，以十六进制表示。
+
+关于 vgpu_device_capability 属性的段落
+获取有关设备级别上限的信息。
+
+"vgpu_device_capability.fractional_multiVgpu"
+此 GPU 上的分数多 GPU 配置支持哪些功能。
+
+"vgpu_device_capability.heterogeneous_timeSlice_profile"
+支持不同时间切片配置的并发执行。
+
+"vgpu_device_capability.heterogeneous_timeSlice_sizes"
+支持不同时间切片配置的并发执行。
+
+"pcie.link.gen.current"
+当前 PCI-E 链路生成。当 GPU 未使用时，可能会降低。请使用 pci.link.gen.gpucurrent 代替。
+
+"pcie.link.gen.gpucurrent"
+当前 PCI-E 链路生成。当 GPU 未使用时，可能会降低。
+
+"pcie.link.gen.max"
+此 GPU 和系统配置中可能的最高 PCI-E 链路生成。例如，如果 GPU 的 PCIe 生成高于系统支持，则报告系统 PCIe 生成。
+
+"pcie.link.gen.gpumax"
+此 GPU 支持的最高 PCI-E 链路生成。
+
+"pcie.link.gen.hostmax"
+对应 GPU 的根端口上的最高 PCI-E 链路生成。
+
+"pcie.link.width.current"
+当前 PCI-E 链路宽度。当 GPU 未使用时，可能会降低。
+
+"pcie.link.width.max"
+此 GPU 和系统配置中可能的最高 PCI-E 链路宽度。例如，如果 GPU 的 PCIe 生成高于系统支持，则报告系统 PCIe 生成。
+
+"index"
+GPU 的零基础索引。可以在每次启动时更改。
+
+"display_mode"
+一个标志，指示物理显示（例如监视器）是否连接到 GPU 的连接器之一。 "Enabled" 表示已连接显示。 "Disabled" 表示未连接显示。
+
+"display_active"
+一个标志，指示 GPU 上的显示是否已初始化。显示可以在没有物理连接显示的情况下处于活动状态。 "Enabled" 表示活动显示。 "Disabled" 表示未活动显示。
+
+"persistence_mode"
+一个标志，指示 GPU 是否启用持久化模式。值可以是 "Enabled" 或 "Disabled"。在启用持久化模式时，即使没有活动客户端（例如 X11 或 nvidia-smi），NVIDIA 驱动程序也将保持加载。这有助于减少与运行依赖应用程序相关的驱动程序加载延迟，例如 CUDA 程序。仅适用于 Linux。
+
+"accounting.mode"
+一个标志，指示 GPU 是否启用核算模式。值可以是 "Enabled" 或 "Disabled"。当核算模式启用时，NVIDIA 驱动程序在未活动客户端（例如 X11 或 nvidia-smi）存在时也将保持加载。这有助于减小与运行依赖于应用程序相关的驱动程序加载延迟，例如 CUDA 程序。仅适用于 Linux。
+
+"accounting.buffer_size"
+用于存储可以用于查询核算统计的进程列表的圆形缓冲区的大小。这是核算信息将覆盖最旧进程信息之前可以存储的最大进程数量。
+
+----总结----
+该文本是一段关于NVIDIA驱动程序中查询有效属性的段落。它列出了查询有效属性的不同属性及其含义。这些属性包括：
+
+1. "timestamp"：查询的时间戳，格式为"YYYY/MM/DD HH:MM:SS.msec"。
+2. "driver_version"：安装的NVIDIA显示驱动程序的版本号，是一个字母数字串。
+3. "vgpu_driver_capability"：查询异质多GPU功能。
+4. "vgpu_device_capability"：查询设备级别上限。
+5. "index"：GPU的零基础索引，可以在每次启动时更改。
+6. "display_mode"：物理显示（例如监视器）是否连接到GPU的连接器之一。
+7. "display_active"：GPU上的显示是否已初始化。
+8. "persistence_mode"：GPU是否启用持久化模式。
+9. "accounting.mode"：GPU是否启用核算模式。
+10. "accounting.buffer_size"：用于存储可以用于查询核算统计的进程列表的圆形缓冲区的大小。
+
+这些查询有效属性可以帮助用户获取有关NVIDIA驱动程序的性能和功能的信息。
+
+----性能----
+原文长度:19763    译文长度:2146 总结长度: 522
+翻译耗时: 61.0662966sec 负载:81.12069 已用显存:15377 显卡功耗:257.5438
+总结耗时:14.4779387sec 负载:57.92857 已用显存:15377 显卡功耗:253.88786

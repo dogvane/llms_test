@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static ManagedCuda.BasicTypes.CUarrayMapInfo;
 
 namespace glm_api_call_test
 {

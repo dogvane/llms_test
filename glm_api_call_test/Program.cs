@@ -3,7 +3,6 @@ using glm_api_call_test;
 using static glm_api_call_test.api.chatglm;
 using System.Text.RegularExpressions;
 using glm_api_call_test.api;
-using ManagedCuda;
 using System.ComponentModel;
 using glm_api_call_test.utils;
 using Newtonsoft.Json;
@@ -18,10 +17,10 @@ internal class Program
         // 逐行翻译();
         // 翻译成中文();
         // 信息提取();        
-        特定词语不翻译();
+        // 特定词语不翻译();
 
-        //var test = new TestApi(new baichuan());
-        //test.Test();
+        var test = new TestApi(new chatglm());
+        test.Test();
 
         Console.WriteLine("end.");
         GPUInfoUtils.StopRecord();
