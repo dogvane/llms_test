@@ -19,6 +19,8 @@ namespace glm_api_call_test.api
             public int max_length { get; set; } = 1000 * 8;
         }
 
+        public int MaxLength => Config.max_length;
+
         public config Config { get; private set; } = new config();
 
         public string Name => "yulan";

@@ -23,6 +23,8 @@ namespace glm_api_call_test.api
 
         public string Name => "qianw";
 
+        public int MaxLength => Config.max_length;
+
         /// <summary>
         /// 将英文翻译成中文
         /// </summary>
@@ -62,6 +64,7 @@ namespace glm_api_call_test.api
                     history,
                     Config.top_p,
                     Config.max_length,
+                    Config.temperature,
                     stream = false
                 };
                 Console.WriteLine($"request.length: {messages.Length}");

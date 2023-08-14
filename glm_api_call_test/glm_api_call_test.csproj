@@ -12,6 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="txt\baichuan\" />
+    <Folder Include="txt\chatglm\" />
+    <Folder Include="txt\qianw\" />
     <Folder Include="txt\yulan\" />
   </ItemGroup>
 

@@ -3,21 +3,47 @@ using glm_api_call_test;
 using static glm_api_call_test.api.chatglm;
 using System.Text.RegularExpressions;
 using glm_api_call_test.api;
+using ManagedCuda;
+using System.ComponentModel;
+using glm_api_call_test.utils;
+using Newtonsoft.Json;
 
 internal class Program
 {
 
     public static void Main(string[] args)
     {
+        GPUInfoUtils.StartRecord();
+
         // 逐行翻译();
         // 翻译成中文();
         // 信息提取();        
+        特定词语不翻译();
 
-        var test = new TestApi(new baichuan());
-        test.Test();
+        //var test = new TestApi(new baichuan());
+        //test.Test();
+
+        Console.WriteLine("end.");
+        GPUInfoUtils.StopRecord();
+        Console.WriteLine(  "end stop");
     }
 
+    static void 特定词语不翻译()
+    {
+        Console.WriteLine("特定词语不翻译");
+        // var chat = new chatgpt_v1();
+        var chat = new qianw();
 
+        var x = "Execution pins: These will dictate the order in which the nodes will be executed. If you want node 1 to be executed first and then node 2, you can link the output execution pin of node 1 to the input execution pin of node 2, as shown in the following screenshot:";
+
+         // var promt = "\r\n 翻译成中文，不认识的专业名词不进行翻译：\r\n";
+         var promt = "\r\n 上文翻译成中文，不返回提示信息，以下单词不翻译： Content Drawer, Viewport, execution pins\r\n";
+        // var promt = "\r\n 上文翻译成中文，不返回提示信息，以下单词用|之后的翻译 Execution pins|执行箭头 \n  ：\r\n";
+         // var ret = chat.ChatCompletion(x + promt);
+         var ret = chat.ChatCompletion(promt + x);
+
+        Console.WriteLine(ret.ToString());
+    }
 
     static void 逐行翻译()
     {

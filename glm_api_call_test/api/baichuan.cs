@@ -19,6 +19,9 @@ namespace glm_api_call_test.api
             public int max_length { get; set; } = 1000 * 8;
         }
 
+        public int MaxLength => Config.max_length;
+
+
         public config Config { get; private set; } = new config();
 
         public string Name => "baichuan";
@@ -60,8 +63,9 @@ namespace glm_api_call_test.api
                 {
                     prompt = messages,
                     history,
-                    Config.top_p,
-                    Config.max_length,
+                    top_p = Config.top_p,
+                    max_length = Config.max_length,
+                    temperature = Config.temperature,
                     stream = false
                 };
                 Console.WriteLine($"request.length: {messages.Length}");

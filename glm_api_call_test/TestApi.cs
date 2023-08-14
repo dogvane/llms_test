@@ -1,10 +1,12 @@
 ﻿using glm_api_call_test.api;
+using glm_api_call_test.utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ManagedCuda.BasicTypes.CUarrayMapInfo;
 
 namespace glm_api_call_test
 {
@@ -56,38 +58,80 @@ namespace glm_api_call_test
                     continue;
                 }
 
-                var lines = File.ReadAllLines(file);
+                // 第一行是文本的url地址，或者内容的来源，不参与翻译
+                var lines = File.ReadAllLines(file).Skip(1).ToList();
+                var start = DateTime.Now;
 
-                var sb = new StringBuilder();
-                // 第一行是文本的url地址，翻译前
-                sb.AppendJoin("\r\n", lines.Skip(1));
                 Stopwatch stopwatch = Stopwatch.StartNew();
-                var source = sb.ToString();
 
-                var trans = api.Translation(source);
+                string trans = TxtSpilteAndCall(lines, (int)(api.MaxLength * 0.7),
+                    api.Translation);
 
                 stopwatch.Stop();
-                var 翻译耗时 = stopwatch.Elapsed.TotalSeconds;
 
+                var 翻译耗时 = stopwatch.Elapsed.TotalSeconds;
+                var infos = GPUInfoUtils.GetGpuInfos(start, DateTime.Now);
+                var 平均负债 = infos.Average(o => o.利用率);
+                var 已用内存 = infos.Average(o => o.已使用内存);
+                var 显卡功耗 = infos.Average(o => o.功耗);
+
+                start = DateTime.Now;
                 stopwatch.Restart();
-                var s = api.Summary(trans);
+
+                string summary = TxtSpilteAndCall(trans.Split("\r\n").ToList(),(int)(api.MaxLength * 0.7),
+                    api.Summary);
+
                 stopwatch.Stop();
                 var 总结耗时 = stopwatch.Elapsed.TotalSeconds;
 
+                infos = GPUInfoUtils.GetGpuInfos(start, DateTime.Now);
+                var 总结平均负债 = infos.Average(o => o.利用率);
+                var 总结已用内存 = infos.Average(o => o.已使用内存);
+                var 总结显卡功耗 = infos.Average(o => o.功耗);
 
-                sb.Clear();
+                var sb = new StringBuilder();
 
                 sb.Append(trans);
                 sb.AppendLine();
                 sb.AppendLine("----总结----");
-                sb.AppendLine(s);
+                sb.AppendLine(summary);
 
                 sb.AppendLine("----性能----");
-                sb.AppendLine($"原文长度:{source.Length}    译文长度:{trans.Length} 总结长度: {s.Length}");
-                sb.AppendLine($"翻译耗时: {翻译耗时}sec  总结耗时:{总结耗时}sec");
+                sb.AppendLine($"原文长度:{lines.Sum(o => o.Length)}    译文长度:{trans.Length} 总结长度: {summary.Length}");
+                sb.AppendLine($"翻译耗时: {翻译耗时}sec 负载:{平均负债} 已用显存:{已用内存} 显卡功耗:{显卡功耗}");
+                sb.AppendLine($"总结耗时:{总结耗时}sec 负载:{总结平均负债} 已用显存:{总结已用内存} 显卡功耗:{总结显卡功耗}");
 
                 File.WriteAllText(outTxtFile, sb.ToString());
             }
+        }
+
+        private string TxtSpilteAndCall(List<string> lines, int spliteLength, Func<string, string> fun)
+        {
+            string ret = "";
+
+            // 根据 api.MaxLength 对 lines 的内容做拆分，
+            // 拆分后，调用 api.Translation 进行翻译，合并到 trans 里
+
+            List<StringBuilder> transSource = new List<StringBuilder>();
+            StringBuilder lastSB = new StringBuilder();
+            transSource.Add(lastSB);
+
+            foreach (var line in lines)
+            {
+                if (lastSB.Length + line.Length > spliteLength)
+                {
+                    lastSB = new StringBuilder();
+                    transSource.Add(lastSB);
+                }
+                lastSB.AppendLine(line);
+            }
+
+            foreach (var tsb in transSource)
+            {
+                ret += fun(tsb.ToString()) + "\r\n";
+            }
+
+            return ret;
         }
     }
 }

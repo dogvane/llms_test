@@ -17,5 +17,7 @@
         string Summary(string source);
 
         string Name { get; }
+
+        int MaxLength { get; }
     }
 }

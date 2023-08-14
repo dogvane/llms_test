@@ -22,6 +22,9 @@ namespace glm_api_call_test.api
 
         public string Name => "chatglm";
 
+        public int MaxLength => Config.max_length;
+
+
         /// <summary>
         /// 将英文翻译成中文
         /// </summary>
