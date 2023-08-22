@@ -1,0 +1,9 @@
+
+
+----总结----
+是插入标志，开始插入的指令； [INST] [<]]表示从 < > 字符开始执行； [/INST>] [<]]表示在 < >> 字符结束之后停止。 例：   //把变量'a'中的字符串值（即："Hello,World!"）存入到String类对象$1 中 //这个函数只作用于参数为变量的命令 #define INST "INSTR"#define SYST "SYS"//定义两个符号元件 #include "#include #include #include "stdio.h""#include "string.h"void main(void)int i=0;int n=0;char *p; char a[26],b[26]; p = (char *)malloc(4*sizeof(char)); a[n++]= 'A'; b[n++]= 'B';p = (char *)strdup(a);printf("a=%s\nc%sn",a,(char *)a[n-1]);p = (char *)strdup(b);printf("b=%sn",b,[b][n-1]);free((char *)p);free((char *)b);exit(0);
+
+----性能----
+原文长度:4344    译文长度:2 总结长度: 532
+翻译耗时: 2.2940708sec 负载:29.333334 已用显存:15724 显卡功耗:123.16
+总结耗时:15.6167028sec 负载:59.866665 已用显存:15735.066 显卡功耗:203.856

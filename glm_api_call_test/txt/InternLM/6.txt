@@ -1,0 +1,121 @@
+查询GPU属性的列表： 
+
+“timestamp”： 查询时间戳格式“YYYY/MM/DD HH:MM:SS.msec”。 
+
+“driver_version”： 安装NVIDIA显示驱动程序的版本。这是一个以数字开头的字母字符串。
+
+GPU驱动能力属性 节： 检索驱动程序级别的能力信息。
+
+“vgpu_driver_capability.heterogenous_multivGPU”： 驱动程序是否支持多GPU heterogeneous。 
+
+“count”： 系统中NVIDIA GPU的数量。
+
+“name”或“gpu_name”： 硬件的官方名称。这是一组字母字符。所有产品都是这样。
+
+“serial”或“gpu_serial”： 这个数字与每个主板上的物理标签匹配。它是全球唯一的不可变性数字值。
+
+“uuid”或“gpu_uuid”： GPU全局唯一不变性标识符。它与任何主板上的物理标签无关。
+
+“pci.bus_id”或“gpu_bus_id”： PCI总线ID“domain:bus:device.function”，以十六进制显示。
+
+PCI域号： PCI域号，以十六进制显示。
+
+PCI总线号： PCI总线号，以十六进制显示。
+
+PCI设备号： PCI设备号，以十六进制显示。
+
+PCI设备ID： PCI厂商设备ID，以十六进制显示
+
+PCI子系统ID： PCI子系统ID，以十六进制显示
+PCI-E链接宽度。 PCI-E链接宽度可能因GPU和系统配置而减少。 PCI-E链接宽度。 PCI-E链接宽度可能需要因GPU和系统配置而减少。
+GPU Accounting mode.
+"driver_model.current"是一个布尔值标志，指示当前使用的 GPU 驱动程序模型。它在以下两种情况下有效：
+在运行时的设置：
+用于配置当前 GPU 驱动程序模型的命令行标志是-dm或-fdm。默认情况下，TCC 驱动程序模型是启用的。如果使用的是 WDDM 驱动程序模型，则该标志将被忽略。
+
+在关闭 GPU 之前设置：
+在关闭 GPU 之前，使用 --help-query-accredited-apps 命令行标志可以列出当前使用的 GPU 驱动程序模型。
+默认情况下，值为 N/A（即“未知”），但可以通过 -dm 和 -fdm 标志设置特定的驱动程序模型。
+Section about credential properties
+Please refer to NVML documentation for more info on credential properties.
+infoROM.img: 全局inforom图像的版本号。Object版本描述的是与inforom flash的图像匹配的版本，而infoROM对象的版本只能指示可用的功能。
+
+infoROM.oem：OEM配置数据的版本号。
+
+infoROM.ecc：ECC记录数据的版本号。
+
+infoROM.pwr：功率管理的版本号。或 infoRom_power 或 infoRom_power 。
+
+Section about gom properties
+GOM允许通过禁用GPU功能来减少功耗和优化GPU性能。每个GOM都有特定于用户需求的。
+在“所有开启”模式中，一切都被启用，并以最大速度运行。
+计算模式适用于仅运行计算任务的情况。图形操作不受限制。
+"gom.current" 或 "gpu_operation_mode.current" - 当前使用的 GOM。
+
+"gom.pending" 或 "gpu_operation_mode.pending" - 下次重启时使用的 GOM。
+HW Power Brake Slowdown (reducing the clocks by a factor of 2 or more) is engaged. This is an indicator of :
+"compute_mode"
+ "encoder.stats.averageLatency"
+Section about fps.properties
+ The average number of frames per second (FPS) of all sessions running on the GPU.
+"ecc.errors.corrected.volatile.device_memory" 设备内存中检测到的纠错码错误。
+
+"ecc.errors.corrected.volatile.dram" 设备内存中检测到的纠错码错误。
+
+"ecc.errors.corrected.volatile.register_file" 寄存器文件内存中检测到的纠错码错误。
+
+"ecc.errors.corrected.volatile.l1_cache" L1缓存中检测到的纠错码错误。
+
+"ecc.errors.corrected.volatile.l2_cache" L2缓存中检测到的纠错码错误。
+
+"ecc.errors.corrected.volatile.texture_memory" 纹理内存中检测到的纠错码错误。
+
+"ecc.errors.corrected.volatile.cbu" CBU中检测到的纠错码错误。
+
+"ecc.errors.corrected.volatile.sram" 全局SRAM中检测到的纠错码错误。
+
+"ecc.errors.corrected.volatile.total" 在整个芯片检测到的纠错码错误数。
+
+"ecc.errors.corrected.aggregate.device_memory" 设备内存中检测到的纠错码错误总数。
+
+"ecc.errors.corrected.aggregate.dram" 设备内存中检测到的纠错码错误总数。
+
+"ecc.errors.corrected.aggregate.register_file" 寄存器文件内存中检测到的纠错码错误总数。
+
+"ecc.errors.corrected.aggregate.l1_cache" L1缓存中检测到的纠错码错误总数。
+
+"ecc.errors.corrected.aggregate.l2_cache" L2缓存中检测到的纠错码错误总数。
+
+"ecc.errors.corrected.aggregate.texture_memory" 纹理内存中检测到的纠错码错误总数。
+
+"ecc.errors.corrected.aggregate.cbu" CBU中检测到的纠错码错误总数。
+
+"ecc.errors.corrected.aggregate.sram"
+"ecc.errors.uncorrected.volatile.dram"
+"ecc.errors.corrected.cbu"：CRC错误已经被正确纠正的CU。"ecc.errors.corrected.sram"：全局SRAM错误已经被正确纠正。"ecc.errors.corrected.total"：整个芯片上所有CU的错误都被正确纠正。"section.about.retired_pages.properties"：NVIDIA GPU可以当GPU设备内存页变得不可靠时退休页。这种情况可能是由于多次单个位ECC错误对同一个页面或双位ECC错误。当一个页被退休时，NVIDIA驱动程序将隐藏它，以便任何驱动程序或应用程序内存分配无法访问它。"retired_pages.single_bit_ecc.count" 或 "retired_pages.sbe"：由于多次单位ECC错误，GPU设备内存页数已退休。"retired_pages.double_bit.count" 或 "retired_pages.dbe"：由于双位ECC错误，GPU设备内存页已退休。"retired_pages.pending"：检测到任何一个GPU设备内存页在下次重启时将会退休。可能仍会分配内存，并且可能导致更多可靠性问题。"temperature.gpu"：核心GPU温度，单位为摄氏度。"temperature.memory"：HBM内存温度，单位为摄氏度。"power_management"：
+电源管理的相关标识
+视频编码器/解码器的当前频率。
+关于mig.mode的属性信息
+表示MIG模式的开关标志。可能是“启用”或“禁用”。修改MIG模式需要GPU复位。
+
+“mig.mode.current”
+表示当前GPU正在运行的MIG模式。
+
+“mig.mode.pending”
+表示重置GPU后将运行的MIG模式。
+
+“fabric.state”
+GPU设备注册过程中当前的注册状态。
+
+“fabric.status”
+错误状态，只有在GPU设备注册状态为“完成”时才会有效。
+
+----总结----
+总结了GPU属性查询的一些常用命令，包括timestamp,
+This indicates that the GPU is performing poorly and the system is throttling down its power consumption.
+System Monitor metrics for measuring GPU reliability.
+
+----性能----
+原文长度:19763    译文长度:3828 总结长度: 194
+翻译耗时: 116.4707341sec 负载:53.07143 已用显存:16770.178 显卡功耗:215.6567
+总结耗时:6.382359sec 负载:69.5 已用显存:17331.166 显卡功耗:253.92

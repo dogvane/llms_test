@@ -1,0 +1,14 @@
+这里是关于 "nvidia-smi" 的文档，如果您想获取完整的信息。
+Output updated
+NVIDIA GPUs can report the page table entries that have been retracted. Each entry represents a page table entry that has been retracted and no longer participates in mapping pages onto global (device) memory.
+The NVIDIA GPU drivers report several properties related to the hardware status, including the following:
+
+* **Read all information from all NVIDIA GPU cores**
+
+----总结----
+此段落提供了有关"nvidia-smi"命令的一些更多信息和说明。它指出了NVIDIA显卡可以报告已撤回的页表条目，并且每个条目代表已被撤回并不再参与映射页面到全球（设备）内存的页表条目。该驱动程序还报告了一些与硬件状态相关的属性，包括以下内容：
+
+----性能----
+原文长度:19763    译文长度:425 总结长度: 125
+翻译耗时: 8.8927984sec 负载:65.888885 已用显存:17139 显卡功耗:244.59555
+总结耗时:4.8739821sec 负载:51.8 已用显存:15527.4 显卡功耗:223.468

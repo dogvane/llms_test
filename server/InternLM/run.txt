@@ -1,0 +1,16 @@
+
+conda create -n InternLM python=3.10 -y
+
+conda activate InternLM
+
+
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+pip install streamlit==1.24.0
+pip install transformers==4.30.2
+
+pip install sentencepiece
+
+
+pip install uvicorn
+pip install fastapi

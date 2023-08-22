@@ -1,0 +1,115 @@
+﻿using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
+namespace glm_api_call_test.api
+{
+    /// <summary>
+    /// Chinese-LLaMA-Alpaca-2
+    /// </summary>
+    public class chinese_llama2 : ILLM
+    {
+        public class config
+        {
+            public string url { get; set; } = "http://127.0.0.1:8001/";
+
+            public double temperature { get; set; } = 0.9;
+            public double top_p { get; set; } = 0.9;
+            public int max_length { get; set; } = 1000 * 4;
+        }
+
+        public config Config { get; private set; } = new config();
+
+        public string Name => "llama2";
+
+        public int MaxLength => Config.max_length;
+
+        /// <summary>
+        /// 将英文翻译成中文
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public string Translation(string source)
+        {
+            var msg = "Translate text to Chinese. 将下文翻译成中文：\r\n " + source;
+
+            var response = ChatCompletion(msg, "You are currently a translator. 你现在是一名翻译员", null);
+
+            var ret = response.response;
+
+            return ret;
+        }
+
+        public string Summary(string source)
+        {
+            var msg = "总结下文：\r\n " + source;
+
+            var response = ChatCompletion(msg, "you are a teacher. 你现在是一名老师.", null);
+
+            var ret = response.response;
+
+            return ret;
+        }
+
+        public ChatCompletionResponse ChatCompletion(string messages, string system_prompt = null, string history = null)
+        {
+            using (var client = new HttpClient())
+            {
+                client.Timeout = TimeSpan.FromMinutes(10);
+
+                var request = new
+                {
+                    prompt = messages,
+                    history,
+                    Config.top_p,
+                    Config.max_length,
+                    Config.temperature,
+                    system_prompt,
+                    stream = false
+                };
+                Console.WriteLine($"request.length: {messages.Length}");
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = client.PostAsync(Config.url + "", content);
+
+                var responseString = response.Result.Content.ReadAsStringAsync().Result;
+
+                //Console.WriteLine(responseString);
+                return JsonConvert.DeserializeObject<ChatCompletionResponse>(responseString);
+            }
+        }
+
+        public class ChatCompletionRequest
+        {
+            public string model { get; set; }
+            public ChatMessage[] messages { get; set; }
+            public double temperature { get; set; }
+            public double top_p { get; set; }
+            public int max_length { get; set; }
+            public bool stream { get; set; }
+        }
+
+        public class ChatMessage
+        {
+            public string role { get; set; }
+            public string content { get; set; }
+        }
+
+        public class ChatCompletionResponse
+        {
+            public string response;
+
+            public string[][] history;
+
+            public string time;
+
+            public override string ToString()
+            {
+                return response;
+            }
+        }
+
+
+    }
+}

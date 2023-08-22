@@ -14,12 +14,14 @@ internal class Program
     {
         GPUInfoUtils.StartRecord();
 
+        // 翻译成中文();
+
         // 逐行翻译();
         // 翻译成中文();
         // 信息提取();        
         // 特定词语不翻译();
 
-        var test = new TestApi(new chatglm());
+        var test = new TestApi(new InternLM());
         test.Test();
 
         Console.WriteLine("end.");
@@ -62,20 +64,20 @@ internal class Program
     {
         Console.WriteLine("信息提取");
         // var chat = new chatgpt_v1();
-        var chat = new yulan();
+        var chat = new chinese_llama2();
 
         var x = "Japan marks 78th anniversary of atomic bombing of Hiroshima amid calls for reflection on its own war atrocities\r\nXinhua | Updated: 2023-08-06 15:09\r\n\r\nAttendees observe a moment of silence during a ceremony to mark the 78th anniversary of the world's first atomic bomb attack, at the Peace Memorial Park in Hiroshima, Japan on August 6, 2023. [Photo/Agencies]\r\nTOKYO -- Japan marked the 78th anniversary of the atomic bombing in its western city of Hiroshima on Sunday amid growing calls for Tokyo to reflect on atrocities the Japanese army committed during World War II.\r\n\r\nAt a memorial ceremony held at the Peace Memorial Park, Hiroshima Mayor Kazumi Matsui delivered the Peace Declaration, urging world leaders to abandon the theory that nuclear weapons deter war.\r\n\r\n\"They must immediately take concrete steps to lead us from the dangerous present toward our ideal world,\" said Matsui, who also urged policymakers to \"move toward a security regime based on trust through dialogue in pursuit of civil society ideals.\"\r\n\r\n\"Mistrust and division are on the rise,\" warned United Nations Secretary-General Antonio Guterres in his message read out at the ceremony.\r\n\r\nA moment of silence was observed at 8:15 am local time, the exact moment when an atomic bomb dropped from a US bomber detonated over the city on Aug. 6, 1945, killing around 140,000 people by the end of that year.\r\n\r\nAt the event which about 50,000 people attended, Matsui placed in a cenotaph a list of the names of 339,227 victims, including 5,320 deaths confirmed last year.\r\n\r\n\"Japan must immediately join the Treaty on the Prohibition of Nuclear Weapons,\" Matsui noted in the Peace Declaration, further urging the government to heed the wishes of survivors from the bombing and the peace-loving Japanese people.\r\n\r\nThe number of survivors of the two atomic bombings including Nagasaki with an average age of over 85, has dropped by 5,346 from a year earlier to 113,649 as of March, according to the Ministry of Health, Labor and Welfare.\r\n\r\nJapanese Prime Minister Fumio Kishida, a lawmaker whose constituency is in the city, spoke at the ceremony, without mentioning whether Japan would be a signatory to the treaty, let alone the historical context of the atomic bombing of Hiroshima.\r\n\r\nThe prime minister was criticized for hosting the Group of Seven leaders' summit in Hiroshima in May as a political stunt.\r\n\r\nWhile Japan inwardly looks at the tragedies it experienced at the end of WWII, historians and political minds of the international community have encouraged Japan to come to see itself not merely as a victim of the atomic bombings but also as the perpetrator who entailed in these tragic incidents in the first place.\r\n\r\nJapan, once a ruthless invader in Asian countries and regions such as China and the Korean Peninsula, has deliberately concealed its ugly history as a perpetrator by repeatedly stressing that it is \"the only country that suffered atomic bombings,\" said Toshiyuki Tanaka, a historian and emeritus professor at Hiroshima City University.\r\n\r\nThe Japanese government, in its latest defense policy shift marked in the updated security documents, has also triggered grave concerns by vowing to acquire the military power to actively attack its enemy amid military expenditure hikes, seriously deviating from the war-renouncing Article 9 of the Japanese Constitution and the track of a postwar pacifist country.\r\n\r\nJapan brutally invaded and occupied many parts of Asia before and during WWII, inflicting untold suffering and heavy casualties on millions of innocent victims.";
 
         // var promt = "保留英文，并逐行中英对照则翻译，一行英文，一行中文翻译：\r\n";
-        var promt = "翻译成中文：\r\n";
-        var ret = chat.ChatCompletion(promt + x);
+        var promt = "英译中：\n\n";
+        var ret = chat.ChatCompletion(promt + x, "you are a translator. 你现在是一名翻译员");
 
         Console.WriteLine(  ret.ToString());
 
 
         var promt2 = "总结下文：\r\n";
 
-        var ret2 = chat.ChatCompletion(promt2 + ret.response);
+        var ret2 = chat.ChatCompletion(promt2 + ret.response, "you a teacher. 你现在是一名老师.");
         Console.WriteLine( ret2.ToString());
     }
 

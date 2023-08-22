@@ -1,0 +1,12 @@
+
+conda create -n cllama python=3.10 -y
+
+conda activate cllama
+
+
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+pip install uvicorn
+pip install fastapi
+pip install -r requirements.txt
+pip install scipy
