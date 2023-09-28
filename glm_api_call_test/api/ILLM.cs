@@ -19,5 +19,17 @@
         string Name { get; }
 
         int MaxLength { get; }
+
+        LLMTestTP[] GetTestTP();
+
+        void SetTP(LLMTestTP configItem);
+    }
+
+    public class LLMTestTP
+    {
+
+        public float top_p { get; set; }
+
+        public float temperature { get; set; }
     }
 }

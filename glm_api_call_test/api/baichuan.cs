@@ -16,7 +16,7 @@ namespace glm_api_call_test.api
 
             public double temperature { get; set; } = 0.9;
             public double top_p { get; set; } = 0.9;
-            public int max_length { get; set; } = 1000 * 8;
+            public int max_length { get; set; } = 1000 * 4;
         }
 
         public int MaxLength => Config.max_length;
@@ -24,7 +24,7 @@ namespace glm_api_call_test.api
 
         public config Config { get; private set; } = new config();
 
-        public string Name => "baichuan";
+        public string Name => "baichuan2";
 
         /// <summary>
         /// 将英文翻译成中文
@@ -78,6 +78,29 @@ namespace glm_api_call_test.api
                 //Console.WriteLine(responseString);
                 return JsonConvert.DeserializeObject<ChatCompletionResponse>(responseString);
             }
+        }
+
+        public LLMTestTP[] GetTestTP()
+        {
+            return new[] {
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.3f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.4f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.5f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.6f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.7f },
+
+                new LLMTestTP(){ top_p = 0.95f, temperature = 0.3f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.3f },
+                new LLMTestTP(){ top_p = 0.75f, temperature = 0.3f },
+                new LLMTestTP(){ top_p = 0.65f, temperature = 0.3f },
+                new LLMTestTP(){ top_p = 0.55f, temperature = 0.3f },
+            };
+        }
+        
+        public void SetTP(LLMTestTP configItem)
+        {
+            Config.top_p = configItem.top_p;
+            Config.temperature = configItem.temperature;
         }
 
         public class ChatCompletionRequest

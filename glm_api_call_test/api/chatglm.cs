@@ -24,6 +24,28 @@ namespace glm_api_call_test.api
 
         public int MaxLength => Config.max_length;
 
+        public LLMTestTP[] GetTestTP()
+        {
+            return new[] {
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.9f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.8f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.7f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.6f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.5f },
+
+                new LLMTestTP(){ top_p = 0.75f, temperature = 0.9f },
+                new LLMTestTP(){ top_p = 0.65f, temperature = 0.9f },
+                new LLMTestTP(){ top_p = 0.55f, temperature = 0.9f },
+                new LLMTestTP(){ top_p = 0.45f, temperature = 0.9f },
+                new LLMTestTP(){ top_p = 0.45f, temperature = 0.5f },
+
+            };
+        }
+        public void SetTP(LLMTestTP configItem)
+        {
+            Config.top_p = configItem.top_p;
+            Config.temperature = configItem.temperature;
+        }
 
         /// <summary>
         /// 将英文翻译成中文

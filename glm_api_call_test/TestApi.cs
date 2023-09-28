@@ -44,6 +44,7 @@ namespace glm_api_call_test
             StringBuilder logs = new StringBuilder();
             var outFolder = new DirectoryInfo(Path.Combine(basePath,"../" + api.Name)).FullName;
             Directory.CreateDirectory(outFolder);
+            api.Translation("hello world.");
 
             foreach (var file in Directory.GetFiles(basePath, "*.txt"))
             {
@@ -56,51 +57,59 @@ namespace glm_api_call_test
                     Console.WriteLine($"out file:{outTxtFile} exists.");
                     continue;
                 }
-
+                
                 // 第一行是文本的url地址，或者内容的来源，不参与翻译
                 var lines = File.ReadAllLines(file).Skip(1).ToList();
-                var start = DateTime.Now;
-
-                Stopwatch stopwatch = Stopwatch.StartNew();
-
-                string trans = TxtSpilteAndCall(lines, (int)(api.MaxLength * 0.7),
-                    api.Translation);
-
-                stopwatch.Stop();
-
-                var 翻译耗时 = stopwatch.Elapsed.TotalSeconds;
-                var infos = GPUInfoUtils.GetGpuInfos(start, DateTime.Now);
-                var 平均负债 = infos.Average(o => o.利用率);
-                var 已用内存 = infos.Average(o => o.已使用内存);
-                var 显卡功耗 = infos.Average(o => o.功耗);
-
-                start = DateTime.Now;
-                stopwatch.Restart();
-
-                string summary = TxtSpilteAndCall(trans.Split("\r\n").ToList(),(int)(api.MaxLength * 0.7),
-                    api.Summary);
-
-                stopwatch.Stop();
-                var 总结耗时 = stopwatch.Elapsed.TotalSeconds;
-
-                infos = GPUInfoUtils.GetGpuInfos(start, DateTime.Now);
-                var 总结平均负债 = infos.Average(o => o.利用率);
-                var 总结已用内存 = infos.Average(o => o.已使用内存);
-                var 总结显卡功耗 = infos.Average(o => o.功耗);
-
                 var sb = new StringBuilder();
 
-                sb.Append(trans);
-                sb.AppendLine();
-                sb.AppendLine("----总结----");
-                sb.AppendLine(summary);
+                foreach (var item in api.GetTestTP())
+                {
+                    api.SetTP(item);
 
-                sb.AppendLine("----性能----");
-                sb.AppendLine($"原文长度:{lines.Sum(o => o.Length)}    译文长度:{trans.Length} 总结长度: {summary.Length}");
-                sb.AppendLine($"翻译耗时: {翻译耗时}sec 负载:{平均负债} 已用显存:{已用内存} 显卡功耗:{显卡功耗}");
-                sb.AppendLine($"总结耗时:{总结耗时}sec 负载:{总结平均负债} 已用显存:{总结已用内存} 显卡功耗:{总结显卡功耗}");
+                    var start = DateTime.Now;
 
-                File.WriteAllText(outTxtFile, sb.ToString());
+                    Stopwatch stopwatch = Stopwatch.StartNew();
+
+                    string trans = TxtSpilteAndCall(lines, (int)(api.MaxLength * 0.7),
+                        api.Translation);
+
+                    stopwatch.Stop();
+
+                    var 翻译耗时 = stopwatch.Elapsed.TotalSeconds;
+                    var infos = GPUInfoUtils.GetGpuInfos(start, DateTime.Now);
+                    var 平均负债 = infos.Average(o => o.利用率);
+                    var 已用内存 = infos.Average(o => o.已使用内存);
+                    var 显卡功耗 = infos.Average(o => o.功耗);
+
+                    start = DateTime.Now;
+                    stopwatch.Restart();
+
+                    string summary = TxtSpilteAndCall(trans.Split("\r\n").ToList(), (int)(api.MaxLength * 0.7),
+                        api.Summary);
+
+                    stopwatch.Stop();
+                    var 总结耗时 = stopwatch.Elapsed.TotalSeconds;
+
+                    infos = GPUInfoUtils.GetGpuInfos(start, DateTime.Now);
+                    var 总结平均负债 = infos.Average(o => o.利用率);
+                    var 总结已用内存 = infos.Average(o => o.已使用内存);
+                    var 总结显卡功耗 = infos.Average(o => o.功耗);
+                    
+                    sb.Append(trans);
+                    sb.AppendLine();
+                    sb.AppendLine("----总结----");
+                    sb.AppendLine(summary);
+
+                    sb.AppendLine("----性能----");
+                    sb.AppendLine($"top_p:{item.top_p}  temperature: {item.temperature}");
+                    sb.AppendLine($"原文长度:{lines.Sum(o => o.Length)}    译文长度:{trans.Length} 总结长度: {summary.Length}");
+                    sb.AppendLine($"翻译耗时: {翻译耗时}sec 负载:{平均负债} 已用显存:{已用内存} 显卡功耗:{显卡功耗}");
+                    sb.AppendLine($"总结耗时:{总结耗时}sec 负载:{总结平均负债} 已用显存:{总结已用内存} 显卡功耗:{总结显卡功耗}");
+                    sb.AppendLine("");
+
+                    File.WriteAllText(outTxtFile, sb.ToString());
+                }
+
             }
         }
 

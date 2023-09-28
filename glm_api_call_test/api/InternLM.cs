@@ -25,6 +25,19 @@ namespace glm_api_call_test.api
 
         public int MaxLength => Config.max_length;
 
+        public LLMTestTP[] GetTestTP()
+        {
+            return new[] {
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.9f },
+            };
+        }
+        
+        public void SetTP(LLMTestTP configItem)
+        {
+            Config.top_p = configItem.top_p;
+            Config.temperature = configItem.temperature;
+        }
+
         /// <summary>
         /// 将英文翻译成中文
         /// </summary>
