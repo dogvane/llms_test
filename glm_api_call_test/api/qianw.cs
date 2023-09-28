@@ -21,14 +21,18 @@ namespace glm_api_call_test.api
 
         public config Config { get; private set; } = new config();
 
-        public string Name => "qianw";
+        public string Name => "qianw13bint4";
 
         public int MaxLength => Config.max_length;
 
         public LLMTestTP[] GetTestTP()
         {
             return new[] {
-                new LLMTestTP(){ top_p = 0.85f, temperature = 0.9f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.01f },
+                new LLMTestTP(){ top_p = 0.95f, temperature = 0.01f },
+                new LLMTestTP(){ top_p = 0.75f, temperature = 0.01f },
+                new LLMTestTP(){ top_p = 0.65f, temperature = 0.01f },
+                new LLMTestTP(){ top_p = 0.55f, temperature = 0.01f },
             };
         }
         public void SetTP(LLMTestTP configItem)

@@ -37,5 +37,5 @@ wsl下 linux 22.04
 [2023/9/28]
 1. 修改了一下测试用例的方法，针对同一篇文章，在翻译时，可以输入不同的top_p和temperature，已对比不同的结果。
 2. 增加了baichuan2-13B-Chat 的测试用例。翻译的质量也不错，处理的耗时比baichuan-13B-Chat要快一些。
-3. 补测了 ChatGLM 模型在不同的top_p值下的结果。发现翻译内容比之前差很多，不清楚上一次是用ChatGLM2测试的，还是用ChatGLM1测试的。相同文章，翻译时间只有baichuan2-13B的1/3。
+3. 补测了 ChatGLM 模型在不同的top_p值下的结果。发现翻译内容比之前差很多，不清楚上一次是用ChatGLM2测试的，还是用ChatGLM1测试的。相同文章，翻译时间只有baichuan2-13B的1/4. 增加qwen-14b-int4 的测试用例，翻译质量看原文。翻译速度上，比chatglm慢，但比baicuan2快。
 

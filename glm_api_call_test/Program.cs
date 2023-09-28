@@ -21,7 +21,7 @@ internal class Program
         // 信息提取();        
         // 特定词语不翻译();
 
-        var test = new TestApi(new chatglm());
+        var test = new TestApi(new qianw());
         test.Test();
 
         Console.WriteLine("end.");
