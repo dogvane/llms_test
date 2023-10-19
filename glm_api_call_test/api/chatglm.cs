@@ -27,7 +27,7 @@ namespace glm_api_call_test.api
         public LLMTestTP[] GetTestTP()
         {
             return new[] {
-                new LLMTestTP(){ top_p = 0.85f, temperature = 0.9f },
+                new LLMTestTP(){ top_p = 1f, temperature = 1f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.8f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.7f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.6f },
@@ -45,6 +45,17 @@ namespace glm_api_call_test.api
         {
             Config.top_p = configItem.top_p;
             Config.temperature = configItem.temperature;
+        }
+
+        public string PromptChat(string prompt, string source)
+        {
+            var msg = prompt + "\r\n " + source;
+
+            var response = ChatCompletion(msg).Result;
+
+            var ret = response.choices.Last().message.content;
+
+            return ret;
         }
 
         /// <summary>
@@ -123,6 +134,7 @@ namespace glm_api_call_test.api
                 return JsonConvert.DeserializeObject<ModelList>(responseString);
             }
         }
+
 
 
         public class ChatCompletionRequest

@@ -14,22 +14,22 @@ namespace glm_api_call_test.api
         {
             public string url { get; set; } = "http://127.0.0.1:8001/";
 
-            public double temperature { get; set; } = 0.9;
-            public double top_p { get; set; } = 0.9;
+            public double temperature { get; set; } = 0.0;
+            public double top_p { get; set; } = 0.5;
             public int max_length { get; set; } = 1000 * 8;
         }
 
         public config Config { get; private set; } = new config();
 
-        public string Name => "qianw13bint4";
+        public string Name => "qianw7";
 
         public int MaxLength => Config.max_length;
 
         public LLMTestTP[] GetTestTP()
         {
             return new[] {
+                new LLMTestTP(){ top_p = 0.1f, temperature = 0.01f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.01f },
-                new LLMTestTP(){ top_p = 0.95f, temperature = 0.01f },
                 new LLMTestTP(){ top_p = 0.75f, temperature = 0.01f },
                 new LLMTestTP(){ top_p = 0.65f, temperature = 0.01f },
                 new LLMTestTP(){ top_p = 0.55f, temperature = 0.01f },
@@ -40,6 +40,18 @@ namespace glm_api_call_test.api
             Config.top_p = configItem.top_p;
             Config.temperature = configItem.temperature;
         }
+
+        public string PromptChat(string prompt, string source)
+        {
+            var msg = prompt + source;
+
+            var response = ChatCompletion(msg, null);
+
+            var ret = response.response;
+
+            return ret;
+        }
+
 
         /// <summary>
         /// 将英文翻译成中文
@@ -77,10 +89,10 @@ namespace glm_api_call_test.api
                 var request = new
                 {
                     prompt = messages,
-                    history,
+                    //history = new[] { history },
                     Config.top_p,
                     Config.max_length,
-                    Config.temperature,
+                    //Config.temperature,
                     stream = false
                 };
                 Console.WriteLine($"request.length: {messages.Length}");

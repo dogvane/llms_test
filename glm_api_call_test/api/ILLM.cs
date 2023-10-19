@@ -3,6 +3,14 @@
     public interface ILLM
     {
         /// <summary>
+        /// 提示词对话
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        string PromptChat(string prompt, string source);
+
+
+        /// <summary>
         /// 翻译成中文
         /// </summary>
         /// <param name="source"></param>

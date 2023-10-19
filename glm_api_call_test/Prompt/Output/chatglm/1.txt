@@ -1,0 +1,153 @@
+------ prompt ------
+将下面段落翻译成中文，对于代码，指令，不要进行翻译，以下是正文：
+------ ------
+好，我们之前在哪里？哦，与结构体相关的改进。在.NET/运行时#79346中，它增加了一个额外的活性优化步骤（活性只是表明一个变量是否仍然需要，因为它的值可能在将来再次被使用）。然后这允许JIT在将其传递给另一个方法的最后一次使用之前删除一些结构体副本。然而，这个额外的活性步骤还有其他好处，特别是与前馈替换有关。前馈替换是一种优化，可以将其视为“共同子表达式消除”的反面（CSE）。在使用CSE时，编译器用包含已经计算出该表达式结果的某些东西来替换该表达式。因此，例如您有：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+
+编译器可能会使用CSE将其重写为：
+
+int tmp = a + b;
+int c = tmp + 3;
+int d = tmp * 4;
+
+前馈替换可以使用这种技术来逆转这种操作，将表达式输入到tmp中，然后将tmp中使用的表达式返回，这样我们最终会回到：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+
+为什么编译器会这样做呢？这可以让后续的优化对于它来说更容易看到。例如，让我们考虑这个基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用BenchmarkDotNet的属性运行此测试：
+
+```
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+```
+
+[隐藏列（Error，StdDev，Median，RatioSD）]
+[DisassemblyDiagnoser]
+public class Tests
+{
+    [Benchmark]
+    [Arguments(42)]
+    public int Merge(int a)
+    {
+        a *= 3;
+        a *= 3;
+        return a;
+    }
+}
+```
+
+这段代码定义了一个名为`Tests`的类，其中包含一个名为`Merge`的测试方法，该方法接受一个整数参数。在`Merge`方法中，将传入的整数乘以3并乘以3，然后返回乘积。
+
+`Merge`方法的其他部分与结构体相关，因此不再翻译。
+
+------ ------
+原文长度:1795    译文长度:1080
+
+------ prompt ------
+翻译下面段落成中文，不要翻译代码，指令。以下是正文： 
+------ ------
+好的，我们之前的定位在哪里呢？哦，与结构体相关的一个改进点是.net/runtime#79346，它比其他已经拥有的（liveness只是衡量一个变量是否仍然需要的指标，因为它的值可能在未来的使用中再次被使用）liveness优化更早地添加了一个额外的“活性检查”通过点（liveness is just an indication whether a variable might still be needed because its value might be used again in the future). 然后这允许JIT在将结构体传递给另一个方法时删除它之前无法删除的一些结构体副本，特别是在上次将结构体传递给另一个方法之后。
+
+然而，这个额外的活性检查还有其他好处，特别是与“后置替换”有关。后置替换是一种优化，可以将其视为“普通子表达式消除”的对立面（CSE）。在使用CSE时，编译器可能会使用CSE将表达式重写为包含已经计算出该表达式结果的表达式，例如：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+
+编译器可能会使用CSE将其重写为：
+
+int tmp = a + b;
+int c = tmp + 3;
+int d = tmp * 4;
+
+后置替换可以使用这种技术来撤销这种重写，将表达式输入到tmp中，然后将tmp使用的表达式返回到tmp被使用的地方，从而我们最终回到了：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+
+为什么编译器想要这样做呢？这可以让它更容易地看到后续优化的可能性。例如，让我们看看这个基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用BenchmarkDotNet的属性运行此测试：
+
+```
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+```
+
+[隐藏列（Error，StdDev，Median，RatioSD）]
+[DisassemblyDiagnoser]
+public class Tests
+{
+    [Benchmark]
+    [Arguments(42)]
+    public int Merge(int a)
+    {
+        a *= 3;
+        a *= 3;
+        return a;
+    }
+}
+```
+
+总的来说，这段代码讨论了一个与.NET runtime 相关的优化问题。它指出，当结构体变量被用作参数传递给另一个方法时，编译器可能会使用后置替换来重写这个结构体变量，这可能会导致性能下降。为了解决这个问题，作者提出了一种新的后置替换技术，该技术允许将表达式传递给临时变量，然后将临时变量的值返回到原始变量，从而允许编译器更早地看到后续的优化可能性。
+
+------ ------
+原文长度:1795    译文长度:1350
+
+------ prompt ------
+Translate the following paragraph into Chinese. Do not translate the code and instructions. Here is the main text:
+------ ------
+好的，我们之前在哪里？哦，与结构体相关的一个改进出现在.NET/运行时#79346中，它比其他已经拥有的（liveness只是衡量一个变量是否仍然需要的指标，因为它的值可能在将来再次被使用）优化更早出现（liveness只是衡量一个变量是否仍然需要的指标，因为它的值可能在将来再次被使用）。这然后允许JIT在将结构体传递给另一个方法时删除一些它以前无法删除的结构体副本。然而，这个额外的liveness步骤还有其他好处，特别是与“后置替换”有关。后置替换是一种优化，可以理解为“常见子表达式消除”的反面（CSE）。在使用CSE时，编译器用包含已经计算出该表达式结果的表达式替换该表达式，所以例如您有：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+编译器可能会使用CSE将此表达式重写为：
+
+int tmp = a + b;
+int c = tmp + 3;
+int d = tmp * 4;
+后置替换可以使用它来撤销这一点，将导入选项入tmp的位置，从而使其最终回到：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+为什么编译器想要这样做呢？这可以让它更容易看到后续优化的可能性。例如，考虑这个基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用BenchmarkDotNet的属性；使用BenchmarkDotNet运行。
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser]
+public class Tests
+{
+    [Benchmark]
+    [Arguments(42)]
+    public int Merge(int a)
+    {
+        a *= 3;
+        a *= 3;
+        return a;
+    }
+}
+
+------ ------
+原文长度:1795    译文长度:956
+
+----性能----
+top_p:1  temperature: 1
+翻译耗时: 79.770067sec 负载:58.513157 已用显存:13760 显卡功耗:224.58395
+

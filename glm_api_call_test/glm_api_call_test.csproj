@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Prompt\Output\chatglm\" />
     <Folder Include="txt\baichuan\" />
     <Folder Include="txt\chatglm\" />
     <Folder Include="txt\InternLM\" />

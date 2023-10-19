@@ -37,6 +37,11 @@ namespace glm_api_call_test.api
             Config.temperature = configItem.temperature;
         }
 
+        public string PromptChat(string prompt, string source)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// 将英文翻译成中文
         /// </summary>

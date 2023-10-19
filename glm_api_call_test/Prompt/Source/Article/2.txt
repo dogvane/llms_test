@@ -1,0 +1,78 @@
+Casting
+Various improvements have gone into improving the performance of casting in .NET 8.
+
+dotnet/runtime#75816 improved the performance of using is T[] when T is sealed. There¡¯s a CORINFO_HELP_ISINSTANCEOFARRAY helper the JIT uses to determine whether an object is of a specified array type, but when the T is sealed, the JIT can instead emit it without the helper, generating code as if it were written like obj is not null && obj.GetType() == typeof(T[]). This is another example where dynamic PGO has a measurable impact, so the benchmark highlights the improvements with and without it.
+
+// dotnet run -c Release -f net7.0 --filter "*"
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+
+var config = DefaultConfig.Instance
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TieredPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8").WithRuntime(CoreRuntime.Core80));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD", "EnvironmentVariables", "Runtime")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly object _obj = new string[1];
+
+    [Benchmark]
+    public bool IsStringArray() => _obj is string[];
+}
+Method	Job	Mean	Ratio
+IsStringArray	.NET 7	1.2290 ns	1.00
+IsStringArray	.NET 8 w/o PGO	0.2365 ns	0.19
+IsStringArray	.NET 8	0.0825 ns	0.07
+Moving on, consider this benchmark:
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly string[] _strings = new string[1];
+
+    [Benchmark]
+    public string Get1() => _strings[0];
+
+    [Benchmark]
+    public string Get2() => Volatile.Read(ref _strings[0]);
+}
+Get1 here is just reading and returning the 0th element from the array. Get2 here is returning a ref to the 0th element from the array. Here¡¯s the assembly we get in .NET 7:
+
+; Tests.Get1()
+       sub       rsp,28
+       mov       rax,[rcx+8]
+       cmp       dword ptr [rax+8],0
+       jbe       short M00_L00
+       mov       rax,[rax+10]
+       add       rsp,28
+       ret
+M00_L00:
+       call      CORINFO_HELP_RNGCHKFAIL
+       int       3
+; Total bytes of code 29
+
+; Tests.Get2()
+       sub       rsp,28
+       mov       rcx,[rcx+8]
+       xor       edx,edx
+       mov       r8,offset MT_System.String
+       call      CORINFO_HELP_LDELEMA_REF
+       nop
+       add       rsp,28
+       ret
+; Total bytes of code 31

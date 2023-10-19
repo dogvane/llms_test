@@ -1,0 +1,131 @@
+------ prompt ------
+将下面段落翻译成中文，对于代码，指令，不要进行翻译，以下是正文：
+------ ------
+好的，我们之前在哪里？哦对，结构体。与结构体相关的另一个改进出现在dotnet/runtime#79346中，它添加了比现有的其他优化更多的一个额外的“活跃性”优化过程（活跃性只是表示一个变量是否可能仍然需要，因为它的值可能在将来被再次使用）。这使JIT能够消除一些之前无法消除的结构副本，特别是在结构体被传递给另一个方法的情况下。然而，这个额外的活跃性优化还有其他好处，特别是与“前向替换”有关。前向替换是一种可以被看作是与“公共子表达式消除”（CSE）相反的优化。通过CSE，编译器用包含已经计算出的表达式结果的东西替换表达式，所以例如如果你有以下代码：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+一个编译器可能会使用CSE重写为：
+
+int tmp = a + b;
+int c = tmp + 3;
+int d = tmp * 4;
+前向替换可以用来撤销这一点，将输入到tmp的表达式分布到tmp被使用的地方，这样我们最终会回到：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+为什么编译器想要这样做？它可以使其特定的后续优化更容易实现。例如，考虑以下基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用BenchmarkDotNet.Attributes；
+使用BenchmarkDotNet.Running；
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args)；
+
+[隐藏列"错误"，"标准差"，"中位数"，"比率SD"]
+[反汇编诊断器]
+public class Tests
+{
+    [基准测试]
+    [参数(42)]
+    public int合并(int a)
+    {
+        a *= 3；
+        a *= 3；
+        返回a；
+    }
+}
+
+------ ------
+原文长度:1795    译文长度:929
+
+------ prompt ------
+翻译下面段落成中文，不要翻译代码，指令。以下是正文： 
+------ ------
+好的，我们之前在哪里？哦对，结构体。与结构体相关的另一个改进出现在dotnet/runtime#79346中，它提前添加了其他已有的优化过程之外的额外的“活跃性”优化过程（活跃性只是表示一个变量是否可能仍然需要，因为它的值可能在将来被再次使用）。这然后允许JIT移除一些之前无法移除的结构副本，特别是在结构体被用于传递给另一个方法的情况下。然而，这个额外的活跃性优化还有其他好处，特别是与“前向替换”有关。前向替换可以被视为与“常见子表达式消除”（CSE）相反的优化。通过CSE，编译器用已经计算出的结果来替换表达式，例如如果你有这样的代码：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+编译器可能会使用CSE重写为：
+
+int tmp = a + b;
+int c = tmp + 3;
+int d = tmp * 4;
+前向替换可以用来撤销那个操作，将输入到tmp的表达式分布回tmp被使用的地方，这样我们最终会回到：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+为什么编译器想要这样做？这样可以使某些后续的优化更容易进行。例如，考虑这个基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用BenchmarkDotNet.Attributes；
+使用BenchmarkDotNet.Running；
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args)；
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser]
+public class Tests
+{
+    [Benchmark]
+    [Arguments(42)]
+    public int Merge(int a)
+    {
+        a *= 3;
+        a *= 3;
+        return a;
+    }
+}
+
+------ ------
+原文长度:1795    译文长度:980
+
+------ prompt ------
+Translate the following paragraph into Chinese. Do not translate the code and instructions. Here is the main text:
+------ ------
+好的，我们之前讲到哪儿了？哦对，结构体。与结构体相关的另一个改进出现在dotnet/runtime#79346中，它在我们已经拥有的其他优化之前增加了额外的“活跃性”优化通道（活跃性只是表示一个变量是否可能仍然需要使用，因为它的值可能在将来被再次使用）。这使JIT能够消除一些之前无法消除的结构化副本，特别是在结构体在传递给另一个方法后被使用的场景中。然而，这个额外的活跃性通道还有其他好处，特别是与“前向替换”有关。前向替换是一种可以被认为与“常见子表达式消除”（CSE）相反的优化。使用CSE，编译器用已经计算出的表达式结果包含的表达式替换一个表达式，例如如果你有这样的代码：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+一个编译器可能会使用CSE将这个重写为：
+
+int tmp = a + b;
+int c = tmp + 3;
+int d = tmp * 4;
+前向替换可以用来取消那个操作，将输入到tmp的表达式分布回tmp的使用处，这样我们最后又回到了：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+为什么编译器想要这样做？这样可以使某些后续的优化更容易被看到。例如，考虑这个基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用BenchmarkDotNet.Attributes;
+使用BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser]
+public class Tests
+{
+    [Benchmark]
+    [Arguments(42)]
+    public int Merge(int a)
+    {
+        a *= 3;
+        a *= 3;
+        return a;
+    }
+}
+在这个基准测试中，我们可以看到使用前向替换优化后，性能有所提升。
+
+------ ------
+原文长度:1795    译文长度:1038
+
+----性能----
+top_p:0.95  temperature: 0.1
+翻译耗时: 435.4761226sec 负载:37.10072 已用显存:19971.443 显卡功耗:78.96271
+

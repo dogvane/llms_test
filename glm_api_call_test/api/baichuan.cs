@@ -26,6 +26,17 @@ namespace glm_api_call_test.api
 
         public string Name => "baichuan2";
 
+        public string PromptChat(string prompt, string source)
+        {
+            var msg = prompt + source;
+
+            var response = ChatCompletion(msg, null);
+
+            var ret = response.response;
+
+            return ret;
+        }
+
         /// <summary>
         /// 将英文翻译成中文
         /// </summary>
@@ -68,8 +79,8 @@ namespace glm_api_call_test.api
                     temperature = Config.temperature,
                     stream = false
                 };
-                Console.WriteLine($"request.length: {messages.Length}");
                 var json = JsonConvert.SerializeObject(request);
+                Console.WriteLine($"request.length: {json}");
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = client.PostAsync(Config.url + "", content);
 
@@ -83,6 +94,7 @@ namespace glm_api_call_test.api
         public LLMTestTP[] GetTestTP()
         {
             return new[] {
+                new LLMTestTP(){ top_p = 0.95f, temperature = 0.1f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.3f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.4f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.5f },
@@ -102,6 +114,7 @@ namespace glm_api_call_test.api
             Config.top_p = configItem.top_p;
             Config.temperature = configItem.temperature;
         }
+
 
         public class ChatCompletionRequest
         {

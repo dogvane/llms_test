@@ -1,0 +1,35 @@
+Ok, where were we? Oh yeah, structs. Another improvement related to structs comes in dotnet/runtime#79346, which adds an additional ¡°liveness¡± optimization pass earlier than the others it already has (liveness is just an indication of whether a variable might still be needed because its value might be used again in the future). This then allows the JIT to remove some struct copies it wasn¡¯t previously able to, in particular in situations where the last time the struct is used is in passing it to another method. However, this additional liveness pass has other benefits as well, in particular with relation to ¡°forward substitution.¡± Forward substitution is an optimization that can be thought of as the opposite of ¡°common subexpression elimination¡± (CSE). With CSE, the compiler replaces an expression with something containing the result already computed for that expression, so for example if you had:
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+a compiler might use CSE to rewrite that as:
+
+int tmp = a + b;
+int c = tmp + 3;
+int d = tmp * 4;
+Forward substitution could be used to undo that, distributing the expression feeding into tmp back to where tmp is used, such that we end up back with:
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+Why would a compiler want to do that? It can make certain subsequent optimizations easier for it to see. For example, consider this benchmark:
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser]
+public class Tests
+{
+    [Benchmark]
+    [Arguments(42)]
+    public int Merge(int a)
+    {
+        a *= 3;
+        a *= 3;
+        return a;
+    }
+}
