@@ -1,0 +1,338 @@
+以下是关于 "--query-gpu" 参数的翻译：
+
+List of valid properties to query for the switch "--query-gpu":
+
+1. timestamp
+2. driver_version
+3. vgpu_driver_capability
+4. count
+5. name or gpu_name
+6. serial or gpu_serial
+7. uuid or gpu_uuid
+8. pci.bus_id
+9. pci.domain
+10. pci.bus
+11. pci.device
+12. pci.device_id
+13. pci.sub_device_id
+14. vgpu_device_capability
+15. fractional_multi_vGpu
+16. count
+17. display_mode
+18. display_active
+19. persistence_mode
+20. accounting.mode
+21. accounting.buffer_size
+22. clocks.current.graphics
+23. clocks.current.sm
+24. clocks.current.memory
+25. clocks.current.video
+26. clocks.applications.graphics
+27. clocks.applications.memory
+28. clocks.default_applications.graphics
+29. clocks.default_applications.memory
+30. clocks.max
+31. mig.mode
+
+Section about inforom properties
+
+* inforom.img or inforom.image
+* inforom.oem
+* inforom. eccentric_data
+* inforom.ecc_data
+* inforom.pwr_data
+* inforom.power_limit
+
+Section about driver_model properties
+
+* driver_model.current
+* driver_model.pending
+
+Section about retired_pages properties
+
+* retired_pages.single_bit_ecc.count or retired_pages.sbe
+* retired_pages.double_bit.count or retired_pages.dbe
+* retired_pages.pending
+
+Section about temperature properties
+
+* temperature.gpu
+* temperature.memory
+
+Section about power.management properties
+
+* power.management
+* power.draw
+* power.limit
+* enforced.power.limit
+
+Section about clocks.applications properties
+
+* clocks.applications.graphics
+* clocks.applications.memory
+* clocks.default_applications.graphics
+* clocks.default_applications.memory
+
+Section about clocks.max properties
+
+* clocks.max.graphics
+* clocks.max.sm
+* clocks.max.memory
+
+Section about mig.mode properties
+
+* mig.mode.current
+* mig.mode.pending
+
+Section about fabric.state properties
+
+* fabric.state
+* fabric.status
+
+请根据需要查询这些属性以获取有关GPU的信息。
+
+----总结----
+这段文字是关于"--query-gpu"参数的说明，列出了可以查询的属性及其描述。这些属性包括GPU的timestamp、driver_version、vgpu_driver_capability等。此外，还介绍了关于Informatics属性、Driver Model属性、Retired Pages属性、Temperature属性、Power Management属性、Clocks Applications属性、Clocks Max属性以及MIG.mode属性。根据这些属性，可以查询到有关GPU的信息。
+
+----性能----
+top_p:0.9  temperature: 0.9
+原文长度:19763    译文长度:1828 总结长度: 257
+翻译耗时: 35.9699948sec 负载:82.97059 已用显存:17228.676 显卡功耗:262.53058
+总结耗时:5.0944753sec 负载:68.4 已用显存:17225.4 显卡功耗:219.608
+
+以下是根据提供的信息翻译的中文：
+
+查询 "--query-gpu" 参数的可用属性：
+
+1. timestamp：查询查询的执行时间，格式为 "YYYY/MM/DD HH:MM:SS.msec"。
+2. driver_version：查询安装的 NVIDIA 显示驱动程序的版本。这是一个字母数字字符串。
+3. vgpu_driver_capability：查询 vGPU 驱动程序能力。
+4. count：系统中的 GPU 数量。
+5. name 或 gpu_name：GPU 的官方产品名称。这是一个字母数字字符串。
+6. serial 或 gpu_serial：与主板上的物理 GPU 序列号匹配的数字。这是一个全球唯一不可变的全局字符串。
+7. uuid 或 gpu_uuid：全球唯一不可变的全局 GPU 唯一标识符。它不对应于板上的任何物理标签。
+8. pci.bus_id：PCI 总线 ID，以十六进制表示。
+9. pci.domain：PCI 域号，以十六进制表示。
+10. pci.bus：PCI 总线，以十六进制表示。
+11. pci.device：PCI 设备号，以十六进制表示。
+12. pci.device_id：PCI 设备 ID，以十六进制表示。
+
+关于 vgpu_driver_capability 属性：
+
+13. heterogeneous_multivGPU：是否支持多 vGPU。
+14. count：GPU 中的 vGPU 数量。
+15. name 或 gpu_name：GPU 的官方产品名称。这是一个字母数字字符串。对于所有产品。
+16. serial 或 gpu_serial：与主板上的物理 GPU 序列号匹配的数字。这是一个全球唯一不可变的全局字符串。
+17. uuid 或 gpu_uuid：全球唯一不可变的全局 GPU 唯一标识符。它不对应于板上的任何物理标签。
+
+关于 driver_model 属性：
+
+18. current：当前使用的驱动程序模型。
+19. pending：下次重启后要使用的驱动程序模型。
+20. vbios_version：GPU 的 BIOS 版本。
+
+关于 inforom 属性：
+
+21. img 或 inforom.image：全局 inforom 图像的版本。这是 inforom 对象的唯一标识符。
+22. inforom.oem：OEM 配置数据的版本。
+23. inforom.ecc：ECC 记录数据的版本。
+24. inforom.pwr：电源管理数据的版本。
+25. inforom.mem：内存配置数据的版本。
+26. inforom.gpu：GPU 配置数据的版本。
+
+关于 gom 属性：
+
+27. current：当前使用的 GOM。
+28. pending：下次重启后要使用的 GOM。
+29. application_mode：应用程序模式。
+30. graphics：图形模式下的 GOM。
+31. memory：内存模式下的 GOM。
+32. video：视频模式下的 GOM。
+33. applications：应用程序模式下的 GOM。
+34. max：GOM 最大频率。
+
+关于 retired_pages 属性：
+
+35. single_bit_ecc：因单 bit ECC 错误而退休的 GPU 设备内存页数。
+36. double_bit：因双 bit ECC 错误而退休的 GPU 设备内存页数。
+37. pending：下次重启后可能退休的 GPU 设备内存页数。
+38. temperature：GPU 核心温度。
+39. memory：HBM 内存温度。
+40. power.management：是否启用电源管理。
+41. power.draw：整个主板上的最后测量功率。仅在电源管理启用时可用。
+42. power.limit：软件限制的电源功率。可以通过 nvidia-smi 命令更改。
+43. enforced.power.limit：电源管理算法的上限，以瓦特为单位。
+44. power.default_limit：默认电源管理算法的上限，以瓦特为单位。
+45. power.min_limit：功率限制的最小值，以瓦特为单位。
+46. power.max_limit：功率限制的最大值，以瓦特为单位。
+47. clocks.current.graphics：图形模式下的当前时钟频率。
+48. clocks.current.sm：SM 模式下的当前时钟频率。
+49. clocks.current.memory：内存模式下的当前时钟频率。
+50. clocks.current.video：视频模式下的当前时钟频率。
+
+关于 clocks.applications 属性：
+
+51. graphics：图形应用程序的时钟频率。
+52. memory：内存应用程序的时钟频率。
+53. video：视频应用程序的时钟频率。
+
+关于 clocks.default_applications 属性：
+
+54. graphics：默认图形应用程序的时钟频率。
+55. memory：默认内存应用程序的时钟频率。
+
+关于 clocks.max 属性：
+
+56. graphics：图形时钟频率的最大值。
+57. sm：SM 模式时钟频率的最大值。
+58. memory：内存时钟频率的最大值。
+59. video：视频时钟频率的最大值。
+
+关于 mig.mode 属性：
+
+60. enabled：MIG 模式是否启用。可以是 "Enabled" 或 "Disabled"。更改 MIG 模式需要 GPU 重置。
+61. mode：当前 MIG 模式。
+62. pending：下次重启后要使用的 MIG 模式。
+
+----总结----
+该文本提供了关于查询 "--query-gpu" 参数的可用属性和 vGPU 驱动程序能力的详细信息。同时，还介绍了驱动程序模型、inforom 属性、gom 属性、retired_pages 属性、clocks.applications 属性以及 mig.mode 属性等 GPU 相关属性。
+
+具体来说，这些属性包括：
+
+1. timestamp：查询查询的执行时间。
+2. driver_version：查询安装的 NVIDIA 显示驱动程序的版本。
+3. vgpu_driver_capability：查询 vGPU 驱动程序能力。
+4. count：系统中的 GPU 数量。
+5. name 或 gpu_name：GPU 的官方产品名称。
+6. serial 或 gpu_serial：与主板上的物理 GPU 序列号匹配的数字。
+7. uuid 或 gpu_uuid：GPU 的全球唯一不可变全局标识符。
+8. pci.bus_id：PCI 总线 ID。
+9. pci.domain：PCI 域号。
+10. pci.bus：PCI 总线。
+11. pci.device：PCI 设备号。
+12. pci.device_id：PCI 设备 ID。
+
+关于 vGPU 驱动程序能力：
+
+13. heterogeneous_multivGPU：是否支持多 vGPU。
+14. count：GPU 中的 vGPU 数量。
+15. name 或 gpu_name：GPU 的官方产品名称。
+16. serial 或 gpu_serial：与主板上的物理 GPU 序列号匹配的数字。
+17. uuid 或 gpu_uuid：全球唯一不可变的全局 GPU 唯一标识符。
+
+关于驱动程序模型：
+
+18. current：当前使用的驱动程序模型。
+19. pending：下次重启后要使用的驱动程序模型。
+20. vbios_version：GPU 的 BIOS 版本。
+
+关于 inforom 属性：
+
+21. img 或 inforom.image：全局 inforom 图像的版本。
+22. inforom.oem：OEM 配置数据的版本。
+23. inforom.ecc：ECC 记录数据的版本。
+24. inforom.pwr：电源管理数据的版本。
+25. inforom.mem：内存配置数据的版本。
+26. inforom.gpu：GPU 配置数据的版本。
+
+关于 GOM 属性：
+
+27. current：当前使用的 GOM。
+28. pending：下次重启后要使用的 GOM。
+29. application_mode：应用程序模式。
+30. graphics：图形模式下的 GOM。
+31. memory：内存模式下的 GOM。
+32. video：视频模式下的 GOM。
+33. applications：应用程序模式下的 GOM。
+34. max：GOM 最大频率。
+
+关于 retired_pages 属性：
+
+35. single_bit_ecc：因单 bit ECC 错误而退休的 GPU 设备内存页数。
+36. double_bit：因双 bit ECC 错误而退休的 GPU 设备内存页数。
+37. pending：下次重启后可能退休的 GPU 设备内存页数。
+38. temperature：GPU 核心温度。
+39. memory：HBM 内存温度。
+40. power.management：是否启用电源管理。
+41. power.draw：整个主板上的最后测量功率。仅在电源管理启用时可用。
+42. power.limit：软件限制的电源功率。可以通过 nvidia-smi 命令更改。
+43. enforced.power.limit：电源管理算法的上限，以瓦特为单位。
+44. power.default_limit：默认电源管理算法的上限，以瓦特为单位。
+45. power.min_limit：功率限制的最小值，以瓦特为单位。
+46. power.max_limit：功率限制的最大值，以瓦特为单位。
+47. clocks.current.graphics：图形模式下的当前时钟频率。
+48. clocks.current.sm：SM 模式下的当前时钟频率。
+49. clocks.current.memory：内存模式下的当前时钟频率。
+50. clocks.current.video：视频模式下的当前时钟频率。
+
+关于 clocks.applications 属性：
+
+51. graphics：图形应用程序的时钟频率。
+52. memory：内存应用程序的时钟频率。
+
+关于 clocks.default_applications 属性：
+
+54. graphics：默认图形应用程序的时钟频率。
+55. memory：默认内存应用程序的时钟频率。
+
+关于 clocks.max 属性：
+
+56. graphics：图形时钟频率的最大值。
+57. sm：SM 模式时钟频率的最大值。
+58. memory：内存时钟频率的最大值。
+59. video：视频时钟频率的最大值。
+
+关于 mig.mode 属性：
+
+60. enabled：MIG 模式是否启用。
+61. mode：当前 MIG 模式。
+62. pending：下次重启后要使用的 MIG 模式。
+
+----性能----
+top_p:0.85  temperature: 0.8
+原文长度:19763    译文长度:2434 总结长度: 2256
+翻译耗时: 69.9364692sec 负载:83.44776 已用显存:17229.357 显卡功耗:253.17358
+总结耗时:59.4070864sec 负载:63.94737 已用显存:17232.982 显卡功耗:224.01842
+
+以下是根据给定的信息翻译的中文：
+
+查询 "--query-gpu" 中的有效属性：
+
+1. timestamp：查询显卡查询 timestamp 的值，格式为 "YYYY/MM/DD HH:MM:SS.msec"。
+2. driver_version：查询显卡驱动程序的版本号，是一个 alphanumeric 字符串。
+3. vgpu_driver_capability：查询显卡的 vGPU 驱动程序能力。
+4. count：查询系统中 NVIDIA GPU 的数量。
+5. name 或 gpu_name：查询 NVIDIA GPU 的官方产品名称，是一个 alphanumeric 字符串。
+6. serial 或 gpu_serial：与每个主板上的物理打印机号匹配的数字。这是一个全局唯一的不可变 alphanumeric 值。
+7. uuid 或 gpu_uuid：全球唯一不可变的 GPU 唯一标识符。它不对应任何物理标签。
+8. pci.bus_id 或 gpu_bus_id：PCI 总线 ID，以十六进制表示。
+9. pci.domain：PCI 域号，以十六进制表示。
+10. pci.bus：PCI 总线，以十六进制表示。
+11. pci.device：PCI 设备号，以十六进制表示。
+12. pci.device_id：PCI 设备 ID，以十六进制表示。
+13. pci.index：索引，零 based。可以在每次启动时更改。
+14. display_mode：显示模式标志，表示物理显示器是否与任何 GPU 连接。
+15. display_active：显示器是否正在初始化，表示是否正在运行。
+16. persistence_mode：是否启用持久性模式。值可以是 "Enabled" 或 "Disabled"。如果持久性模式启用，则 NVIDIA 驱动程序将保持加载，即使没有活动客户端（如 X11 或 nvidia-smi）正在运行。这可以减少与运行依赖应用程序相关的驱动程序加载延迟。仅在支持持久性模式的产品上使用。
+17. accounting.mode：是否启用计数器模式。值可以是 "Enabled" 或 "Disabled"。如果启用计数器模式，则 GPU 统计信息将在每次设备启动时获取。仅在支持计数器模式的产品上使用。
+18. accounting.buffer_size：用于存储计算过程的缓冲区大小。这是 GPU 实际可用的最大内存量。此值可能超过 100%。
+19. mig.mode：MIG（多 GPU）模式是否启用。可以是 "Enabled" 或 "Disabled"。更改 MIG 模式需要 GPU 重置。仅在支持 MIG 模式的产品上使用。
+20. fabric.state：GPU fabric 注册过程的当前状态。
+21. fabric.status：GPU fabric 注册状态的错误信息，仅在 GPU fabric 注册状态为 "completed" 时有效。
+
+以上是关于查询 "--query-gpu" 的有效属性的中文翻译。
+
+----总结----
+以下是给定信息总结的中文：
+
+1. 查询 "--query-gpu" 中的有效属性包括：timestamp、driver_version、vgpu_driver_capability、count、name 或 gpu_name、serial 或 gpu_serial、uuid 或 gpu_uuid、pci.bus_id 或 gpu_bus_id、pci.domain、pci.bus、pci.device、pci.device_id、pci.index、display_mode、display_active、persistence_mode、accounting.mode、accounting.buffer_size、mig.mode 和 fabric.state。
+2. 每个属性都有相应的描述和格式。例如，timestamp 为 "YYYY/MM/DD HH:MM:SS.msec"，driver_version 为一个 alphanumeric 字符串，vgpu_driver_capability 为一个表示显卡 vGPU 驱动程序能力的整数等。
+3. 部分属性只在特定条件下有效，如持久性模式和计数器模式，需要在支持相应模式的产品上使用。
+4. 有些属性与 GPU 驱动程序的特定功能相关，如 MIG 模式和 fabric.state。
+
+----性能----
+top_p:0.85  temperature: 0.7
+原文长度:19763    译文长度:1308 总结长度: 578
+翻译耗时: 37.9022194sec 负载:82.02702 已用显存:17236.459 显卡功耗:254.05649
+总结耗时:13.2699939sec 负载:59.916668 已用显存:17227.334 显卡功耗:203.52167
+

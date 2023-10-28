@@ -15,19 +15,19 @@ namespace glm_api_call_test.api
 
             public double temperature { get; set; } = 0.9;
             public double top_p { get; set; } = 0.9;
-            public int max_length { get; set; } = 1024 * 32;
+            public int max_length { get; set; } = 1024 * 8;
         }
 
         public config Config { get; private set; } = new config();
 
-        public string Name => "chatglm";
+        public string Name => "chatglm3";
 
         public int MaxLength => Config.max_length;
 
         public LLMTestTP[] GetTestTP()
         {
             return new[] {
-                new LLMTestTP(){ top_p = 1f, temperature = 1f },
+                new LLMTestTP(){ top_p = 0.9f, temperature = 0.9f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.8f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.7f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.6f },

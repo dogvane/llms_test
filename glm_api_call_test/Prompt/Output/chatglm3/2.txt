@@ -1,0 +1,330 @@
+------ prompt ------
+将下面段落翻译成中文，对于代码，指令，不要进行翻译，以下是正文：
+------ ------
+编码
+ .NET 8对 casting 进行了各种改进。
+
+dotnet/runtime#75816改进了使用 sealed T[] 时的情况下的性能。JIT 可以使用 CORINFO_HELP_ISINSTANCEOFARRAY 辅助来确定对象是否为指定数组类型，但当 T 是 sealed 时，JIT 可以代替该辅助，生成代码，就好像 obj 不是 null 且 obj.GetType() == typeof(T[])。这是动态 PGO 具有可衡量影响的一个例子，因此基准测试突出了有和没有它的改进。
+
+// dotnet run -c Release -f net7.0 --filter "*"
+
+使用 BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+
+configuration 实例
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TieredPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8"));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD", "EnvironmentVariables", "Runtime")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly object _obj = new string[1];
+
+    [Benchmark]
+    public bool IsStringArray() => _obj is string[];
+}
+Method	Job	Mean	Ratio
+IsStringArray	.NET 7	1.2290 ns	1.00
+IsStringArray	.NET 8 w/o PGO	0.2365 ns	0.19
+IsStringArray	.NET 8	0.0825 ns	0.07
+接下来要考虑的基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用 BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly string[] _strings = new string[1];
+
+    [Benchmark]
+    public string Get1() => _strings[0];
+
+    [Benchmark]
+    public string Get2() => Volatile.Read(ref _strings[0]);
+}
+Get1 这里只是读取并返回数组的 0 个元素。Get2 这里返回一个数组 0 个元素的引用。下面是在 .NET 7 中的 assembly：
+
+; Tests.Get1()
+       sub       rsp,28
+       mov       rax,[rcx+8]
+       cmp       dword ptr [rax+8],0
+       jbe       short M00_L00
+       mov       rax,[rax+10]
+       add       rsp,28
+       ret
+M00_L00:
+       call      CORINFO_HELP_RNGCHKFAIL
+       int       3
+; Total bytes of code 29
+
+; Tests.Get2()
+       sub       rsp,28
+       mov       rcx,[rcx+8]
+       xor       edx,edx
+       mov       r8,offset MT_System.String
+       call      CORINFO_HELP_LDELEMA_REF
+       nop
+       add       rsp,28
+       ret
+; Total bytes of code 31
+
+------ ------
+原文长度:2808    译文长度:2363
+
+------ prompt ------
+翻译下面段落成中文，不要翻译代码，指令。以下是正文： 
+------ ------
+编码
+在 .NET 8 中，对 casting 的性能进行了多项改进。
+
+当 T 是一个已封裝的类型时，使用 is T[] 性能得到了提高。在 JIT 中，有一个名为 CORINFO_HELP_ISINSTANCEOFARRAY 的辅助器，用于确定对象是否为指定数组类型，但当 T 是已封裝的時，JIT 可以不再使用此辅助器，而是生成與 obj 不是 null 且 obj.GetType() == typeof(T[]). 这是动态 PGO 影响的另一个示例，因此基准测试突出了有和没有它的改进。
+
+// dotnet run -c Release -f net7.0 --filter "*"
+
+使用 BenchmarkDotNet.Attributes;
+使用 BenchmarkDotNet.Configs;
+使用 BenchmarkDotNet.Environments;
+使用 BenchmarkDotNet.Jobs;
+使用 BenchmarkDotNet.Running;
+
+config = DefaultConfig.Instance
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TieredPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8"));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD", "EnvironmentVariables", "Runtime")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly object _obj = new string[1];
+
+    [Benchmark]
+    public bool IsStringArray() => _obj is string[];
+}
+Method	Job	Mean	Ratio
+IsStringArray	.NET 7	1.2290 ns	1.00
+IsStringArray	.NET 8 w/o PGO	0.2365 ns	0.19
+IsStringArray	.NET 8	0.0825 ns	0.07
+接下来，考虑这个基准：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用 BenchmarkDotNet.Attributes;
+使用 BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly string[] _strings = new string[1];
+
+    [Benchmark]
+    public string Get1() => _strings[0];
+
+    [Benchmark]
+    public string Get2() => Volatile.Read(ref _strings[0]);
+}
+Get1 这里只是读取并返回数组的 0 个元素。Get2 这里返回一个指向数组 0 个元素的指针。在 .NET 7 中，我们得到的汇编如下：
+
+; Tests.Get1()
+       sub       rsp,28
+       mov       rax,[rcx+8]
+       cmp       dword ptr [rax+8],0
+       jbe       short M00_L00
+       mov       rax,[rax+10]
+       add       rsp,28
+       ret
+M00_L00:
+       call      CORINFO_HELP_RNGCHKFAIL
+       int       3
+
+; Total bytes of code 29
+
+; Tests.Get2()
+       sub       rsp,28
+       mov       rcx,[rcx+8]
+       xor       edx,edx
+       mov       r8,offset MT_System.String
+       call      CORINFO_HELP_LDELEMA_REF
+       nop
+       add       rsp,28
+       ret
+; Total bytes of code 31
+
+------ ------
+原文长度:2808    译文长度:2358
+
+------ prompt ------
+Translate the following paragraph into Chinese. Do not translate the code and instructions. Here is the main text:
+------ ------
+编码
+在 .NET 8 中，对 casting 的性能进行了各种改进。
+
+dotnet/runtime#75816 改进了使用 is T[] 时 T 是 sealed 的情况下的性能。JIT 使用一个名为 CORINFO_HELP_ISINSTANCEOFARRAY 的辅助来确定对象是否为指定数组类型，但是当 T 是 sealed 时，JIT 可以直接生成代码，而不需要使用辅助，如下所示：
+
+obj is null && obj.GetType() == typeof(T[])。
+
+这是动态 PGO 具有可衡量影响的一个示例，因此基准测试突显了具有和没有它的改进。
+
+// dotnet run -c Release -f net7.0 --filter "*"
+
+使用 BenchmarkDotNet.Attributes；
+
+使用 BenchmarkDotNet.Configs；
+
+使用 BenchmarkDotNet.Environments；
+
+使用 BenchmarkDotNet.Jobs；
+
+使用 BenchmarkDotNet.Running；
+
+config 变量如下：
+
+var config = DefaultConfig.Instance
+
+.AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+
+.AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TieredPGO", "0"))
+
+.AddJob(Job.Default.WithId(".NET 8").WithRuntime(CoreRuntime.Core80));
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config)；
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD", "EnvironmentVariables", "Runtime")]
+
+[DisassemblyDiagnoser(maxDepth: 0)]
+
+public class Tests
+
+{
+
+private readonly object _obj = new string[1];
+
+[Benchmark]
+
+public bool IsStringArray() => _obj is string[];
+
+}
+
+Method	Job	Mean	Ratio
+
+IsStringArray	.NET 7	1.2290 ns	1.00
+
+IsStringArray	.NET 8 w/o PGO	0.2365 ns	0.19
+
+IsStringArray	.NET 8	0.0825 ns	0.07
+
+接下来要考虑的基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用 BenchmarkDotNet.Attributes；
+
+使用 BenchmarkDotNet.Running；
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+
+[DisassemblyDiagnoser(maxDepth: 0)]
+
+public class Tests
+
+{
+
+private readonly string[] _strings = new string[1];
+
+[Benchmark]
+
+public string Get1() => _strings[0];
+
+[Benchmark]
+
+public string Get2() => Volatile.Read(ref _strings[0]）；
+
+}
+
+Get1 这里只是读取并返回数组的 0 个元素。Get2 这里返回一个指向数组 0 个元素的引用。下面是在 .NET 7 中的 assembly：
+
+; Tests.Get1()
+
+sub       rsp,28
+
+mov       rax, [rcx+8]
+
+cmp       dword ptr [rax+8],0
+
+jbe       short M00_L00
+
+mov       rax, [rax+10]
+
+add       rsp,28
+
+ret
+
+M00_L00:
+
+call      CORINFO_HELP_RNGCHKFAIL
+
+int       3
+
+; 总共有 29 字节代码
+
+接下来要考虑的基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用 BenchmarkDotNet.Attributes；
+
+使用 BenchmarkDotNet.Running；
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+
+[DisassemblyDiagnoser(maxDepth: 0)]
+
+public class Tests
+
+{
+
+private readonly string[] _strings = new string[1];
+
+[Benchmark]
+
+public string Get1() => _strings[0];
+
+[Benchmark]
+
+public string Get2() => Volatile.Read(ref _strings[0]）；
+
+}
+
+Get1 这里只是读取并返回数组的 0 个元素。Get2 这里返回一个指向数组 0 个元素的引用。下面是在 .NET 8 中的 assembly：
+
+; Tests.Get1()
+
+sub       rsp,28
+
+------ ------
+原文长度:2808    译文长度:2736
+
+----性能----
+top_p:0.9  temperature: 0.9
+翻译耗时: 156.9571557sec 负载:61.986668 已用显存:17224.406 显卡功耗:225.56413
+

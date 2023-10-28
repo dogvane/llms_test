@@ -1,0 +1,130 @@
+------ prompt ------
+将下面段落翻译成中文，对于代码，指令，不要进行翻译，以下是正文：
+------ ------
+好的，我们之前讨论了什么？哦，是的，结构体。与结构体相关的一个改进来自.NET/runtime#79346，它比其他已经具有的liveness优化阶段提前引入了一个额外的“liveness优化”阶段（liveness只是变量可能仍然需要的指示，因为其值可能在未来被使用）。这使得JIT能够删除一些之前无法删除的结构体复制，特别是在结构体最后一次被使用时，它被传递给另一个方法的情况下。然而，这个额外的liveness pass还有其他好处，特别是在“forward substitution”方面。Forward substitution是一种优化，可以认为是“common subexpression elimination”（CSE）的相反。使用CSE，编译器将替换包含已经计算该表达式结果的表达式，例如，如果你有：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+编译器可能会使用CSE将其重写为：
+
+int tmp = a + b;
+int c = tmp + 3;
+int d = tmp * 4;
+Forward substitution可以用来反向执行这个操作，将表达式喂入tmp并将其返回到tmp所在的位置，从而我们最终返回：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+为什么编译器想要这样做呢？这可以使后续的优化更容易实现。例如，考虑以下基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser]
+public class Tests
+{
+    [Benchmark]
+    [Arguments(42)]
+    public int Merge(int a)
+    {
+        a *= 3;
+        a *= 3;
+        return a;
+    }
+}
+
+------ ------
+原文长度:1795    译文长度:1060
+
+------ prompt ------
+翻译下面段落成中文，不要翻译代码，指令。以下是正文： 
+------ ------
+Ok，我们在哪里？哦，对了，是结构体。与结构体相关的一个改进可以在netcore/runtime#79346中找到，它比其他已经具有的liveness优化阶段提前执行一个额外的优化（liveness只是表示变量是否可能仍然需要，因为它的值可能会在将来被使用）。这使得JIT能够删除一些之前无法删除的结构体复制，特别是在结构体最后一次被使用时，被传递给另一个方法的情况下。然而，这个额外的liveness阶段也有其他好处，特别是在 relation to forward substitution（向前替换）方面。向前替换是一种优化，可以认为它是 common subexpression elimination（CSE）的相反。使用CSE，编译器用包含对某个表达式已经计算结果的某种表达式替换表达式，例如，如果你有：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+编译器可能会使用CSE将其重写为：
+
+int tmp = a + b;
+int c = tmp + 3;
+int d = tmp * 4;
+向前替换可以使用户将表达式 feeding into tmp 返回到 tmp 的位置，从而使我们最终回到：
+
+int c = (a + b) + 3;
+int d = (a + b) * 4;
+为什么编译器想要这样做呢？这可以让后续的优化更容易实现。例如，考虑这个基准：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser]
+public class Tests
+{
+    [Benchmark]
+    [Arguments(42)]
+    public int Merge(int a)
+    {
+        a *= 3;
+        a *= 3;
+        return a;
+    }
+}
+
+------ ------
+原文长度:1795    译文长度:1043
+
+------ prompt ------
+Translate the following paragraph into Chinese. Do not translate the code and instructions. Here is the main text:
+------ ------
+好的，我们在哪里？哦，对，结构体。与结构体相关的另一个改进可以在netdotnet/runtime#79346中找到，它添加了一个额外的“活性”优化 passes，这个 passes 它在其他 passes 之前已经拥有（“活性”只是表示变量是否可能仍然需要，因为它的值可能会在将来被使用）。这使得 JIT 能够删除之前无法删除的一些结构体复制，特别是在最后一次使用结构体并在将结构体传递给另一个方法的情况下。然而，这个额外的“活性” pass 也有其他好处，特别是在“向前替换”方面。向前替换是一种优化，可以认为是“常见子表达式消除”（CSE）的相反。使用 CSE，编译器用包含该表达式已计算结果的替换表达式替换表达式，例如，如果你有：
+
+int c = (a + b) + 3;
+int d = (a + b) \* 4;
+编译器可能会使用 CSE 将其重写为：
+
+int tmp = a + b;
+int c = tmp + 3;
+int d = tmp \* 4;
+向前替换可以使用户将表达式喂回 tmp，以便最终回到：
+
+int c = (a + b) + 3;
+int d = (a + b) \* 4;
+为什么编译器想要这样做呢？这可以使后续的优化更容易实现。例如，考虑这个基准：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+使用 BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser]
+public class Tests
+{
+[Benchmark]
+[Arguments(42)]
+public int Merge(int a)
+{
+a \*= 3;
+a \*= 3;
+return a;
+}
+}
+
+------ ------
+原文长度:1795    译文长度:938
+
+----性能----
+top_p:0.9  temperature: 0.9
+翻译耗时: 72.1862674sec 负载:57.3 已用显存:17223.271 显卡功耗:218.64258
+
