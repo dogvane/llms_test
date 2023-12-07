@@ -6,35 +6,37 @@ using Newtonsoft.Json;
 namespace glm_api_call_test.api
 {
     /// <summary>
-    /// 千问，阿里的产品
+    /// 01 
     /// </summary>
-    public class qianw : ILLM
+    public class Yi : ILLM
     {
         public class config
         {
             public string url { get; set; } = "http://127.0.0.1:8001/";
 
-            public double temperature { get; set; } = 0.0;
-            public double top_p { get; set; } = 0.5;
-            public int max_length { get; set; } = 1000 * 8;
+            public double temperature { get; set; } = 0.9;
+            public double top_p { get; set; } = 0.9;
+            public int max_length { get; set; } = 4096;
         }
 
         public config Config { get; private set; } = new config();
 
-        public string Name => "qianw7";
+        public string Name => "Yi_6b";
 
         public int MaxLength => Config.max_length;
 
         public LLMTestTP[] GetTestTP()
         {
             return new[] {
-                new LLMTestTP(){ top_p = 0.1f, temperature = 0.01f },
-                new LLMTestTP(){ top_p = 0.85f, temperature = 0.01f },
-                new LLMTestTP(){ top_p = 0.75f, temperature = 0.01f },
-                new LLMTestTP(){ top_p = 0.65f, temperature = 0.01f },
-                new LLMTestTP(){ top_p = 0.55f, temperature = 0.01f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.7f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.5f },
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.4f },
+                new LLMTestTP(){ top_p = 0.95f, temperature = 0.8f },
+                new LLMTestTP(){ top_p = 0.75f, temperature = 0.7f },
+                new LLMTestTP(){ top_p = 0.65f, temperature = 0.7f },
             };
         }
+        
         public void SetTP(LLMTestTP configItem)
         {
             Config.top_p = configItem.top_p;
@@ -89,10 +91,10 @@ namespace glm_api_call_test.api
                 var request = new
                 {
                     prompt = messages,
-                    //history = new[] { history },
+                    history,
                     Config.top_p,
                     Config.max_length,
-                    //Config.temperature,
+                    Config.temperature,
                     stream = false
                 };
                 Console.WriteLine($"request.length: {messages.Length}");

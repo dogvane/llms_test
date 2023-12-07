@@ -1,0 +1,575 @@
+以下是为查询“--query-gpu”开关的有效属性列出的列表：
+
+“timestamp”
+查询的日期和时间，以“YYYY/MM/DD HH:MM:SS.msec”的格式显示。
+
+“driver_version”
+安装的NVIDIA显示驱动的版本号。这是一个字母数字字符串。
+
+关于vgpu_driver_capability属性的部分：
+获取关于驱动级别特性的信息。
+
+“vgpu_driver_capability.heterogenous_multivGPU”
+是否支持异构多vGPU配置。
+
+“count”
+系统中的NVIDIA显卡的数目。
+
+“name”或“gpu_name”
+GPU的官方产品名称。这是一个字母数字字符串。对所有产品都适用。
+
+“serial”或“gpu_serial”
+这个数字与每个板子上物理打印的序列号相匹配。它是一个全局唯一、不可变的字母数字值。
+
+“uuid”或“gpu_uuid”
+这是GPU的全球唯一、不可变的字母数字标识符。它并不对应于板子上的任何物理标签。
+
+“pci.bus_id”或“gpu_bus_id”
+以“domain:bus:device.function”的格式显示PCI总线ID，为十六进制。
+
+“pci.domain”
+PCI总线域号，为十六进制。
+
+“pci.bus”
+PCI总线号，为十六进制。
+
+“pci.device”
+PCI设备号，为十六进制。
+
+“pci.device_id”
+PCI厂商设备号，为十六进制。
+
+“pci.sub_device_id”
+PCI子系统号，为十六进制。
+
+关于vgpu_device_capability属性的部分：
+获取关于设备级别特性的信息。
+
+“vgpu_device_capability.fractional_multivGPU”
+当前GPU是否支持分段vGPU配置。
+
+“vgpu_device_capability.heterogeneous_timeslice_profile”
+是否支持并发执行不同类型的timesliced vGPU配置。
+
+“vgpu_device_capability.heterogeneous_timeslice_sizes”
+是否支持并发执行不同帧缓冲区大小的timesliced vGPU配置。
+
+“pcie.link.gen.current”
+当前PCI-E链接的生成。这些可能在GPU不使用时被减少。已过时，请使用pcie.link.gen.gpucurrent代替。
+
+“pcie.link.gen.gpucurrent”
+当前PCI-E链接的生成。这些可能在GPU不使用时被减少。
+
+“pcie.link.gen.max”
+与当前GPU和系统配置相关的最大PCI-E链接生成。例如，如果GPU支持比系统更高的PCIe生成，那么此报告的是系统PCIe生成。
+
+“pcie.link.gen.hostmax”
+与对应于此GPU的根端口相关的最大PCI-E链接生成。
+
+“pcie.link.width.current”
+当前PCI-E链接宽度。这些可能在GPU不使用时被减少。
+
+“pcie.link.width.max”
+与当前GPU和系统配置相关的最大PCI-E链接宽度。例如，如果GPU支持比系统更高的PCIe生成，那么此报告的是系统PCIe生成。
+
+“index”
+
+零基索引表示GPU的索引。在每次启动时可能会发生变化。
+
+"显示模式"
+一个标志，表示物理显示器（例如显示器）是否当前连接到GPU的任何连接器。“启用”表示已连接显示器。“禁用”表示其他情况。
+
+"显示活跃"
+一个标志，表示GPU（例如内存）是否已初始化以显示。即使物理显示器没有实际连接，显示也可以处于活动状态。“启用”表示活动显示。“禁用”表示其他情况。
+
+"持久性模式"
+一个标志，表示是否为GPU启用了持久性模式。值为“启用”或“禁用”。当持久性模式启用时，即使没有活动的客户端（如X11或nvidia-smi）存在，NVIDIA驱动程序也会保持加载。这可以减少与运行依赖性应用程序（如CUDA程序）相关的驱动加载延迟。Linux上。
+
+"会计模式"
+一个标志，表示会计模式是否为GPU启用。值为“启用”或“禁用”。当会计模式启用时，将为每个在GPU上运行的计算进程计算统计信息。可以在进程的整个生命周期或终止后查询统计信息。进程的执行时间在进程运行时报告为0，并在进程终止后更新为实际执行时间。请参阅--help-query-accounted-apps以获取更多信息。
+
+"会计缓冲区大小"
+保存可以查询会计统计信息的进程列表的环形缓冲区的最大大小。这是存储关于最老进程的信息之前关于新进程的信息会被更新的最大进程数。
+
+关于驱动模型属性的部分
+在Windows上，TCC和WDDM驱动模型是支持的。驱动模型可以通过(-dm)或(-fdm)标志进行更改。TCC驱动模型针对计算应用程序进行了优化。例如，内核启动时间在使用TCC时将会更快。WDDM驱动模型是为图形应用程序设计的，不推荐用于计算应用程序。Linux不支持多个驱动模型，并且始终为“N/A”。仅适用于选定产品。请参阅NVML文档中的功能矩阵。
+
+"驱动模型.当前"
+当前使用的驱动模型的值。在Linux上始终为“N/A”。
+
+"驱动模型.待定"
+在下次重启后将使用的驱动模型。在Linux上始终为“N/A”。
+
+"vbios版本"
+GPU板的BIOS版本。
+版本号对于GPU板上的信息存储rom中的每个对象。信息存储rom是一个小的、持久的数据存储，用于GPU的配置和状态信息。rom中的所有版本号字段都是数字的。了解这些版本号是有用的，因为GPU的一些功能只对特定版本的或更高的信息存储rom可用。
+
+"inforom.img" 或 "inforom.image"
+全局信息存储映像版本。图像版本类似于VBIOS版本，独一无二地描述了板上闪存的特定版本信息存储，与信息存储对象的版本不同，它只是支持功能的指示器。
+
+"inforom.oem"
+OEM配置数据的版本。
+
+"inforom.ecc"
+ECC记录数据的版本。
+
+"inforom.pwr" 或 "inforom.power"
+电源管理数据的版本。
+
+关于gom属性的部分
+GOM允许通过禁用GPU功能来减少功耗并优化GPU吞吐量。每个GOM都设计来满足特定的用户需求。
+在“全部开启”模式下，所有功能都启用，并运行在最大速度。
+“计算”模式设计用于仅运行计算任务。不允许执行图形操作。
+“低双精度”模式设计用于运行不要求高带宽双精度的图形应用程序。
+GOM可以通过(--gom)标志进行更改。
+
+"gom.current" 或 "gpu_operation_mode.current"
+当前使用的GOM。
+
+"gom.pending" 或 "gpu_operation_mode.pending"
+下次重启时将使用的GOM。
+
+"fan.speed"
+风扇速度值是设备当前打算运行的最高噪音容限风扇速度的百分比。在某些情况下，此值可能超过100%。注意：报告的速度是设备的预期风扇速度。如果风扇 physically blocked and unable to spin，此输出将不匹配实际风扇速度。许多部分不报告风扇速度，因为它们依赖于周围的机箱冷却。
+
+"pstate"
+GPU当前的工作状态。状态范围从P0（最大性能）到P12（最小性能）。
+
+关于时钟s_throttle_reasons属性的部分
+获取减少时钟频率的因素信息。如果所有限制原因都被返回为“Not Active”，这意味着时钟正在以尽可能高的速度运行。
+
+"clocks_throttle_reasons.supported"
+支持的时钟限制原因的位掩码。详细信息请参阅nvml.h。
+
+"clocks_throttle_reasons.active"
+当前活跃的时钟限制原因的位掩码。详细信息请参阅nvml.h。
+
+"clocks_throttle_reasons.gpu_idle"
+GPU上没有任何运行，时钟正在下降到空闲状态。这可能在未来版本中被移除。
+
+"clocks_throttle_reasons.applications_clocks_setting"
+GPU时钟受到应用时钟设置的限制。例如，可以通过nvidia-smi --applications-clocks=
+
+
+时钟限制原因的翻译：
+
+- "clocks_throttle_reasons.sw_power_cap" 表示软件功率缩放算法正在降低时钟，因为GPU消耗的功率过多。例如，软件功率限制极限可以通过使用nvidia-smi --power-limit来更改。
+- "clocks_throttle_reasons.hw_slowdown" 表示硬件减速（降低核心时钟至少2倍）已启用。这可能指示：
+  - HW Thermal Slowdown：温度过高
+  - HW Power Brake Slowdown：系统电源供应器触发外部电源制动（例如）
+  - 功率消耗过高，导致快速触发器保护降低时钟
+  - 可能在P状态或时钟变化期间报告
+  - 此行为可能在后续版本中取消
+- "clocks_throttle_reasons.hw_thermal_slowdown" 表示硬件热减速已启用。这可能指示温度过高
+- "clocks_throttle_reasons.hw_power_brake_slowdown" 表示硬件功率制动减速已启用。这可能指示外部电源制动器被触发（例如，系统电源供应器）
+- "clocks_throttle_reasons.sw_thermal_slowdown" 表示软件热限制算法正在降低时钟，因为GPU温度超过最大操作温度。
+- "clocks_throttle_reasons.sync_boost" 表示同步加速。GPU被添加到同步加速组，该组通过nvidia-smi或DCGM在
+  - 以最大化每瓦特性能。组中的所有GPU
+  - 会以整个组中可能的最低时钟运行。查看系统中其他GPU的限制原因以了解为什么那些GPU限制此GPU的时钟。
+
+内存属性的翻译：
+
+- "memory.total" 表示总GPU内存。
+- "memory.reserved" 表示由NVIDIA驱动和固件保留的总内存。
+- "memory.used" 表示已分配给活动上下文的总内存。
+- "memory.free" 表示可用内存的总数。
+- "compute_mode" 表示计算模式标志，指示单个还是多个计算应用程序是否可以在GPU上运行。
+  - "0: Default" 表示允许单个设备中的多个上下文。
+  - "1: Exclusive_Thread"，已弃用，使用Exclusive_Process代替
+  - "2: Prohibited" 表示不允许单个设备中的任何上下文（不允许计算应用程序）。
+  - "3: Exclusive_Process" 表示仅允许单个设备中的一个上下文，可在多个线程中同时使用。
+
+计算能力的翻译：
+
+- "compute_cap" 表示CUDA计算能力，以Major DOT Minor表示。
+翻译成中文：
+利用率报告展示了每个GPU在一段时间内的繁忙程度，可以用来确定应用程序对系统GPU的使用量。
+
+"利用率.gpu"
+在过去采样期间，一个或多个内核在GPU上执行的时间百分比。
+采样期可能为1秒到1/6秒，具体取决于产品。
+
+"利用率.memory"
+在过去采样期间，全球（设备）内存被读或写的百分比。
+采样期可能为1秒到1/6秒，具体取决于产品。
+
+关于编码器.stats属性的说明部分：
+编码器统计报告GPU上运行的编码器会话数、平均FPS和平均延迟（以微秒为单位）。
+
+"编码器.stats.sessionCount"
+运行在GPU上的编码器会话数。
+
+"编码器.stats.averageFps"
+所有运行在GPU上的会话的平均FPS。
+
+"编码器.stats.averageLatency"
+所有运行在GPU上的会话的平均延迟（以微秒为单位）。
+
+关于ecc.mode属性的说明部分：
+一个标志，指示ECC支持是否已启用。可能是“Enabled”或“Disabled”。更改ECC模式需要重启。需要Inforom ECC对象版本1.0或更高版本。
+
+"ecc.mode.current"
+GPU当前运行的ECC模式。
+
+"ecc.mode.pending"
+GPU在下次重启后将运行的模式。
+
+关于ecc.errors属性的说明部分：
+NVIDIA GPU可以提供各种ECC错误的错误计数。一些ECC错误要么是单比特错误，要么是双比特错误，其中单比特错误被自动纠正，双比特错误不被纠正。纹理内存错误可能是通过重传或失败的不纠正错误。这些错误在两个时间尺度（易失性和总和）下可用。单比特ECC错误由HW自动纠正，不会导致数据损坏。双比特错误被检测但不纠正。请参考网络上的ECC文档，了解当双比特错误发生时，计算应用程序的行为。易失性错误计数跟踪自上次驱动加载以来检测到的错误数。总和错误计数无限期地存在，因此作为终身计数器。
+
+"ecc.errors.corrected.volatile.device_memory"
+在全局设备内存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.dram"
+在全局设备内存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.register_file"
+在寄存器文件内存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.l1_cache"
+在L1缓存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.l2_cache"
+在L2缓存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.texture_memory"
+在纹理内存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.cbu"
+在CBU中检测到的错误数。
+
+"ecc.errors.corrected.volatile.sram"
+
+检测到全局SRAM中的错误。
+
+"ecc.errors.corrected.volatile.total"
+在整个芯片上检测到的错误总数。
+
+"ecc.errors.corrected.aggregate.device_memory"
+检测到的全局设备内存错误。
+
+"ecc.errors.corrected.aggregate.dram"
+检测到的全局设备内存错误。
+
+"ecc.errors.corrected.aggregate.register_file"
+检测到的寄存器文件内存错误。
+
+"ecc.errors.corrected.aggregate.l1_cache"
+检测到的L1缓存错误。
+
+"ecc.errors.corrected.aggregate.l2_cache"
+检测到的L2缓存错误。
+
+"ecc.errors.corrected.aggregate.texture_memory"
+检测到的纹理内存奇偶校验错误。
+
+"ecc.errors.corrected.aggregate.cbu"
+检测到的CBU奇偶校验错误。
+
+"ecc.errors.corrected.aggregate.sram"
+检测到的全局SRAM中的错误。
+
+"ecc.errors.corrected.aggregate.total"
+在整个芯片上检测到的错误总数。
+
+"ecc.errors.uncorrected.volatile.device_memory"
+检测到的全局设备内存错误。
+
+"ecc.errors.uncorrected.volatile.dram"
+检测到的全局设备内存错误。
+
+"ecc.errors.uncorrected.volatile.register_file"
+检测到的寄存器文件内存错误。
+
+"ecc.errors.uncorrected.volatile.l1_cache"
+检测到的L1缓存错误。
+
+"ecc.errors.uncorrected.volatile.l2_cache"
+检测到的L2缓存错误。
+
+"ecc.errors.uncorrected.volatile.texture_memory"
+检测到的纹理内存奇偶校验错误。
+
+"ecc.errors.uncorrected.volatile.cbu"
+检测到的CBU奇偶校验错误。
+
+"ecc.errors.uncorrected.volatile.sram"
+检测到的全局SRAM中的错误。
+
+"ecc.errors.uncorrected.volatile.total"
+在整个芯片上检测到的错误总数。
+
+"ecc.errors.uncorrected.aggregate.device_memory"
+检测到的全局设备内存错误。
+
+"ecc.errors.uncorrected.aggregate.dram"
+检测到的全局设备内存错误。
+
+"ecc.errors.uncorrected.aggregate.register_file"
+检测到的寄存器文件内存错误。
+
+"ecc.errors.uncorrected.aggregate.l1_cache"
+检测到的L1缓存错误。
+
+"ecc.errors.uncorrected.aggregate.l2_cache"
+检测到的L2缓存错误。
+
+"ecc.errors.uncorrected.aggregate.texture_memory"
+检测到的纹理内存奇偶校验错误。
+
+"ecc.errors.uncorrected.aggregate.cbu"
+检测到的CBU奇偶校验错误。
+
+"ecc.errors.uncorrected.aggregate.sram"
+检测到的全局SRAM中的错误。
+
+"ecc.errors.uncorrected.aggregate.total"
+在整个芯片上检测到的错误总数。
+由于我是一个人工智能，我无法直接翻译，但我可以提供一些可能的翻译：
+
+由于出现多次单比特ECC错误，GPU设备内存页已被退休的数量。
+
+由于双比特ECC错误，GPU设备内存页已被退休的数量。
+
+检查是否有任何GPU设备内存页在下次重启时处于待退休状态。处于待退休状态的内存页仍然可以分配，可能会导致进一步可靠性问题。
+
+GPU核心温度，以摄氏度计。
+
+HBM内存温度，以摄氏度计。
+
+是否启用了电源管理。可能是“支持”或“[未支持]”。需要Inforom PWR对象版本3.0或更高或Kepler设备。
+
+最近测量的整个板卡功率，以瓦特为单位。仅在电源管理支持时可用。该读数精确到+/- 5瓦特。
+
+软件设置的电源限制，以瓦特为单位。通过软件如nvidia-smi设置。在Kepler设备上，Power Limit可以通过[-pl | --power-limit=]开关进行调整。
+
+强制执行的电源限制，以瓦特为单位。
+
+默认的电源管理算法的电源限制，以瓦特为单位。Power Limit在驱动程序卸载后将设置为Default Power Limit。
+
+最小可设置的电源限制。
+
+最大可设置的电源限制。
+
+当前图形（着色器）时钟。
+
+当前SM（流多处理器）时钟。
+
+当前内存时钟。
+
+当前视频编码/解码时钟。
+
+应用程序时钟配置属性部分
+应用程序将运行于其上的频率。可以通过使用[-ac | --applications-clocks]开关进行更改。
+
+用户指定的图形（着色器）时钟频率。
+
+用户指定的内存频率。
+
+应用程序默认时钟配置属性部分
+应用程序的默认运行频率。可以通过使用[-ac | --applications-clocks]开关进行更改。可以使用[-rac | --reset-applications-clocks]开关将应用程序时钟重置为默认值。
+
+用户指定的图形（着色器）时钟频率。
+
+用户指定的内存频率。
+
+
+默认应用程序图形(着色器)时钟的频率。
+
+"clocks.default_applications.memory"或"clocks.default_applications.mem"
+默认应用程序内存时钟的频率。
+
+关于clocks.max属性的部分
+这是GPU的部分，设计用于以最高频率运行。
+
+"clocks.max.graphics"或"clocks.max.gr"
+图形(着色器)时钟的最大频率。
+
+"clocks.max.sm"或"clocks.max.sm"
+SM(流多处理器)时钟的最大频率。
+
+"clocks.max.memory"或"clocks.max.mem"
+内存时钟的最大频率。
+
+关于mig.mode属性
+这是一个标志，指示MIG模式是否已启用。可以是“Enabled”或“Disabled”。更改MIG模式需要重置GPU。
+
+"mig.mode.current"
+GPU当前运行的模式。
+
+"mig.mode.pending"
+GPU在重置后将运行的模式。
+
+"fabric.state"
+GPU fabric注册过程的当前状态。
+
+"fabric.status"
+只有在GPU fabric注册状态为“completed”时才有效的错误状态。
+
+----总结----
+这份列表详细列出了查询“--query-gpu”开关的有效属性。这些属性可以用于获取有关GPU硬件、驱动程序版本、功能状态以及驱动模型和PCI Express链接的信息。
+版本号对于GPU板上的信息存储rom中的每个对象。信息存储rom是一个小的、持久的数据存储，用于GPU的配置和状态信息。rom中的所有版本号字段都是数字的。了解这些版本号是有用的，因为GPU的一些功能只对特定版本的或更高的信息存储rom可用。
+
+"inforom.img" 或 "inforom.image"
+全局信息存储映像版本。图像版本类似于VBIOS版本，独一无二地描述了板上闪存的特定版本信息存储，与信息存储对象的版本不同，它只是支持功能的指示器。
+
+"inforom.oem"
+OEM配置数据的版本。
+
+"inforom.ecc"
+ECC记录数据的版本。
+
+"inforom.pwr" 或 "inforom.power"
+电源管理数据的版本。
+
+关于gom属性的部分
+GOM允许通过禁用GPU功能来减少功耗并优化GPU吞吐量。每个GOM都设计来满足特定的用户需求。
+在“全部开启”模式下，所有功能都启用，并运行在最大速度。
+“计算”模式设计用于仅运行计算任务。不允许执行图形操作。
+“低双精度”模式设计用于运行不要求高带宽双精度的图形应用程序。
+GOM可以通过(--gom)标志进行更改。
+
+"gom.current" 或 "gpu_operation_mode.current"
+当前使用的GOM。
+
+"gom.pending" 或 "gpu_operation_mode.pending"
+下次重启时将使用的GOM。
+
+"fan.speed"
+风扇速度值是设备当前打算运行的最高噪音容限风扇速度的百分比。在某些情况下，此值可能超过100%。注意：报告的速度是设备的预期风扇速度。如果风扇 physically blocked and unable to spin，此输出将不匹配实际风扇速度。许多部分不报告风扇速度，因为它们依赖于周围的机箱冷却。
+
+"pstate"
+GPU当前的工作状态。状态范围从P0（最大性能）到P12（最小性能）。
+
+关于时钟s_throttle_reasons属性的部分
+获取减少时钟频率的因素信息。如果所有限制原因都被返回为“Not Active”，这意味着时钟正在以尽可能高的速度运行。
+
+"clocks_throttle_reasons.supported"
+支持的时钟限制原因的位掩码。详细信息请参阅nvml.h。
+
+"clocks_throttle_reasons.active"
+当前活跃的时钟限制原因的位掩码。详细信息请参阅nvml.h。
+
+"clocks_throttle_reasons.gpu_idle"
+GPU上没有任何运行，时钟正在下降到空闲状态。这可能在未来版本中被移除。
+
+"clocks_throttle_reasons.applications_clocks_setting"
+GPU时钟受到应用时钟设置的限制。例如，可以通过nvidia-smi --applications-clocks=
+
+时钟限制原因的翻译：
+
+- "clocks_throttle_reasons.sw_power_cap" 表示软件功率缩放算法正在降低时钟，因为GPU消耗的功率过多。例如，软件功率限制极限可以通过使用nvidia-smi --power-limit来更改。
+- "clocks_throttle_reasons.hw_slowdown" 表示硬件减速（降低核心时钟至少2倍）已启用。这可能指示：
+  - HW Thermal Slowdown：温度过高
+  - HW Power Brake Slowdown：系统电源供应器触发外部电源制动（例如）
+  - 功率消耗过高，导致快速触发器保护降低时钟
+  - 可能在P状态或时钟变化期间报告
+  - 此行为可能在后续版本中取消
+- "clocks_throttle_reasons.hw_thermal_slowdown" 表示硬件热减速已启用。这可能指示温度过高
+- "clocks_throttle_reasons.hw_power_brake_slowdown" 表示硬件功率制动减速已启用。这可能指示外部电源制动器被触发（例如，系统电源供应器）
+- "clocks_throttle_reasons.sw_thermal_slowdown" 表示软件热限制算法正在降低时钟，因为GPU温度超过最大操作温度。
+- "clocks_throttle_reasons.sync_boost" 表示同步加速。GPU被添加到同步加速组，该组通过nvidia-smi或DCGM在
+  - 以最大化每瓦特性能。组中的所有GPU
+  - 会以整个组中可能的最低时钟运行。查看系统中其他GPU的限制原因以了解为什么那些GPU限制此GPU的时钟。
+
+内存属性的翻译：
+
+- "memory.total" 表示总GPU内存。
+- "memory.reserved" 表示由NVIDIA驱动和固件保留的总内存。
+- "memory.used" 表示已分配给活动上下文的总内存。
+- "memory.free" 表示可用内存的总数。
+- "compute_mode" 表示计算模式标志，指示单个还是多个计算应用程序是否可以在GPU上运行。
+  - "0: Default" 表示允许单个设备中的多个上下文。
+  - "1: Exclusive_Thread"，已弃用，使用Exclusive_Process代替
+  - "2: Prohibited" 表示不允许单个设备中的任何上下文（不允许计算应用程序）。
+  - "3: Exclusive_Process" 表示仅允许单个设备中的一个context，可在多个线程中同时使用。
+
+计算能力的翻译：
+
+- "compute_cap" 表示CUDA计算能力，以Major DOT Minor表示。
+利用率报告提供了关于每个GPU在指定时间段内的繁忙程度的详细信息。这些信息可以帮助应用程序开发者了解他们的应用程序对系统GPU的使用情况。
+
+"利用率.gpu"
+在过去采样期间，一个或多个内核在GPU上执行的时间百分比。
+采样期可以是1秒到1/6秒，具体取决于产品的设计。
+
+"利用率.memory"
+在过去采样期间，全球（设备）内存被读或写的百分比。
+采样期可以是1秒到1/6秒，具体取决于产品的设计。
+
+关于编码器.stats属性的说明部分：
+编码器统计报告了GPU上运行的编码器会话的数量、平均FPS（帧率）和平均延迟（以微秒为单位）。
+
+"编码器.stats.sessionCount"
+运行在GPU上的编码器会话的数量。
+
+"编码器.stats.averageFps"
+所有运行在GPU上的会话的平均FPS。
+
+"编码器.stats.averageLatency"
+所有运行在GPU上的会话的平均延迟（以微秒为单位）。
+
+关于ecc.mode属性的说明部分：
+这是一个标志，指示ECC支持是否已启用。可能的值是“Enabled”或“Disabled”。更改ECC模式需要重启。需要Inforom ECC对象版本1.0或更高版本。
+
+"ecc.mode.current"
+GPU当前运行的ECC模式。
+
+"ecc.mode.pending"
+GPU在下次重启后将运行的模式。
+
+关于ecc.errors属性的说明部分：
+NVIDIA GPU可以提供各种ECC错误的错误计数。一些ECC错误要么是单比特错误，要么是双比特错误，其中单比特错误被自动纠正，双比特错误不被纠正。纹理内存错误可能是通过重传或失败的不纠正错误。这些错误在两个时间尺度（易失性和总和）下可用。单比特ECC错误由HW自动纠正，不会导致数据损坏。双比特错误被检测但不纠正。请参考网络上的ECC文档，了解当双比特错误发生时，计算应用程序的行为。易失性错误计数跟踪自上次驱动加载以来检测到的错误数。总和错误计数无限期地存在，因此作为终身计数器。
+
+"ecc.errors.corrected.volatile.device_memory"
+在全局设备内存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.dram"
+在全局设备内存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.register_file"
+在寄存器文件内存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.l1_cache"
+在L1缓存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.l2_cache"
+在L2缓存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.texture_memory"
+在纹理内存中检测到的错误数。
+
+"ecc.errors.corrected.volatile.cbu"
+在CBU中检测到的错误数。
+
+"ecc.errors.corrected.volatile.sram"
+
+
+检测到全局SRAM中的错误。
+根据您提供的信息，我可以总结如下：
+
+1. **默认应用程序内存时钟频率**：可以在“clocks.default_applications.memory”或“clocks.default_applications.mem”属性中找到默认应用程序内存时钟的频率。
+
+2. **图形(着色器)时钟的最大频率**：可以在“clocks.max.graphics”或“clocks.max.gr”属性中找到图形(着色器)时钟的最大频率。
+
+3. **SM(流多处理器)时钟的最大频率**：可以在“clocks.max.sm”或“clocks.max.sm”属性中找到SM(流多处理器)时钟的最大频率。
+
+4. **内存时钟的最大频率**：可以在“clocks.max.memory”或“clocks.max.mem”属性中找到内存时钟的最大频率。
+
+5. **MIG模式的状态和操作**：
+   - “mig.mode.current”表示GPU当前运行的模式。
+   - “mig.mode.pending”表示GPU在重置后将运行的模式。
+   - “fabric.state”表示GPU fabric注册过程的当前状态。
+
+6. **GPU fabric注册过程的状态**：可以在“fabric.state”属性中找到GPU fabric注册过程的当前状态。
+
+7. **错误状态**：只有在GPU fabric注册状态为“completed”时，“fabric.status”中的错误状态才有效。
+
+请注意，这些属性可能随GPU驱动或其他系统配置的变化而变化，因此实际值可能会根据您使用的硬件和软件环境而有所不同。如果您需要具体数值，建议直接查询对应的系统或硬件配置文件。
+
+----性能----
+top_p:0.85  temperature: 0.7
+原文长度:19763    译文长度:8988 总结长度: 4577
+翻译耗时: 281.9547324sec 负载:49.588234 已用显存:14300.15 显卡功耗:212.96371
+总结耗时:144.8686116sec 负载:52.1 已用显存:14355.942 显卡功耗:217.936
+

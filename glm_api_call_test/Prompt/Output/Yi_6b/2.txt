@@ -1,0 +1,271 @@
+------ prompt ------
+将下面段落翻译成中文，对于代码，指令，不要进行翻译，以下是正文：
+------ ------
+在.NET 8中，各种改进已经投入到改进casting性能中。
+
+dotnet/runtime#75816改进了使用T[]类型时的性能，当T是密封类型时，JIT可以使用一个名为CORINFO_HELP_ISINSTANCEOFARRAY的辅助来确定对象是否是某个数组类型，但是当T是密封类型时，JIT可以生成不使用该辅助的代码，生成类似于obj是null&&obj.GetType()==typeof(T[])的代码。这又是一个动态PGO有可测量影响的例子，所以基准测试展示了带和不带动态PGO的改进情况。
+
+// dotnet run -c Release -f net7.0 --filter "*"
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+
+var config = DefaultConfig.Instance
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TieredPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8").WithRuntime(CoreRuntime.Core80));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD", "EnvironmentVariables", "Runtime")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private object _obj = new string[1];
+
+    [Benchmark]
+    public bool IsStringArray() => _obj is string[];
+}
+
+Method	Job	Mean	Ratio
+IsStringArray	.NET 7	1.2290 ns	1.00
+IsStringArray	.NET 8 w/o PGO	0.2365 ns	0.19
+IsStringArray	.NET 8	0.0825 ns	0.07
+
+接着考虑这个基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private string[] _strings = new string[1];
+
+    [Benchmark]
+    public string Get1() => _strings[0];
+
+    [Benchmark]
+    public string Get2() => Volatile.Read(ref _strings[0]);
+}
+
+Get1这里只是读取并返回数组的第0个元素。Get2这里则是返回数组第0个元素的引用。这里是我们从.NET 7中得到的汇编代码：
+
+; Tests.Get1()
+       sub       rsp,28
+       mov       rax,[rcx+8]
+       cmp       dword ptr [rax+8],0
+       jbe       short M00_L00
+       mov       rax,[rax+10]
+       add       rsp,28
+       ret
+M00_L00:
+       call      CORINFO_HELP_RNGCHKFAIL
+       int       3
+; Total bytes of code 29
+
+; Tests.Get2()
+       sub       rsp,28
+       mov       rcx,[rcx+8]
+       xor       edx,edx
+       mov       r8,offset MT_System.String
+
+这段代码的翻译如下：
+
+调用CORINFO_HELP_LDELEMA_REF
+
+不执行任何操作
+
+将堆栈顶部的内容加上28
+
+返回
+
+总代码字节数31
+
+------ ------
+原文长度:2808    译文长度:2362
+
+------ prompt ------
+翻译下面段落成中文，不要翻译代码，指令。以下是正文： 
+------ ------
+翻译如下：
+
+各种改进已经投入到.NET 8中，以提高 casting（转换）的性能。
+
+dotnet/runtime#75816 改进了使用 T[] 时当 T 是密封类型时的性能。JIT（即时编译器）使用了一个名为 CORINFO_HELP_ISINSTANCEOFARRAY 的辅助函数来确定一个对象是否是某个数组类型，但当 T 是密封类型时，JIT 可以不使用该辅助函数，生成像是 obj 是 null 且 obj.GetType() == typeof(T[]) 的代码，这又是一个动态 PGO（Profile-Guided Optimization，基于行为的优化）有可测量的改进的例子，因此基准测试展示了有和无动态 PGO 时的改进。
+
+// dotnet run -c Release -f net7.0 --filter "*"
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+
+var config = DefaultConfig.Instance
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TieredPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8").WithRuntime(CoreRuntime.Core80));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD", "EnvironmentVariables", "Runtime")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private object _obj = new string[1];
+
+    [Benchmark]
+    public bool IsStringArray() => _obj is string[];
+}
+Method	Job	Mean	Ratio
+IsStringArray	.NET 7	1.2290 ns	1.00
+IsStringArray	.NET 8 w/o PGO	0.2365 ns	0.19
+IsStringArray	.NET 8	0.0825 ns	0.07
+继续看，考虑这个基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private string[] _strings = new string[1];
+
+    [Benchmark]
+    public string Get1() => _strings[0];
+
+    [Benchmark]
+    public string Get2() => Volatile.Read(ref _strings[0]);
+}
+Get1 这里只是读取并返回数组中的第 0 个元素。Get2 这里则是返回数组中第 0 个元素的引用。在.NET 7中，我们得到的汇编代码如下：
+
+; Tests.Get1()
+       sub       rsp,28
+       mov       rax,[rcx+8]
+       cmp       dword ptr [rax+8],0
+       jbe       short M00_L00
+       mov       rax,[rax+10]
+       add       rsp,28
+       ret
+M00_L00:
+       call      CORINFO_HELP_RNGCHKFAIL
+       int       3
+; Total bytes of code 29
+
+; Tests.Get2()
+       sub       rsp,28
+       mov       rcx,[rcx+8]
+       xor       edx,edx
+       mov       r8,offset MT_System.String
+
+这段代码是C语言的汇编代码，它调用了一个名为CORINFO_HELP_LDELEMA_REF的函数，然后执行了一个空操作（nop），接着减去了28个字节从堆栈中弹出，最后返回。这段代码的总字节数是31字节。
+
+------ ------
+原文长度:2808    译文长度:2467
+
+------ prompt ------
+Translate the following paragraph into Chinese. Do not translate the code and instructions. Here is the main text:
+------ ------
+在进行.NET 8的 casting（转换）时，已经进行了多种改进，以提高性能。在dotnet/runtime#75816中，改进了使用`is T[]` 时，当`T`是密封类时的性能。这里有一个名为CORINFO_HELP_ISINSTANCEOFARRAY的辅助方法，JIT（即时编译器）使用它来确定一个对象是否是某个数组类型。但是，当`T`是密封类时，JIT可以直接生成代码，而不需要使用辅助方法，生成代码类似于obj is not null && obj.GetType() == typeof(T[])。这是动态PGO（Profile-Guided Optimization，基于性能计数器的优化）有所影响的又一个例子，因此基准测试突出了有和无动态PGO时的改进。
+
+// dotnet run -c Release -f net7.0 --filter "*"
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+
+var config = DefaultConfig.Instance
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TieredPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8").WithRuntime(CoreRuntime.Core80));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD", "EnvironmentVariables", "Runtime")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly object _obj = new string[1];
+
+    [Benchmark]
+    public bool IsStringArray() => _obj is string[];
+}
+Method	Job	Mean	Ratio
+IsStringArray	.NET 7	1.2290 ns	1.00
+IsStringArray	.NET 8 w/o PGO	0.2365 ns	0.19
+IsStringArray	.NET 8	0.0825 ns	0.07
+
+接下来考虑这个基准测试：
+
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly string[] _strings = new string[1];
+
+    [Benchmark]
+    public string Get1() => _strings[0];
+
+    [Benchmark]
+    public string Get2() => Volatile.Read(ref _strings[0]);
+}
+Get1 here is just reading and returning the 0th element from the array. Get2 here is returning a ref to the 0th element from the array. Here��s我们得到的.NET 7的assembly：
+
+; Tests.Get1()
+       sub       rsp,28
+       mov       rax,[rcx+8]
+       cmp       dword ptr [rax+8],0
+       jbe       short M00_L00
+       mov       rax,[rax+10]
+       add       rsp,28
+       ret
+M00_L00:
+       call      CORINFO_HELP_RNGCHKFAIL
+       int       3
+; Total bytes of code 29
+
+; Tests.Get2()
+       sub       rsp,28
+       mov       rcx,[rcx+8]
+       xor       edx,edx
+       mov       r8,offset MT_System.String
+
+这段代码的翻译如下：
+
+调用CORINFO_HELP_LDELEMA_REF
+
+不执行任何操作
+
+将堆栈指针rsp减去28
+
+返回
+
+总代码字节数31
+
+------ ------
+原文长度:2808    译文长度:2562
+
+----性能----
+top_p:0.85  temperature: 0.7
+翻译耗时: 173.8725098sec 负载:58.511906 已用显存:14374.012 显卡功耗:226.46227
+

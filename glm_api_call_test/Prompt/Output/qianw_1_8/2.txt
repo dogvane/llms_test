@@ -1,0 +1,117 @@
+------ prompt ------
+将下面段落翻译成中文，对于代码，指令，不要进行翻译，以下是正文：
+------ ------
+在.NET 8中，对casting进行了许多改进。dotnet/runtime#75816提高了使用is T[]时T是否为密封类型时的性能。当T是密封类型时，JIT可以不使用帮助函数直接生成代码，就像obj不是null且obj的类型等于typeof(T[])一样。这是动态POG的一个可测量影响的例子，因此基准测试突出了没有动态POG的情况下和有动态POG的情况下之间的改善。
+
+```csharp
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+
+var config = DefaultConfig.Instance
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TIEREDPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8").WithRuntime(CoreRuntime.Core80));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+```
+
+这段代码创建了一个名为"Tests"的类，并定义了两个方法：IsStringArray和Get1。IsStringArray方法检查一个字符串数组是否为字符串数组，而Get1方法返回一个字符串数组的第一个元素。这两个方法都使用了.NET 8中的新特性，包括静态类型检查、反射和动态POG。
+
+接下来是一个示例，展示了如何使用这个新的性能改进：
+
+```csharp
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+```
+
+这段代码运行了两个基准测试，一个是使用.NET 7编译器编写的，另一个是使用.NET 8编译器编写的。第一个基准测试使用了默认配置，第二个基准测试使用了带有动态POG的配置。
+
+------ ------
+原文长度:2808    译文长度:1178
+
+------ prompt ------
+翻译下面段落成中文，不要翻译代码，指令。以下是正文： 
+------ ------
+在.NET 8中，对casting进行了许多改进。dotnet/runtime#75816提高了使用is T[]时T是否密封的性能。当T是密封的时，JIT可以不使用帮助函数直接生成代码，就像obj不是null且obj类型等于typeof(T[])一样。这是动态POG的一个明显影响，因此基准测试突出了没有它的情况下和有它的情况下之间的改善。
+
+```csharp
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+
+var config = DefaultConfig.Instance
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TIEREDPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8").WithRuntime(CoreRuntime.Core80));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+```
+
+这段代码创建了一个名为"Tests"的类，并定义了两个方法：`IsStringArray`和`Get1`。`IsStringArray`方法检查一个字符串数组是否为字符串数组，而`Get1`方法返回一个字符串数组的第一个元素。这两个方法都使用了.NET 8中的新特性，包括静态类型检查、动态类型检查和反射。
+
+接下来是一个示例，展示了这些改进如何影响性能：
+
+```csharp
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+```
+
+这段代码运行了两个基准测试，一个是使用.NET 7编译器编写的，另一个是使用.NET 8编译器编写的。第一个基准测试使用了默认配置，第二个基准测试使用了带有PGO优化的配置。结果表明，没有使用动态POG的情况下，性能比使用了动态POG的情况下要好。
+
+------ ------
+原文长度:2808    译文长度:1204
+
+------ prompt ------
+Translate the following paragraph into Chinese. Do not translate the code and instructions. Here is the main text:
+------ ------
+在.NET 8中，对Casting的性能进行了改进。当T是密封时，JIT可以使用一个帮助函数来确定对象是否为指定数组类型的对象。但是，如果T是密封的，那么JIT就可以直接生成代码，就像obj不为null且obj类型等于typeof(T[])一样。这是动态POG的一个明显影响，因此基准测试突出了没有动态POG的情况下和有动态POG的情况下之间的差异。
+
+```csharp
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+
+var config = DefaultConfig.Instance
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TIEREDPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8").WithRuntime(CoreRuntime.Core80));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD", "EnvironmentVariables", "Runtime")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly object _obj = new string[1];
+
+    [Benchmark]
+    public bool IsStringArray() => _obj is string[];
+}
+```
+
+接下来是一个基准测试：
+
+```csharp
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+```
+
+在这个基准测试中，我们从.NET 7运行了两个测试：一个是使用密封的字符串数组，另一个是使用密封的整数数组。这两个测试都使用了.NET 8的默认编译器（CoreRuntime.Core70）和环境变量DOTNET_TIEREDPGO设置为0。结果表明，没有动态POG的情况下，性能比有动态POG的情况下要好得多。
+
+------ ------
+原文长度:2808    译文长度:1343
+
+----性能----
+top_p:0.1  temperature: 0.01
+翻译耗时: 52.6360607sec 负载:36.313725 已用显存:6172.51 显卡功耗:98.09549
+

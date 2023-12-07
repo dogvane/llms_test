@@ -17,7 +17,7 @@
     <Folder Include="txt\chatglm\" />
     <Folder Include="txt\InternLM\" />
     <Folder Include="txt\llama2\" />
-    <Folder Include="txt\qianw\" />
+    <Folder Include="txt\Yi_6b\" />
     <Folder Include="txt\yulan\" />
   </ItemGroup>
 
