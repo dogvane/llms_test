@@ -6,34 +6,35 @@ using Newtonsoft.Json;
 namespace glm_api_call_test.api
 {
     /// <summary>
-    /// 01 
+    /// 
     /// </summary>
-    public class Yi : ILLM
+    public class MiniCPM : ILLM
     {
         public class config
         {
             public string url { get; set; } = "http://127.0.0.1:8001/";
 
-            public double temperature { get; set; } = 0.9;
-            public double top_p { get; set; } = 0.9;
-            public int max_length { get; set; } = 4096 + 1024;
+            public double temperature { get; set; } = 0.0;
+            public double top_p { get; set; } = 0.5;
+            public int max_length { get; set; } = 1000 * 8;
         }
 
         public config Config { get; private set; } = new config();
 
-        public string Name => "Yi_34b_4bit";
+        public string Name => "MiniCPM";
 
         public int MaxLength => Config.max_length;
 
         public LLMTestTP[] GetTestTP()
         {
             return new[] {
+                new LLMTestTP(){ top_p = 0.1f, temperature = 0.8f },
                 new LLMTestTP(){ top_p = 0.85f, temperature = 0.7f },
-                new LLMTestTP(){ top_p = 0.95f, temperature = 0.7f },
+                new LLMTestTP(){ top_p = 0.75f, temperature = 0.7f },
                 new LLMTestTP(){ top_p = 0.65f, temperature = 0.7f },
+                new LLMTestTP(){ top_p = 0.55f, temperature = 0.8f },
             };
         }
-        
         public void SetTP(LLMTestTP configItem)
         {
             Config.top_p = configItem.top_p;
@@ -88,10 +89,10 @@ namespace glm_api_call_test.api
                 var request = new
                 {
                     prompt = messages,
-                    history,
+                    //history = new[] { history },
                     Config.top_p,
                     Config.max_length,
-                    Config.temperature,
+                    //Config.temperature,
                     stream = false
                 };
                 Console.WriteLine($"request.length: {messages.Length}");
@@ -101,7 +102,7 @@ namespace glm_api_call_test.api
 
                 var responseString = response.Result.Content.ReadAsStringAsync().Result;
 
-                //Console.WriteLine(responseString);
+                Console.WriteLine(responseString);
                 return JsonConvert.DeserializeObject<ChatCompletionResponse>(responseString);
             }
         }
@@ -126,7 +127,7 @@ namespace glm_api_call_test.api
         {
             public string response;
 
-            public string[][] history;
+            //public string[][] history;
 
             public string time;
 

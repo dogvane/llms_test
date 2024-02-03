@@ -1,0 +1,273 @@
+更多措施可能在第三季度推出，以提振经济增长。
+
+由中国日报网编译：吴雪jia
+
+中国的国家经济监管机构将研究并制定一系列有针对性的储备政策。专家表示，中国将在第三季度推出一系列促进增长的措施，重点关注扩大国内需求、刺激消费、激发私人投资活力以及稳定房地产市场。
+
+这些专家表示，中国将继续加强逆周期调整和政策储备，加大宏观调整力度，如进一步降低准备金率和利率降息，加快地方政府特别债券发行，以及更多的减税和降费来减轻企业负担。
+
+中国国家发展和改革委员会的经济发展部负责人 Yuan Da 表示，中国将更加注重稳定增长，采取有针对性的措施实施宏观经济调控。
+
+Yuan 在北京举行的新闻发布会上表示，中国将加强政策储备，如更好地满足居民的基本住房需求和改善住房条件的需求，以及扩大有效投资。
+
+刘迪，复旦大学中国研究院的助理研究员，表示政策重点将放在扩大国内需求、增强信心和防范风险上。
+
+他还建议政策制定者考虑增加公共服务的支出、发放消费券和增加对地方政府的转移支付，以促进消费和当地消费与投资。
+
+易永达，中国银行研究研究所的研究员，表示中国将在第三季度推出一系列刺激政策，主要针对推动消费、增强信心稳定房地产市场等关键领域。
+
+在新闻发布会上，中国人民银行货币政策部负责人周兰表示，如果需要，中央银行将推出新的政策工具，支持绿色和低碳领域的包容性金融发展，以及绿色和低碳产业。
+
+杨海平，中央财经大学证券与期货研究所的研究员，表示中央银行可以考虑新的政策工具，支持关键领域的消费和关键消费者群体的消费，重点是推动房地产行业向新的发展模式转型。
+
+周兰表示，中央银行将灵活地使用和协调政策工具，包括降低准备金率、公开市场操作和中长期贷款便利等结构性货币政策工具，以确保银行系统中有合理的流动性。
+
+ Zhe Shao，浙商证券的首席经济学家，表示中央银行将在第三季度降低RRR，并在第四季度降低政策利率。
+
+在财政方面，中国将加快地方政府的特殊债券发行和使用，并采取措施减轻企业的负担，同时进一步减税和降费，帮助面临压力的行业。
+
+中国人民银行行长潘功胜表示，周四，中央银行呼吁努力满足私人房地产公司的合理融资需求，作为其“全力推动”私人经济发展的举措之一。
+
+中国人民银行将发布关于金融支持私营企业的指导方针，帮助地方政府解决企业对企业的逾期付款问题，并扩大支持私营企业债券融资的工具。
+
+潘在参加与私营企业举行的研讨会上说。
+
+----总结----
+中国的国家经济监管机构计划研究并制定一系列有针对性的储备政策，以提振经济增长。预计在第三季度推出一系列措施，重点关注扩大国内需求、刺激消费、激发私人投资活力和稳定房地产市场。这些措施可能包括降低准备金率、利率降息、加快地方政府特别债券发行、减税和降费，以及更多的政策支持。中国国家发展和改革委员会的经济发展部负责人表示，中国将更加注重稳定增长，采取有针对性的措施实施宏观经济调控。政策重点将放在扩大国内需求、增强信心和防范风险上。中央银行将推出新的政策工具，支持绿色和低碳领域的包容性金融发展，以及绿色和低碳产业。在财政方面，中国将加快地方政府的特殊债券发行和使用，并采取措施减轻企业的负担，同时进一步减税和降费，帮助面临压力的行业。
+
+----性能----
+top_p:0.1  temperature: 0.8
+原文长度:4279    译文长度:1050 总结长度: 319
+翻译耗时: 35.1979132sec 负载:38 已用显存:10138.941 显卡功耗:102.97794
+总结耗时:10.2825665sec 负载:35.6 已用显存:9742.6 显卡功耗:103.394
+
+以下是翻译为中文的文章：
+
+更多措施可能在第三季度提振增长
+
+由OUYANG SHIJIA撰写 | chinadaily.com.cn | 更新：2023年8月4日22:42
+
+中国的经济监管机构将研究并制定一系列有针对性的储备政策
+
+中国可能将在第三季度推出一系列促进增长的措施，重点关注扩大国内需求、刺激消费、激发私人投资活力以及稳定房地产市场，专家表示。
+
+他们表示，国家将不断加强逆周期调整和政策储备，以加大宏观调整力度，如进一步降低准备金比例和利率降息，加快地方政府特别债券发行，以及更多减税和降费以减轻企业负担。
+
+这些评论是在中国顶级经济监管者承诺研究并计划一系列更具针对性且力度更强的储备政策后发表的，这些政策可以在需要时迅速使用。
+
+国家发展和改革委员会的部长 Yuan Da 表示，中国将更加重视稳定增长，采取有针对性的、有力的措施实施宏观经济调控。
+
+Yuan 在北京举行的新闻发布会上表示，国家将在满足居民基本住房需求和改善住房条件方面加强政策储备，以及扩大有效投资。
+
+“政策重点将放在扩大国内需求、增强信心和防止风险上”，复旦大学经济学教授 Liu Dian 说。
+
+“中国还需要继续加强逆周期调整，提高财政和货币政策支持，以促进增长。”
+
+Liu 建议政策制定者考虑增加公共服务支出、发放消费者优惠券和增加对地方政府转移支付的力度，以刺激需求、支持本地消费和投资。
+
+中国银行研究院的研究员 Ye Yindan 说，国家将在第三季度推出一系列刺激政策，主要在推动消费、增强信心稳定房地产市场等方面。
+
+在新闻发布会上，中国人民银行货币政策司司长 Zou Lan 说，中央银行将根据需要推出新的政策工具，持续支持关键领域和薄弱环节，如普惠金融、绿色和低碳产业。
+
+证券与期货研究所的学者 Yang Haiping 说，中央银行可以考虑推出新的政策工具，支持关键领域的消费、关键消费者的群体，重点关注房地产行业向新发展模式的转变。
+
+Zou 说，中央银行将灵活地使用和协调政策工具，包括准备金比例削减、公开市场操作和中长期贷款等结构性货币政策工具，以确保银行系统中有合理的流动性。
+
+ Zheshang Securities的首席经济学家 Li Chao 说，中央银行预计将在第三季度降低 RRR（存准率），并在第四季度降低政策利率。
+
+在经济方面，中国计划加快地方政府的特别债券发行和使用，同时进一步减轻企业的负担，帮助面临压力的行业。
+
+中国人民银行行长潘功胜在参加与私营企业者的研讨会时表示，为了支持其“全力推进”的私营经济发展，中央银行将就金融支持私营企业提出指导方针，帮助地方政府解决企业对企业的逾期付款问题，并推广支持私营企业债券融资的工具。
+
+----总结----
+以下是该文章翻译为英文的内容：
+
+More measures may boost growth in the third quarter
+
+By OUYANG SHIJIA | chinadaily.com.cn | Updated: August 4, 2023, 22:42
+
+China's economic regulators will study and formulate a series of targeted reserve policies
+
+China is expected to launch a series of measures to promote growth in the third quarter, focusing on expanding domestic demand, stimulating consumption, revitalizing private investment, and stabilizing the real estate market, according to experts.
+
+They stated that the country will continuously strengthen countercyclical adjustment and policy reserves with greater macroeconomic adjustment, such as further reducing reserve ratio and interest rate cuts, accelerating the issuance of special local government bonds, and more tax and fee reductions to alleviate corporate burdens.
+
+These remarks were made after China's top economic regulators pledged to study and plan a series of more targeted and stronger reserve policies that can be activated when needed.
+
+The Minister of National Development and Reform Yuan Da stated that China will give greater emphasis to stable growth and implement targeted, effective measures for macroeconomic regulation.
+
+Yuan said at a press conference in Beijing that the country will strengthen policy reserves in meeting residents' basic housing needs and improving living conditions, as well as expanding effective investment.
+
+"The focus will be on expanding domestic demand, boosting confidence, and preventing risks," said Liu Dian, a professor of economics at Fudan University.
+
+"China still needs to continue strengthening countercyclical adjustment, improve fiscal and monetary policy support, to promote growth."
+
+Liu suggested that policy makers consider increasing public service expenditure, issuing consumer vouchers, and enhancing transfer payments to stimulate demand, support local consumption and investment.
+
+Yan Yindan, a researcher at the China Banking Institute, said that the country will launch a series of stimulus policies in the third quarter, mainly focusing on promoting consumption, boosting confidence, and stabilizing the real estate market.
+
+At a press conference, Zhou Lan, the Governor of the People's Bank of China, said that central banks will introduce new policy tools as needed to continue supporting key areas and weak links, such as the development of universal finance, green and low-carbon industries.
+
+Yang Haiping, an associate researcher at the Securities and Futures Research Institute, said that central banks may introduce new policy tools to support consumption in key sectors, support key consumer groups, and focus on the transformation of the real estate industry towards new development models.
+
+Zhou said that central banks will flexibly use and coordinate policy tools, including cutting reserve ratio, conducting open market operations, and long-term loans, to ensure a reasonable level of liquidity in the banking system.
+
+Li Chao, the Chief Economist of Zheshang Securities, said that central banks are expected to reduce RRR (reserve ratio) in the third quarter and then lower policy interest rates in the fourth quarter.
+
+In terms of the economy, China plans to accelerate the issuance and use of special local government bonds, while further alleviating the burden on enterprises and helping industries facing pressure.
+
+During a seminar with private entrepreneurs, the Governor of the People's Bank of China, Pan Guansheng, stated that to support the "full-scale push forward" of private economic development, central banks will propose guidelines on financial support for private enterprises, help local governments solve payment problems between enterprises, and promote tools to support private enterprise bond financing.
+
+----性能----
+top_p:0.85  temperature: 0.7
+原文长度:4279    译文长度:1142 总结长度: 3757
+翻译耗时: 37.1313289sec 负载:38.333332 已用显存:10134.556 显卡功耗:102.695
+总结耗时:46.0800959sec 负载:37.477272 已用显存:9831.478 显卡功耗:101.93455
+
+在2023年8月4日，中国的国家经济监管者将研究并制定一系列有针对性的储备政策，以提振第三季度的经济增长。专家表示，中国将在第三季度推出一系列有利于经济增长的措施，重点关注扩大国内需求、刺激消费、提振私营投资活力以及稳定房地产市场。
+
+中国将连续加强逆周期调整和政策储备，加大宏观调整力度，例如进一步降低准备金率、利率降息、加快地方政府特别债券发行，以及更多减税降费措施，减轻企业负担。
+
+中国国家发展和改革委员会的经济发展司司长 Yuan Da表示，中国将更加注重稳定增长，采取有针对性的措施实施宏观经济调控。
+
+在中国北京举行的新闻发布会上，中国社科院的刘大元博士表示，政策重点将放在扩大国内需求、增强信心和预防风险上。他还指出，中国需要继续加强逆周期调整和加强财政和货币政策支持，以提振经济增长。
+
+刘大元建议政策制定者考虑增加公共服务的支出、发行消费者券和提升转移支付，以促进消费和本地消费与投资。
+
+中国央行研究院的 Ye Yindan 认为，在第三季度的第三季度，中国可能会推出一系列刺激政策，主要集中在推动消费、提振私营部门信心以及稳定房地产市场等领域。
+
+中国人民银行货币政策部负责人周兰在新闻发布会上表示，如果需要，央行将推出新的政策工具来持续支持关键领域和薄弱环节，如普惠金融、绿色低碳产业等。
+
+证券分析师 Yang Haiping 说，央行可能考虑推出新的政策工具来支持关键领域的消费，以及支持关键消费群体的消费，重点是推动房地产行业向新的发展模式转变。
+
+周兰表示，央行将灵活地使用和协调政策工具，包括准备金率下调、公开市场操作和中长期贷款设施等结构性货币政策工具，以确保银行系统的合理充足的流动性。
+
+ Zheshang Securities的首席经济学家 Li Chao 说，央行将很可能在第三季度下调 RRR，并在第四季度降低政策利率。
+
+在经济方面，中国将加快地方政府的特殊债券发行和使用，并加大对企业负担的缓解力度，同时进一步减税降费，帮助面临压力的行业。
+
+中国人民银行行长潘功胜表示，央行将发布关于金融支持私营企业的指导，协助地方政府解决企业拖欠问题，并扩大支持私营企业债券融资的机制。
+
+在论坛上，潘功胜呼吁采取措施满足私人房地产公司的合理融资需求，作为其“全面努力”振兴私营经济的组成部分。
+
+中国人民银行将发布有关金融支持私营企业的指导，帮助地方政府解决企业拖欠问题，并扩大支持私营企业债券融资的机制。
+
+----总结----
+中国国家经济监管者在2023年8月4日计划推出一系列有针对性的储备政策，以提振第三季度的经济增长。这些政策将着重于扩大国内需求、刺激消费、提振私营投资活力和稳定房地产市场。为了实现这一目标，中国将采取逆周期调整措施，降低准备金率、利率降息、加快地方政府特别债券发行，并实施更多减税降费措施。
+
+中国国家发展和改革委员会的经济发展司司长 Yuan Da 表示，中国将更加注重稳定增长，采取有针对性的措施实施宏观经济调控。中国社科院的刘大元博士建议政策制定者考虑增加公共服务的支出、发行消费者券和提升转移支付，以促进消费和本地消费与投资。
+
+中国央行研究院的 Ye Yindan 认为，在第三季度的第三季度，中国可能会推出一系列刺激政策，主要集中在推动消费、提振私营部门信心以及稳定房地产市场等领域。中国人民银行货币政策部负责人周兰表示，如果需要，央行将推出新的政策工具来持续支持关键领域和薄弱环节，如普惠金融、绿色低碳产业等。
+
+证券分析师 Yang Haiping 说，央行可能考虑推出新的政策工具来支持关键领域的消费，以及支持关键消费群体的消费，重点是推动房地产行业向新的发展模式转变。
+
+周兰表示，央行将灵活地使用和协调政策工具，包括准备金率下调、公开市场操作和中长期贷款设施等结构性货币政策工具，以确保银行系统的合理充足的流动性。
+
+在经济方面，中国将加快地方政府的特殊债券发行和使用，并加大对企业负担的缓解力度，同时进一步减税降费，帮助面临压力的行业。中国人民银行行长潘功胜表示，央行将发布关于金融支持私营企业的指导，协助地方政府解决企业拖欠问题，并扩大支持私营企业债券融资的机制。
+
+中国人民银行将发布有关金融支持私营企业的指导，帮助地方政府解决企业拖欠问题，并扩大支持私营企业债券融资的机制。
+
+----性能----
+top_p:0.75  temperature: 0.7
+原文长度:4279    译文长度:1026 总结长度: 754
+翻译耗时: 33.0066565sec 负载:37.5 已用显存:10124.3125 显卡功耗:117.499374
+总结耗时:25.0974531sec 负载:37.25 已用显存:9682.5 显卡功耗:97.3075
+
+更多措施可能在第三季度推出，以提振经济增长。
+
+由中国日报网报道的这篇文章提到，中国的国家经济监管机构将研究并制定一系列有针对性的储备政策，以促进经济增长。专家表示，中国将在第三季度推出一系列支持措施，重点扩大国内需求、刺激消费、促进民间投资活力稳定房地产市场等。
+
+国家经济监管机构将加强逆周期调整和政策储备，加大宏观调控力度，例如进一步降低准备金比例和利率降息，加快地方政府专项债券发行，以及降低企业税收和费用负担。
+
+中国国家发展和改革委员会的负责人 Yuan Da 表示，中国将更加注重稳定增长，采取有针对性的、有力的措施实施宏观经济调控。
+
+在中国首都北京举行的新闻发布会上，国家经济研究院主任 Yuan Da 说，国家将加强政策储备，在满足居民基本住房需求和改善住房条件等方面发挥更大作用，同时扩大有效投资。
+
+刘大，复旦大学中国研究院的助理研究员 Liu Dian 说，中国需要继续加强逆周期调整，加大对财政和货币政策的支持力度，以提振经济增长。
+
+刘大建议政策制定者考虑增加公共服务的支出，发行消费券，提高对地方政府的转移支付，从而刺激需求，支持当地消费和投资。
+
+在中国银行研究院的研究员 Ye Yindan 看来，国家将可能推出一系列刺激政策，主要集中在推动消费、增强民间企业对市场信心、稳定房地产市场等领域。
+
+中国人民银行货币政策部负责人 周兰 在新闻发布会上表示，央行将根据需要推出新的政策工具，支持绿色金融和低碳产业，并在包容性金融等领域提供支持。
+
+证券研究所的 Yang Haiping 认为，央行可以考虑新的政策工具来支持关键领域的消费和关键消费者群体的消费，重点是推动房地产行业向新的发展模式转型。
+
+周兰表示，央行将灵活地使用和协调政策工具，包括降低准备金比例、开展公开市场操作和中期借贷便利等结构性货币政策工具，以确保银行系统有合理的流动性。
+
+浙商证券的首席经济学家 李超 说，央行将可能在第三季度降低 RRR，并在第四季度降低政策利率。
+
+在经济方面，中国将加快地方政府特别债券的发行和使用，并进一步减轻企业的负担，以帮助面临压力的行业。
+
+中国人民银行行长 周小川 在与私营企业代表交流时表示，央行将努力满足私人房地产公司的合理融资需求，作为其“全力以赴”支持私营经济的举措之一。
+
+中国人民银行行长 周小川 将在一个研讨会上介绍，央行将推出有关金融支持私营企业的指导方针，帮助地方政府解决企业逾期付款问题，并扩大对私营企业债券融资的支持。
+
+----总结----
+本文介绍了中国国家经济监管机构计划推出一系列有针对性的储备政策，以提振经济增长。这些政策包括扩大国内需求、刺激消费、促进民间投资活力稳定房地产市场等。国家经济监管机构将加强逆周期调整和政策储备，加大宏观调控力度，如降低准备金比例、利率降息、加快地方政府专项债券发行等。
+
+中国国家发展和改革委员会的负责人Yuan Da表示，中国将更加注重稳定增长，采取有针对性的、有力的措施实施宏观经济调控。国家经济研究院主任Yuan Da强调，国家将加强政策储备，在满足居民基本住房需求和改善住房条件等方面发挥更大作用，同时扩大有效投资。
+
+刘大建议政策制定者考虑增加公共服务的支出，发行消费券，提高对地方政府的转移支付，从而刺激需求，支持当地消费和投资。中国人民银行货币政策部负责人周兰表示，央行将根据需要推出新的政策工具，支持绿色金融和低碳产业，并在包容性金融等领域提供支持。
+
+浙商证券首席经济学家李超预计央行可能在第三季度降低RRR，并在第四季度降低政策利率。在经济方面，中国将加快地方政府特别债券的发行和使用，并进一步减轻企业的负担，以帮助面临压力的行业。中国人民银行行长周小川表示，央行将努力满足私人房地产公司的合理融资需求，作为其“全力以赴”支持私营经济的举措之一。
+
+中国人民银行行长周小川将在一个研讨会上介绍，央行将推出有关金融支持私营企业的指导方针，帮助地方政府解决企业逾期付款问题，并扩大对私营企业债券融资的支持。
+
+----性能----
+top_p:0.65  temperature: 0.7
+原文长度:4279    译文长度:1045 总结长度: 613
+翻译耗时: 33.2197795sec 负载:38.303032 已用显存:10094.061 显卡功耗:104.00879
+总结耗时:19.7885861sec 负载:36.736843 已用显存:9668.105 显卡功耗:98.48421
+
+更多措施可能在第三季度推动增长
+
+吴晓杰（OUYANG SHIJIA）|chinadaily.com.cn|更新：2023年8月4日22:42
+
+中国的经济监管机构将研究并制定一系列有针对性的储备政策
+
+中国可能将在第三季度推出一系列促进经济增长的措施，重点扩大国内需求、刺激消费、激发私人投资活力并稳定房地产市场，专家表示。
+
+他们表示，国家将不断加强逆周期调整和政策储备，加大宏观调整力度，如进一步降低准备金率和利率降息，加快地方政府特别债券发行，以及更多的减税和降费以减轻企业负担。
+
+他们的评论是在中国最高经济监管机构承诺研究并计划一系列更具针对性、更强力的储备政策，可以及时使用。
+
+国家发展和改革委员会的 Yuan Da 说，中国将更加重视稳定增长，采取有针对性的、有力的措施实施宏观经济调控。
+
+Yuan 在北京新闻发布会上说，国家将加强政策储备，如更好地满足居民的基本住房需求和改善住房条件，以及扩大有效投资。
+
+刘大，复旦大学中国经济研究所的助理研究员，说国家将重点放在扩大国内需求、增强信心和防范风险上。
+
+刘建议政策制定者考虑增加公共服务的支出，发行消费券和增加对地方政府的转移支付，这将有助于刺激需求，支持当地消费和投资。
+
+易一丹，中国银行研究学院的研究员，说国家将在第三季度推出一系列刺激政策，主要集中在提振消费、增强信心稳定房地产市场等方面。
+
+在新闻发布会上，中国人民银行货币政策部负责人周亮说，中央银行将根据需要推出新的政策工具，持续支持关键领域和薄弱环节，如普惠金融、绿色和低碳产业等。
+
+杨海平，中央财经大学证券与期货研究所的研究员，说中央银行可以考虑新的政策工具来支持关键领域的消费和关键消费者群体的消费，重点是推动房地产行业向新的发展模式转变。
+
+周说，中央银行将灵活地使用和协调政策工具，包括准备金率削减、公开市场操作和中长期贷款便利等结构性货币政策工具，以确保银行系统中流动性合理充足。
+
+ Zheshang Securities的首席经济学家李超说，中央银行将在第三季度降低RRR，并在第四季度降低政策利率。
+
+在财政方面，中国将加快地方政府的特殊债券发行和使用，并继续努力减轻企业的负担，进一步减税和降费以帮助面临压力的行业，李说。
+
+中国人民银行行长潘郭生说，中央银行将发布关于金融支持私营企业的指导方针，帮助地方政府解决企业对企业的逾期付款问题，并扩大支持私营企业债券融资的工具的使用。
+
+在私企金融支持方面，潘郭生说，中央银行将发布有关金融支持私营企业的指导方针，帮助地方政府解决企业对企业的逾期付款问题，并扩大支持私营企业债券融资的工具的使用。
+
+----总结----
+中国的经济监管机构计划于第三季度推出一系列旨在推动经济增长的措施。这些措施将重点关注扩大国内需求、刺激消费、激发私人投资活力和稳定房地产市场。国家将加强逆周期调整和政策储备，包括降低准备金率和利率降息、加快地方政府特别债券发行、减税和降费以减轻企业负担。
+
+中国国家发展和改革委员会的发言人表示，中国将更加重视稳定增长，采取有针对性的、有力的措施实施宏观经济调控。此外，国家将加强政策储备，以满足居民的基本住房需求和改善住房条件，以及扩大有效投资。
+
+政策制定者建议增加公共服务的支出，发行消费券和增加对地方政府的转移支付，以刺激需求，支持当地消费和投资。中央银行将在第三季度降低RRR，并在第四季度降低政策利率。在财政方面，中国将加快地方政府的特殊债券发行和使用，并继续努力减轻企业的负担，进一步减税和降费以帮助面临压力的行业。
+
+此外，中央银行将发布关于金融支持私营企业的指导方针，帮助地方政府解决企业对企业的逾期付款问题，并扩大支持私营企业债券融资的工具的使用。
+
+----性能----
+top_p:0.55  temperature: 0.8
+原文长度:4279    译文长度:1103 总结长度: 436
+翻译耗时: 35.9153021sec 负载:38.32353 已用显存:10124 显卡功耗:104.920296
+总结耗时:13.7286399sec 负载:36.5 已用显存:9737 显卡功耗:101.98071
+

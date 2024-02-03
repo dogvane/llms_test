@@ -13,6 +13,10 @@ baichuan-13B-Chat(int8)
 
 测试原文:   ./txt/chinadaily
 测试结果：  ./txt/对应模型名称
+[2024/2/4]
+1. 增加一个 miniCPM 2B的模型。 号称2B就能干掉其它7B的模型。
+2. 增加 yi-34B-4bit 的模型。之前刚出来时测的，忘记上传了。在2080ti 22G上，需要将maxlen限制在2K以内，否则会OOM。
+
 [2023/12/7]
 1. 增加01.ai的yi-6b-Chat的测试结果
 2. 增加qwen1.8b的测试结果

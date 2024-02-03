@@ -22,10 +22,10 @@ internal class Program
         //信息提取();        
         // 特定词语不翻译();
 
-        var test = new TestApi(new Yi());
-        test.Test();
+        //var test = new TestApi(new MiniCPM());
+        //test.Test();
 
-        var test2 = new PromptTransTest(new Yi());
+        var test2 = new PromptTransTest(new MiniCPM());
         test2.Test();
 
         Console.WriteLine("end.");

@@ -1,0 +1,912 @@
+有效查询开关"--query-gpu"的属性列表：
+
+"timestamp"
+查询发出的时间戳，格式为"YYYY/MM/DD HH:MM:SS.msec"。
+
+"driver_version"
+已安装的NVIDIA显示驱动程序的版本，这是一个字母数字字符串。
+
+关于vgpu_driver_capability属性的部分：
+获取有关驱动程序级别的功能的信息。
+
+"vgpu_driver_capability.heterogenous_multivGPU"
+指示异构多vGPU是否受驱动程序支持。
+
+"count"
+系统中的NVIDIA GPU数量。
+
+"name" 或 "gpu_name"
+GPU的官方产品名称，这是一个字母数字字符串。适用于所有产品。
+
+"serial" 或 "gpu_serial"
+此号码与打印在每块板上的物理序列号相匹配。这是一个全球唯一的不变字母数字值。
+
+"uuid" 或 "gpu_uuid"
+此值是GPU的全球唯一不变的字母数字标识符。它不对应于板上的任何物理标签。
+
+"pci.bus_id" 或 "gpu_bus_id"
+PCI总线ID，以"domain:bus:device.function"的形式表示，在十六进制中。
+
+"pci.domain"
+PCI域号，在十六进制中。
+
+"pci.bus"
+PCI总线号，在十六进制中。
+
+"pci.device"
+PCI设备号，在十六进制中。
+
+"pci.device_id"
+PCI供应商设备ID，在十六进制中。
+
+"pci.sub_device_id"
+PCI子系统ID，在十六进制中。
+
+关于vgpu_device_capability属性的部分：
+获取有关设备级别的功能的信息。
+
+"vgpu_device_capability.fractional_multiVgpu"
+指示此GPU上的vGPU配置可以包含分数vGPU配置。
+
+"vgpu_device_capability.heterogeneous_timeSlice_profile"
+支持不同类型的时片vGPU配置的并发执行。
+
+"vgpu_device_capability.heterogeneous_timeSlice_sizes"
+支持不同帧缓冲区大小的时片vGPU配置的并发执行。
+
+"pcie.link.gen.current"
+当前PCI-E链路生成。这些可能在GPU未使用时减少。已弃用，请使用pcie.link.gen.gpucurrent代替。
+
+"pcie.link.gen.gpucurrent"
+当前PCI-E链路生成。这些可能在GPU未使用时减少。
+
+"pcie.link.gen.max"
+在给定的GPU和系统配置中可能的最大PCI-E链路生成。例如，如果GPU支持的PCIe生成高于系统支持，那么这将报告系统的PCIe生成。
+
+"pcie.link.gen.gpumax"
+此GPU支持的最高PCI-E链路生成。
+
+"pcie.link.gen.hostmax"
+与这个GPU对应的根端口支持的最高PCI-E链路生成。
+
+"pcie.link.width.current"
+当前PCI-E链路宽度。这些可能在GPU未使用时减少。
+
+"pcie.link.width.max"
+在给定的GPU和系统配置中可能的最大PCI-E链路宽度。例如，如果GPU支持的PCIe宽度高于系统支持，那么这将报告系统的PCIe宽度。
+
+"index"
+GPU在系统中的索引位置。
+基于零的GPU索引。每次启动时可能会改变。
+
+"display_mode"
+一个标志，表明物理显示器（例如显示器）是否当前连接到GPU的任何一个连接器。"Enabled"表示已连接显示器。"Disabled"表示否则。
+
+"display_active"
+一个标志，表明GPU上是否已初始化显示器（例如内存已分配给设备上的显示）。即使没有物理显示器连接，显示也可以是活跃的。"Enabled"表示活跃的显示。"Disabled"表示否则。
+
+"persistence_mode"
+一个标志，表明是否为GPU启用了持久模式。值可以是"Enabled"或"Disabled"。在持久模式启用时，即使没有活跃的客户端（如X11或nvidia-smi），NVIDIA驱动程序仍然保持加载。这减少了与运行依赖应用程序（如CUDA程序）相关的驱动程序加载延迟。仅限Linux。
+
+"accounting.mode"
+一个标志，表明是否启用了会计模式。值可以是"Enabled"或"Disabled"。当启用会计时，会为每个在GPU上运行的计算进程计算统计信息。可以在进程运行时查询统计信息，也可以在进程终止后查询。进程的执行时间在进程运行时报告为0，并在进程终止后更新为实际执行时间。更多信息请参见--help-query-accounted-apps。
+
+"accounting.buffer_size"
+保存可以查询会计统计信息的进程列表的循环缓冲区的大小。这是为会计信息存储的最大进程数，超过这个数，关于最旧进程的信息会被新进程的信息覆盖。
+
+关于driver_model属性的部分
+在Windows上，支持TCC和WDDM驱动器模型。可以通过(-dm)或(-fdm)标志更改驱动器模型。TCC驱动器模型针对计算应用进行了优化。也就是说，使用TCC时，内核的启动时间会更快。WDDM驱动器模型是设计给图形应用的，不推荐用于计算应用。Linux不支持多种驱动器模型，并且值总是为"N/A"。仅适用于特定产品。请参阅NVML文档中的功能矩阵。
+
+"driver_model.current"
+当前正在使用的驱动器模型。在Linux上总是为"N/A"。
+
+"driver_model.pending"
+下次重启时将使用的驱动器模型。在Linux上总是为"N/A"。
+
+"vbios_version"
+GPU板的BIOS版本。
+
+关于inforom属性的部分
+GPU板上的每个对象的inforom存储的版本号。inforom是一个小的、持久的存储空间，用于存储GPU的配置和状态数据。所有inforom版本字段都是数值的。了解这些版本号是有用的，因为某些GPU功能只有在inforom达到一定版本或更高版本时才可用。
+
+"inforom.img"或"inforom.image"
+infoROM映像的全球版本。图像版本就像VBIOS版本一样，唯一地描述了infoROM在板上的闪存版本，与infoROM对象版本不同，后者只是一个支持功能指标。
+
+"inforom.oem"
+OEM配置数据的版本。
+
+"inforom.ecc"
+ECC记录数据的版本。
+
+"inforom.pwr"或"inforom.power"
+电源管理数据的版本。
+
+关于GOM属性的部分
+GOM允许通过禁用GPU功能来降低功耗和优化GPU吞吐量。每种GOM都是为了满足特定用户需求而设计的。
+在“全开”模式下，所有功能都启用，并以全速运行。
+“计算”模式专为仅运行计算任务而设计。不允许进行图形操作。
+“低双精度”模式专为运行不要求高带宽双精度的图形应用程序而设计。
+GOM可以通过（--gom）标志更改。
+
+"gom.current"或"gpu_operation_mode.current"
+当前使用的GOM。
+
+"gom.pending"或"gpu_operation_mode.pending"
+下次重启时将使用的GOM。
+
+"fan.speed"
+风扇速度值是产品最大噪音容忍度风扇速度的百分比，设备的风扇目前旨在以该速度运行。在某些情况下，该值可能超过100%。注意：报告的速度是意图中的风扇速度。如果风扇被物理阻挡无法旋转，则输出不会匹配实际风扇速度。许多部件不报告风扇速度，因为它们依赖于周围机箱中的风扇进行冷却。
+
+"pstate"
+GPU的当前性能状态。状态从P0（最大性能）到P12（最小性能）不等。
+
+关于clocks_throttle_reasons属性的部分
+检索影响时钟频率的因素的信息。如果所有限速原因都被返回为“非活动”，这意味着时钟正在尽可能高地进行。
+
+"clocks_throttle_reasons.supported"
+支持的时钟限速原因的位掩码。参见nvml.h以获取更多细节。
+
+"clocks_throttle_reasons.active"
+活动时钟限速原因的位掩码。参见nvml.h以获取更多细节。
+
+"clocks_throttle_reasons.gpu_idle"
+GPU上没有任何东西在运行，时钟正在下降到空闲状态。这个限制器可能在后续版本中被移除。
+
+"clocks_throttle_reasons.applications_clocks_setting"
+GPU时钟受到应用程序时钟设置的限制。例如，可以通过nvidia-smi --applications-clocks=来更改。
+GPU Utilization properties. The utilization percentages are computed by the driver and may be influenced by the application and system configuration.
+
+"gpu_util"
+GPU Utilization percentage.
+
+"memory_util"
+GPU Memory Utilization percentage.
+
+"enc_util_gpu"
+GPU Utilization for encoding.
+
+"dec_util_gpu"
+GPU Utilization for decoding.
+
+"enc_util_engine"
+Engine Utilization for encoding.
+
+"dec_util_engine"
+Engine Utilization for decoding.
+
+Section about clock properties
+Clock properties. The clock speeds are the current speeds at which the GPU and memory are running. These speeds can vary based on workload and power management settings.
+
+"clocks.current_gpu_clock"
+Current GPU Clock speed in MHz.
+
+"clocks.current_mem_clock"
+Current Memory Clock speed in MHz.
+
+"clocks.max_gpu_clock"
+Maximum GPU Clock speed in MHz.
+
+"clocks.max_mem_clock"
+Maximum Memory Clock speed in MHz.
+
+"clocks.boost_gpu_clock"
+Boosted GPU Clock speed in MHz.
+
+"clocks.boost_mem_clock"
+Boosted Memory Clock speed in MHz.
+
+"clocks.default_gpu_clock"
+Default GPU Clock speed in MHz.
+
+"clocks.default_mem_clock"
+Default Memory Clock speed in MHz.
+
+Section about power properties
+Power properties. The power levels are the current and maximum power consumption of the GPU. These values are approximate and can vary based on workload and system configuration.
+
+"power.current_draw"
+Current power draw in Watts.
+
+"power.max_draw"
+Maximum power draw in Watts.
+
+"power.limit_default"
+Default power limit in Watts.
+
+"power.limit_max"
+Maximum power limit in Watts.
+
+"power.limit_min"
+Minimum power limit in Watts.
+
+"power.default_limit_type"
+Default power limit type. Possible values are:
+"1: Default"
+"2: PowerLimit"
+"3: ThermalLimit"
+"4: PowerBrake"
+"5: PowerShare"
+"6: PowerCap"
+"7: PowerLimitDynamic"
+"8: PowerLimitStatic"
+"9: PowerLimitDynamicWithBoost"
+"10: PowerLimitDynamicWithBoostAndClock"
+"11: PowerLimitDynamicWithBoostAndTemperature"
+"12: PowerLimitDynamicWithBoostAndClockAndTemperature"
+"13: PowerLimitDynamicWithBoostAndClockAndTemperatureAndPowerCap"
+"14: PowerLimitDynamicWithBoostAndClockAndTemperatureAndPowerCapAndThermalLimit"
+"15: PowerLimitDynamicWithBoostAndClockAndTemperatureAndPowerCapAndThermalLimitAndPowerBrake"
+"16: PowerLimitDynamicWithBoostAndClockAndTemperatureAndPowerCapAndThermalLimitAndPowerBrakeAndPowerShare"
+
+"power.current_limit_type"
+Current power limit type. Possible values are the same as for default_limit_type.
+
+"power.default_power_cap"
+Default power cap in Watts.
+
+"power.current_power_cap"
+Current power cap in Watts.
+
+"power.max_power_cap"
+Maximum power cap in Watts.
+
+"power.min_power_cap"
+Minimum power cap in Watts.
+
+"power.default_power_scale"
+Default power scale factor. This is a value between 0 and 1 that indicates the default power scaling factor applied to the GPU. A value of 1 means no power scaling, while a value less than 1 means power is being scaled back.
+
+"power.current_power_scale"
+Current power scale factor. This is a value between 0 and 1 that indicates the current power scaling factor applied to the GPU. A value of 1 means no power scaling, while a value less than 1 means power is being scaled back.
+
+"power.max_power_scale"
+Maximum power scale factor. This is a value between 0 and 1 that indicates the maximum allowed power scaling factor. A value of 1 means no power scaling, while a value less than 1 means power can be scaled back to this factor.
+
+"power.min_power_scale"
+Minimum power scale factor. This is a value between 0 and 1 that indicates the minimum allowed power scaling factor. A value of 1 means no power scaling, while a value less than 1 means power can be scaled back to this factor.
+
+"power.default_power_share"
+Default power share setting. This is a value that indicates how power is shared among GPUs in a multi-GPU system when using dynamic power management. The exact meaning of this value depends on the power limit type and power management algorithm in use.
+
+"power.current_power_share"
+Current power share setting. This is a value that indicates how power is currently being shared among GPUs in a multi-GPU system when using dynamic power management. The exact meaning of this value depends on the power limit type and power management algorithm in use.
+
+"power.max_power_share"
+Maximum power share setting. This is a value that indicates the maximum allowed power share setting among GPUs in a multi-GPU system when using dynamic power management. The exact meaning of this value depends on the power limit type and power management algorithm in use.
+
+"power.min_power_share"
+Minimum power share setting. This is a value that indicates the minimum allowed power share setting among GPUs in a multi-GPU system when using dynamic power management. The exact meaning of this value depends on the power limit type and power management algorithm in use.
+
+"power.default_power_state"
+Default power state. This is an integer that indicates the default power state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.current_power_state"
+Current power state. This is an integer that indicates the current power state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.max_power_state"
+Maximum power state. This is an integer that indicates the maximum allowed power state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.min_power_state"
+Minimum power state. This is an integer that indicates the minimum allowed power state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.default_thermal_state"
+Default thermal state. This is an integer that indicates the default thermal state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.current_thermal_state"
+Current thermal state. This is an integer that indicates the current thermal state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.max_thermal_state"
+Maximum thermal state. This is an integer that indicates the maximum allowed thermal state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.min_thermal_state"
+Minimum thermal state. This is an integer that indicates the minimum allowed thermal state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.default_clock_state"
+Default clock state. This is an integer that indicates the default clock state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.current_clock_state"
+Current clock state. This is an integer that indicates the current clock state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.max_clock_state"
+Maximum clock state. This is an integer that indicates the maximum allowed clock state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.min_clock_state"
+Minimum clock state. This is an integer that indicates the minimum allowed clock state of the GPU. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.default_power_state_with_clocks"
+Default power state with clocks. This is an integer that indicates the default power state of the GPU, including clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.current_power_state_with_clocks"
+Current power state with clocks. This is an integer that indicates the current power state of the GPU, including current clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.max_power_state_with_clocks"
+Maximum power state with clocks. This is an integer that indicates the maximum allowed power state of the GPU, including clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.min_power_state_with_clocks"
+Minimum power state with clocks. This is an integer that indicates the minimum allowed power state of the GPU, including clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.default_thermal_state_with_clocks"
+Default thermal state with clocks. This is an integer that indicates the default thermal state of the GPU, including clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.current_thermal_state_with_clocks"
+Current thermal state with clocks. This is an integer that indicates the current thermal state of the GPU, including current clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.max_thermal_state_with_clocks"
+Maximum thermal state with clocks. This is an integer that indicates the maximum allowed thermal state of the GPU, including clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.min_thermal_state_with_clocks"
+Minimum thermal state with clocks. This is an integer that indicates the minimum allowed thermal state of the GPU, including clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.default_clock_state_with_clocks"
+Default clock state with clocks. This is an integer that indicates the default clock state of the GPU, including clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.current_clock_state_with_clocks"
+Current clock state with clocks. This is an integer that indicates the current clock state of the GPU, including current clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.max_clock_state_with_clocks"
+Maximum clock state with clocks. This is an integer that indicates the maximum allowed clock state of the GPU, including clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.min_clock_state_with_clocks"
+Minimum clock state with clocks. This is an integer that indicates the minimum allowed clock state of the GPU, including clock settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.default_power_state_with_clocks_and_thermal_state"
+Default power state with clocks and thermal state. This is an integer that indicates the default power state of the GPU, including clock and thermal settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.current_power_state_with_clocks_and_thermal_state"
+Current power state with clocks and thermal state. This is an integer that indicates the current power state of the GPU, including current clock and thermal settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.max_power_state_with_clocks_and_thermal_state"
+Maximum power state with clocks and thermal state. This is an integer that indicates the maximum allowed power state of the GPU, including clock and thermal settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.min_power_state_with_clocks_and_thermal_state"
+Minimum power state with clocks and thermal state. This is an integer that indicates the minimum allowed power state of the GPU, including clock and thermal settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.default_thermal_state_with_clocks_and_power_state"
+Default thermal state with clocks and power state. This is an integer that indicates the default thermal state of the GPU, including clock and power state settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.current_thermal_state_with_clocks_and_power_state"
+Current thermal state with clocks and power state. This is an integer that indicates the current thermal state of the GPU, including current clock and power state settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.max_thermal_state_with_clocks_and_power_state"
+Maximum thermal state with clocks and power state. This is an integer that indicates the maximum allowed thermal state of the GPU, including clock and power state settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.min_thermal_state_with_clocks_and_power_state"
+Minimum thermal state with clocks and power state. This is an integer that indicates the minimum allowed thermal state of the GPU, including clock and power state settings. The meaning of this value can vary depending on the GPU and the driver.
+
+"power.default_clock_state_with_clocks_and_
+利用率率报告了每个GPU在一段时间内的繁忙程度，可以用来确定应用程序对系统中的GPU使用量。
+
+“utilization.gpu”
+在过去的一个采样周期内，GPU上执行一个或多个内核的时间百分比。采样周期可能在1秒到1/6秒之间，具体取决于产品。
+
+“utilization.memory”
+在过去的一个采样周期内，对全局（设备）内存进行读写的时间百分比。采样周期可能在1秒到1/6秒之间，具体取决于产品。
+
+关于encoder.stats属性的部分
+编码器统计报告了GPU上运行的编码器会话数、平均FPS和平均延迟（以微秒为单位）。
+
+“encoder.stats.sessionCount”
+在GPU上运行的编码器会话数。
+
+“encoder.stats.averageFps”
+所有在GPU上运行的会话的平均FPS。
+
+“encoder.stats.averageLatency”
+所有在GPU上运行的会话的平均延迟，单位为微秒。
+
+关于ecc.mode属性的部分
+这是一个标志，表明是否启用了ECC支持。可能的状态是“Enabled”或“Disabled”。更改ECC模式需要重启。需要InfoROM ECC对象版本1.0或更高版本。
+
+“ecc.mode.current”
+GPU当前正在运行的ECC模式。
+
+“ecc.mode.pending”
+GPU将在下次重启后运行的ECC模式。
+
+关于ecc.errors属性的部分
+NVIDIA GPU可以提供各种ECC错误的错误计数。一些ECC错误是单比特或双比特的，其中单比特错误被自动纠正，而双比特错误则无法纠正。纹理内存错误可能是可纠正的，通过重发来纠正，或者如果重发失败，则无法纠正。这些错误在两个时间尺度上可用：易失性和累积。单比特ECC错误被硬件自动纠正，不会导致数据 corruption。双比特错误被检测到但未被纠正。请参阅网络上的ECC文档，以获取有关计算应用程序在双比特错误发生时的行为的信息。易失性错误计数器跟踪自上次加载驱动程序以来检测到的错误数量。累积错误计数持久存在，因此它们作为终身计数器。
+
+“ecc.errors.corrected.volatile.device_memory”
+在全局设备内存中检测到的错误数量。
+
+“ecc.errors.corrected.volatile.dram”
+在全局设备内存中检测到的错误数量。
+
+“ecc.errors.corrected.volatile.register_file”
+在寄存器文件内存中检测到的错误数量。
+
+“ecc.errors.corrected.volatile.l1_cache”
+在L1缓存中检测到的错误数量。
+
+“ecc.errors.corrected.volatile.l2_cache”
+在L2缓存中检测到的错误数量。
+
+“ecc.errors.corrected.volatile.texture_memory”
+在纹理内存中检测到的错误数量。
+
+“ecc.errors.corrected.volatile.cbu”
+在CBU中检测到的错误数量。
+
+“ecc.errors.corrected.volatile.sram”
+在SRAM中检测到的错误数量。
+全球SRAM中检测到错误。
+
+“ecc.errors.corrected.volatile.total”
+整个芯片中检测到的错误总数。
+
+“ecc.errors.corrected.aggregate.device_memory”
+全局设备内存中检测到的错误。
+
+“ecc.errors.corrected.aggregate.dram”
+全局设备内存中检测到的错误。
+
+“ecc.errors.corrected.aggregate.register_file”
+寄存器文件内存中检测到的错误。
+
+“ecc.errors.corrected.aggregate.l1_cache”
+L1缓存中检测到的错误。
+
+“ecc.errors.corrected.aggregate.l2_cache”
+L2缓存中检测到的错误。
+
+“ecc.errors.corrected.aggregate.texture_memory”
+纹理内存中检测到的奇偶校验错误。
+
+“ecc.errors.corrected.aggregate.cbu”
+CBU中检测到的奇偶校验错误。
+
+“ecc.errors.corrected.aggregate.sram”
+全局SRAM中检测到的错误。
+
+“ecc.errors.corrected.aggregate.total”
+整个芯片中检测到的错误总数。
+
+“ecc.errors.uncorrected.volatile.device_memory”
+全局设备内存中检测到的错误。
+
+“ecc.errors.uncorrected.volatile.dram”
+全局设备内存中检测到的错误。
+
+“ecc.errors.uncorrected.volatile.register_file”
+寄存器文件内存中检测到的错误。
+
+“ecc.errors.uncorrected.volatile.l1_cache”
+L1缓存中检测到的错误。
+
+“ecc.errors.uncorrected.volatile.l2_cache”
+L2缓存中检测到的错误。
+
+“ecc.errors.uncorrected.volatile.texture_memory”
+纹理内存中检测到的奇偶校验错误。
+
+“ecc.errors.uncorrected.volatile.cbu”
+CBU中检测到的奇偶校验错误。
+
+“ecc.errors.uncorrected.volatile.sram”
+全局SRAM中检测到的错误。
+
+“ecc.errors.uncorrected.aggregate.total”
+整个芯片中检测到的错误总数。
+
+关于退休页面的属性
+NVIDIA GPU在页面变得不可靠时可以退休它们。这可能是由于同一页面上多次发生单比特ECC错误，或者发生了双比特ECC错误。当一个页面退休时，NVIDIA驱动程序会隐藏它，使得没有驱动程序或应用程序内存分配可以访问它。
+
+“retired_pages.single_bit_ecc.count” 或 “retired_pages.sbe”
+退休的单比特ECC错误页面数。
+GPU设备内存中已退役的单比特ECC错误页数。
+
+"retired_pages.double_bit.count" 或 "retired_pages.dbe"
+GPU设备内存中已退役的双比特ECC错误页数。
+
+"retired_pages.pending"
+检查是否有任何GPU设备内存页在下次重启时等待退役。这些页仍可分配，可能会导致进一步的可靠性问题。
+
+"temperature.gpu"
+核心GPU温度，单位为摄氏度。
+
+"temperature.memory"
+HBM内存温度，单位为摄氏度。
+
+"power.management"
+一个标志，指示是否启用了电源管理。可以是“Supported”或“[Not Supported]”。需要Inforom PWR对象版本3.0或更高，或者Kepler设备。
+
+"power.draw"
+整个板子的最后测量的功率消耗，单位为瓦特。仅在支持电源管理时可用。该读数在+/- 5瓦特范围内准确。
+
+"power.limit"
+软件电源限制，单位为瓦特。通过软件如nvidia-smi设置。在Kepler设备上，电源限制可以使用[-pl | --power-limit=]开关调整。
+
+"enforced.power.limit"
+电源管理算法的功率上限，单位为瓦特。总板功率消耗由电源管理算法控制，使其保持在这一点以下。这是各种电源限制器的最小值。
+
+"power.default_limit"
+默认电源管理算法的功率上限，单位为瓦特。在驱动程序卸载后，电源限制将恢复为默认电源限制。
+
+"power.min_limit"
+电源限制可以设置的最低值，单位为瓦特。
+
+"power.max_limit"
+电源限制可以设置的最高值，单位为瓦特。
+
+"clocks.current.graphics" 或 "clocks.gr"
+当前图形（着色器）时钟频率。
+
+"clocks.current.sm" 或 "clocks.sm"
+当前SM（流式多处理器）时钟频率。
+
+"clocks.current.memory" 或 "clocks.mem"
+当前内存时钟频率。
+
+"clocks.current.video" 或 "clocks.video"
+当前视频编码器/解码器时钟频率。
+
+关于clocks.applications属性的部分
+用户指定的应用程序运行频率。可以通过[-ac | --applications-clocks]开关更改。
+
+"clocks.applications.graphics" 或 "clocks.applications.gr"
+用户指定的图形（着色器）时钟频率。
+
+"clocks.applications.memory" 或 "clocks.applications.mem"
+用户指定的内存时钟频率。
+
+关于clocks.default_applications属性的部分
+默认应用程序运行频率。可以通过[-ac | --applications-clocks]开关更改应用程序时钟。应用程序时钟可以重置为默认值，使用[-rac | --reset-applications-clocks]开关。
+
+"clocks.default_applications.graphics" 或 "clocks.default_applications.gr"
+默认的图形（着色器）时钟频率。
+默认应用程序图形（着色器）时钟频率。
+
+"clocks.default_applications.memory" 或 "clocks.default_applications.mem"
+默认应用程序内存时钟频率。
+
+关于clocks.max属性的段落
+GPU设计中各个部分能够运行的最大频率。
+
+"clocks.max.graphics" 或 "clocks.max.gr"
+图形（着色器）时钟的最大频率。
+
+"clocks.max.sm" 或 "clocks.max.sm"
+SM（流式多处理器）时钟的最大频率。
+
+"clocks.max.memory" 或 "clocks.max.mem"
+内存时钟的最大频率。
+
+关于mig.mode属性的段落
+一个标志，表明MIG模式是否启用。可能是“Enabled”或“Disabled”。更改MIG模式需要GPU重置。
+
+"mig.mode.current"
+GPU当前正在运行的MIG模式。
+
+"mig.mode.pending"
+GPU重置后将操作的MIG模式。
+
+"fabric.state"
+GPU织物注册过程的当前状态。
+
+"fabric.status"
+错误状态，仅在GPU织物注册状态为“completed”时有效
+
+----总结----
+"inforom.img_version"
+GPU上安装的INFOROM映像版本。
+
+"inforom.oem_version"
+GPU上安装的INFOROM OEM版本。
+
+"inforom.ecc_mode"
+GPU上启用的ECC模式。
+
+"inforom.secure_mode"
+GPU上启用的安全模式。
+
+关于power_readings属性的部分
+获取有关GPU功耗和温度的信息。
+
+"power_readings.power_draw"
+GPU当前的功耗，以瓦特为单位。
+
+"power_readings.power_limit"
+GPU的当前功耗限制，以瓦特为单位。
+
+"power_readings.temperature"
+GPU核心的温度，以摄氏度为单位。
+
+关于memory_readings属性的部分
+获取有关GPU内存使用和带宽的信息。
+
+"memory_readings.total"
+GPU上物理内存的总容量，以字节为单位。
+
+"memory_readings.free"
+GPU上空闲的内存容量，以字节为单位。
+
+"memory_readings.used"
+GPU上已使用内存的容量，以字节为单位。
+
+"memory_readings.bandwidth"
+GPU内存的带宽，以字节/秒为单位。
+
+关于clocks属性的部分
+获取有关GPU时钟频率的信息。
+
+"clocks.graphics"
+GPU的图形时钟频率，以兆赫兹（MHz）为单位。
+
+"clocks.sm"
+GPU的SM时钟频率，以兆赫兹（MHz）为单位。
+
+"clocks.mem"
+GPU的内存时钟频率，以兆赫兹（MHz）为单位。
+
+关于utilization属性的部分
+获取有关GPU利用率的信息。
+
+"utilization.gpu"
+GPU的总体利用率，以百分比表示。
+
+"utilization.memory"
+GPU内存的利用率，以百分比表示。
+
+关于compute_mode属性的部分
+获取有关GPU计算模式的信息。
+
+"compute_mode.gpu"
+GPU的计算模式。值可以是"Default"或"Exclusive"。在"Default"模式下，GPU同时支持图形和计算任务。在"Exclusive"模式下，GPU专用于计算任务，不支持图形任务。仅适用于特定产品。请参阅NVML文档中的功能矩阵。
+
+关于display_active属性的部分
+获取有关GPU上显示器活动状态的信息。
+
+"display_active.gpu"
+GPU上显示器的活动状态。值可以是"Active"或"Inactive"。"Active"表示显示器当前连接到GPU并且已经初始化。"Inactive"表示显示器未连接或未初始化。
+
+关于persistence_mode属性的部分
+获取有关GPU持久模式状态的信息。
+
+"persistence_mode.gpu"
+GPU的持久模式状态。值可以是"PersistenceModeEnabled"或"PersistenceModeDisabled"。在持久模式启用时，即使没有活跃的客户端（如X11或nvidia-smi），NVIDIA驱动程序仍然保持加载。这减少了与运行依赖应用程序（如CUDA程序）相关的驱动程序加载延迟。仅限Linux。
+
+关于accounting_mode属性的部分
+获取有关GPU会计模式状态的信息。
+
+"accounting_mode.gpu"
+GPU的会计模式状态。值可以是"AccountingModeEnabled"或"AccountingModeDisabled"。当启用会计时，会为每个在GPU上运行的计算进程计算统计信息。可以在进程运行时查询统计信息，也可以在进程终止后查询。进程的执行时间在进程运行时报告为0，并在进程终止后更新为实际执行时间。更多信息请参见--help-query-accounted-apps。
+
+关于driver_model属性的部分
+获取有关GPU驱动器模型的信息。
+
+"driver_model.current.gpu"
+当前正在使用的驱动器模型。在Linux上总是为"N/A"。
+
+"driver_model.pending.gpu"
+下次重启时将使用的驱动器模型。在Linux上总是为"N/A"。
+
+关于vbios_version属性的部分
+获取有关GPU BIOS版本的信息。
+
+"vbios_version.gpu"
+GPU板的BIOS版本。
+总结下文：
+
+GPU板上的每个对象都有一个名为inforom的存储空间，用于存储GPU的配置和状态数据。inforom存储的版本号是数值的，且每个对象的inforom版本都不同。了解这些版本号有助于判断GPU是否支持某些功能。
+
+"inforom.img"或"inforom.image"指的是infoROM映像的全球版本，这个版本号唯一地标识了infoROM在板上的闪存版本。
+
+"inforom.oem"是OEM配置数据的版本。
+
+"inforom.ecc"是ECC记录数据的版本。
+
+"inforom.pwr"或"inforom.power"是电源管理数据的版本。
+
+GOM（Graphics Operation Mode）允许通过禁用GPU功能来降低功耗和优化GPU吞吐量。有三种模式：全开、计算和低双精度。GOM可以通过（--gom）标志更改，并且有当前使用的GOM和下次重启时将使用的GOM。
+
+"fan.speed"是风扇速度值，表示为产品最大噪音容忍度风扇速度的百分比。这个值可能超过100%，但要注意，报告的速度是意图中的风扇速度，而不是实际速度。
+
+"pstate"是GPU的当前性能状态，从P0（最大性能）到P12（最小性能）不等。
+
+"clocks_throttle_reasons.supported"是支持的时钟限速原因的位掩码。
+
+"clocks_throttle_reasons.active"是活动时钟限速原因的位掩码。
+
+"clocks_throttle_reasons.gpu_idle"表示GPU上没有任何东西在运行，时钟正在下降到空闲状态。这个限制器可能在后续版本中被移除。
+
+"clocks_throttle_reasons.applications_clocks_setting"表示GPU时钟受到应用程序时钟设置的限制。
+
+GPU Utilization properties提供了GPU和内存的利用率信息，这些百分比是由驱动程序计算的，并可能受到应用程序和系统配置的影响。
+
+"gpu_util"是GPU Utilization的百分比。
+
+"memory_util"是GPU Memory Utilization的百分比。
+
+"enc_util_gpu"是GPU Utilization for encoding的百分比。
+
+"dec_util_gpu"是GPU Utilization for decoding的百分比。
+
+"enc_util_engine"是Engine Utilization for encoding的百分比。
+
+"dec_util_engine"是Engine Utilization for decoding的百分比。
+
+Clock properties提供了GPU和内存的当前和最大时钟速度信息，这些速度会根据工作负载和电源管理设置而变化。
+
+"clocks.current_gpu_clock"是当前GPU Clock speed in MHz。
+
+"clocks.current_mem_clock"是当前Memory Clock speed in MHz。
+
+"clocks.max_gpu_clock"是Maximum GPU Clock speed in MHz。
+
+"clocks.max_mem_clock"是Maximum Memory Clock speed in MHz。
+
+"clocks.boost_gpu_clock"是Boosted GPU Clock speed in MHz。
+
+"clocks.boost_mem_clock"是Boosted Memory Clock speed in MHz。
+
+"clocks.default_gpu_clock"是Default GPU Clock speed in MHz。
+
+"clocks.default_mem_clock"是Default Memory Clock speed in MHz。
+
+Power properties提供了GPU的当前和最大功率消耗信息，这些值是 approximate的，并可能根据工作负载和系统配置而变化。
+
+"power.current_draw"是Current power draw in Watts。
+
+"power.max_draw"是Maximum power draw in Watts。
+
+"power.limit_default"是Default power limit in Watts。
+
+"power.limit_max"是Maximum power limit in Watts。
+
+"power.limit_min"是Minimum power limit in Watts。
+Power management settings for GPUs:
+
+- `power.default_limit_type`: The default power limit type. Possible values are:
+  - `1: Default`
+  - `2: PowerLimit`
+  - `3: ThermalLimit`
+  - `4: PowerBrake`
+  - `5: PowerShare`
+  - `6: PowerCap`
+  - `7: PowerLimitDynamic`
+  - `8: PowerLimitStatic`
+  - `9: PowerLimitDynamicWithBoost`
+  - `10: PowerLimitDynamicWithBoostAndClock`
+  - `11: PowerLimitDynamicWithBoostAndTemperature`
+  - `12: PowerLimitDynamicWithBoostAndClockAndTemperature`
+  - `13: PowerLimitDynamicWithBoostAndClockAndTemperatureAndPowerCap`
+  - `14: PowerLimitDynamicWithBoostAndClockAndTemperatureAndPowerCapAndThermalLimit`
+  - `15: PowerLimitDynamicWithBoostAndClockAndTemperatureAndPowerCapAndThermalLimitAndPowerBrake`
+  - `16: PowerLimitDynamicWithBoostAndClockAndTemperatureAndPowerCapAndThermalLimitAndPowerBrakeAndPowerShare`
+
+- `power.current_limit_type`: The current power limit type. Possible values are the same as for `default_limit_type`.
+
+- `power.default_power_cap`: The default power cap in Watts.
+
+- `power.current_power_cap`: The current power cap in Watts.
+
+- `power.max_power_cap`: The maximum power cap in Watts.
+
+- `power.min_power_cap`: The minimum power cap in Watts.
+
+- `power.default_power_scale`: The default power scale factor. This is a value between 0 and 1 that indicates the default power scaling factor applied to the GPU. A value of 1 means no power scaling, while a value less than 1 means power is being scaled back.
+
+- `power.current_power_scale`: The current power scale factor. This is a value between 0 and 1 that indicates the current power scaling factor applied to the GPU. A value of 1 means no power scaling, while a value less than 1 means power is being scaled back.
+
+- `power.max_power_scale`: The maximum power scale factor. This is a value between 0 and 1 that indicates the maximum allowed power scaling factor. A value of 1 means no power scaling, while a value less than 1 means power can be scaled back to this factor.
+
+- `power.min_power_scale`: The minimum power scale factor. This is a value between 0 and 1 that indicates the minimum allowed power scaling factor. A value of 1 means no power scaling, while a value less than 1 means power can be scaled back to this factor.
+
+- `power.default_power_share`: The default power share setting. This is a value that indicates how power is shared among GPUs in a multi-GPU system when using dynamic power management. The exact meaning of this value depends on the power limit type and power management algorithm in use.
+
+- `power.current_power_share`: The current power share setting. This is a value that indicates how power is currently being shared among GPUs in a multi-GPU system when using dynamic power management. The exact meaning of this value depends on the power limit type and power management algorithm in use.
+Power management settings for GPUs in a multi-GPU system, including maximum and minimum power share settings, default and current power states, maximum and minimum power states, default and current thermal states, maximum and minimum thermal states, default and current clock states, and maximum and minimum clock states. The exact meaning of these values depends on the power limit type and power management algorithm in use, as well as the specific GPU and driver.
+总结：
+
+- `minimum_clock_state`: 表示GPU允许的最小时钟状态。
+- `default_power_state_with_clocks`: 表示GPU的默认功率状态，包括时钟设置。
+- `current_power_state_with_clocks`: 表示GPU当前的功率状态，包括当前的时钟设置。
+- `max_power_state_with_clocks`: 表示GPU允许的最大功率状态，包括时钟设置。
+- `min_power_state_with_clocks`: 表示GPU允许的最小功率状态，包括时钟设置。
+- `default_thermal_state_with_clocks`: 表示GPU的默认热状态，包括时钟设置。
+- `current_thermal_state_with_clocks`: 表示GPU当前的热状态，包括当前的时钟设置。
+- `max_thermal_state_with_clocks`: 表示GPU允许的最大热状态，包括时钟设置。
+- `min_thermal_state_with_clocks`: 表示GPU允许的最小热状态，包括时钟设置。
+- `default_clock_state_with_clocks`: 表示GPU的默认时钟状态，包括时钟设置。
+- `current_clock_state_with_clocks`: 表示GPU当前的时钟状态，包括当前的时钟设置。
+- `max_clock_state_with_clocks`: 表示GPU允许的最大时钟状态，包括时钟设置。
+- `min_clock_state_with_clocks`: 表示GPU允许的最小时钟状态，包括时钟设置。
+
+这些值的具体含义会根据不同的GPU和驱动程序而有所不同。
+The provided information summarizes various power and clock states of a GPU. Here's a brief summary:
+
+- `maximum_clock_state_with_clocks`: The maximum allowed clock state of the GPU, including clock settings.
+- `minimum_clock_state_with_clocks`: The minimum allowed clock state of the GPU, including clock settings.
+- `default_power_state_with_clocks_and_thermal_state`: The default power state of the GPU, including clock and thermal settings.
+- `current_power_state_with_clocks_and_thermal_state`: The current power state of the GPU, including current clock and thermal settings.
+- `maximum_power_state_with_clocks_and_thermal_state`: The maximum allowed power state of the GPU, including clock and thermal settings.
+- `minimum_power_state_with_clocks_and_thermal_state`: The minimum allowed power state of the GPU, including clock and thermal settings.
+- `default_thermal_state_with_clocks_and_power_state`: The default thermal state of the GPU, including clock and power state settings.
+- `current_thermal_state_with_clocks_and_power_state`: The current thermal state of the GPU, including current clock and power state settings.
+- `maximum_thermal_state_with_clocks_and_power_state`: The maximum allowed thermal state of the GPU, including clock and power state settings.
+- `minimum_thermal_state_with_clocks_and_power_state`: The minimum allowed thermal state of the GPU, including clock and power state settings.
+
+These values can vary depending on the specific GPU and the driver being used, and they provide insight into the power and clock management of the GPU.
+总结下文：
+
+- **power.default_clock_state_with_clocks_and_utilization**：报告了每个GPU在一段时间内的繁忙程度，可以用来确定应用程序对系统中的GPU使用量。
+
+- **utilization.gpu**：在过去的一个采样周期内，GPU上执行一个或多个内核的时间百分比。采样周期可能在1秒到1/6秒之间，具体取决于产品。
+
+- **utilization.memory**：在过去的一个采样周期内，对全局（设备）内存进行读写的时间百分比。采样周期可能在1秒到1/6秒之间，具体取决于产品。
+
+- **encoder.stats**：报告了GPU上运行的编码器会话数、平均FPS和平均延迟（以微秒为单位）。
+  - **encoder.stats.sessionCount**：在GPU上运行的编码器会话数。
+  - **encoder.stats.averageFps**：所有在GPU上运行的会话的平均FPS。
+  - **encoder.stats.averageLatency**：所有在GPU上运行的会话的平均延迟，单位为微秒。
+
+- **ecc.mode**：这是一个标志，表明是否启用了ECC支持。可能的状态是“Enabled”或“Disabled”。更改ECC模式需要重启。需要InfoROM ECC对象版本1.0或更高版本。
+  - **ecc.mode.current**：GPU当前正在运行的ECC模式。
+  - **ecc.mode.pending**：GPU将在下次重启后运行的ECC模式。
+
+- **ecc.errors**：NVIDIA GPU可以提供各种ECC错误的错误计数。一些ECC错误是单比特或双比特的，其中单比特错误被自动纠正，而双比特错误则无法纠正。纹理内存错误可能是可纠正的，通过重发来纠正，或者如果重发失败，则无法纠正。这些错误在两个时间尺度上可用：易失性和累积。单比特ECC错误被硬件自动纠正，不会导致数据 corruption。双比特错误被检测到但未被纠正。请参阅网络上的ECC文档，以获取有关计算应用程序在双比特错误发生时的行为的信息。易失性错误计数器跟踪自上次加载驱动程序以来检测到的错误数量。累积错误计数持久存在，因此它们作为终身计数器。
+  - **ecc.errors.corrected.volatile.device_memory**：在全局设备内存中检测到的错误数量。
+  - **ecc.errors.corrected.volatile.dram**：在全局设备内存中检测到的错误数量。
+  - **ecc.errors.corrected.volatile.register_file**：在寄存器文件内存中检测到的错误数量。
+  - **ecc.errors.corrected.volatile.l1_cache**：在L1缓存中检测到的错误数量。
+  - **ecc.errors.corrected.volatile.l2_cache**：在L2缓存中检测到的错误数量。
+  - **ecc.errors.corrected.volatile.texture_memory**：在纹理内存中检测到的错误数量。
+  - **ecc.errors.corrected.volatile.cbu**：在CBU中检测到的错误数量。
+  - **ecc.errors.corrected.volatile.sram**：在SRAM中检测到的错误数量。
+  - **ecc.errors.corrected.aggregate.device_memory**：全局设备内存中检测到的错误。
+  - **ecc.errors.corrected.aggregate.dram**：全局设备内存中检测到的错误。
+  - **ecc.errors.corrected.aggregate.register_file**：寄存器文件内存中检测到的错误。
+  - **ecc.errors.corrected.aggregate.l1_cache**：L1缓存中检测到的错误。
+  - **ecc.errors.corrected.aggregate.l2_cache**：L2缓存中检测到的错误。
+  - **ecc.errors.corrected.aggregate.texture_memory**：纹理内存中检测到的奇偶校验错误。
+  - **ecc.errors.corrected.aggregate.cbu**：CBU中检测到的奇偶校验错误。
+  - **ecc.errors.corrected.aggregate.sram**：全局SRAM中检测到的错误。
+  - **ecc.errors.corrected.aggregate.total**：整个芯片中检测到的错误总数。
+  - **ecc.errors.uncorrected.volatile.device_memory**：全局设备内存中检测到的错误。
+  - **ecc.errors.uncorrected.volatile.dram**：全局设备内存中检测到的错误。
+  - **ecc.errors.uncorrected.volatile.register_file**：寄存器文件内存中检测到的错误。
+  - **ecc.errors.uncorrected.volatile.l1_cache**：L1缓存中检测到的错误。
+  - **ecc.errors.uncorrected.volatile.l2_cache**：L2缓存中检测到的错误。
+  - **ecc.errors.uncorrected.volatile.texture_memory**：纹理内存中检测到的奇偶校验错误。
+  - **ecc.errors.uncorrected.volatile.cbu**：CBU中检测到的奇偶校验错误。
+  - **ecc.errors.uncorrected.volatile.sram**：全局SRAM中检测到的错误。
+  - **ecc.errors.uncorrected.aggregate.total**：整个芯片中检测到的错误总数。
+
+- **retired_pages**：NVIDIA GPU在页面变得不可靠时可以退休它们。这可能是由于同一页面上多次发生单比特ECC错误，或者发生了双比特ECC错误。当一个页面退休时，NVIDIA驱动程序会隐藏它，使得没有驱动程序或应用程序内存分配可以访问它。
+  - **retired_pages.single_bit_ecc.count** 或 **retired_pages.sbe**：退休的单比特ECC错误页面数。
+总结：
+
+- "retired_pages.double_bit.count" or "retired_pages.dbe"：GPU设备内存中已退役的双比特ECC错误页数。
+- "retired_pages.pending"：检查是否有任何GPU设备内存页在下次重启时等待退役。这些页仍可分配，可能会导致进一步的可靠性问题。
+- "temperature.gpu"：核心GPU温度，单位为摄氏度。
+- "temperature.memory"：HBM内存温度，单位为摄氏度。
+- "power.management"：一个标志，指示是否启用了电源管理。可以是“Supported”或“[Not Supported]”。需要Inforom PWR对象版本3.0或更高，或者Kepler设备。
+- "power.draw"：整个板子的最后测量的功率消耗，单位为瓦特。仅在支持电源管理时可用。该读数在+/- 5瓦特范围内准确。
+- "power.limit"：软件电源限制，单位为瓦特。通过软件如nvidia-smi设置。在Kepler设备上，电源限制可以使用[-pl | --power-limit=]开关调整。
+- "enforced.power.limit"：电源管理算法的功率上限，单位为瓦特。总板功率消耗由电源管理算法控制，使其保持在这一点以下。这是各种电源限制器的最小值。
+- "power.default_limit"：默认电源管理算法的功率上限，单位为瓦特。在驱动程序卸载后，电源限制将恢复为默认电源限制。
+- "power.min_limit"：电源限制可以设置的最低值，单位为瓦特。
+- "power.max_limit"：电源限制可以设置的最高值，单位为瓦特。
+- "clocks.current.graphics" or "clocks.gr"：当前图形（着色器）时钟频率。
+- "clocks.current.sm" or "clocks.sm"：当前SM（流式多处理器）时钟频率。
+- "clocks.current.memory" or "clocks.mem"：当前内存时钟频率。
+- "clocks.current.video" or "clocks.video"：当前视频编码器/解码器时钟频率。
+- "clocks.applications.graphics" or "clocks.applications.gr"：用户指定的图形（着色器）时钟频率。
+- "clocks.applications.memory" or "clocks.applications.mem"：用户指定的内存时钟频率。
+- "clocks.default_applications.graphics" or "clocks.default_applications.gr"：默认应用程序图形（着色器）时钟频率。
+- "clocks.default_applications.memory" or "clocks.default_applications.mem"：默认应用程序内存时钟频率。
+- "clocks.max.graphics" or "clocks.max.gr"：图形（着色器）时钟的最大频率。
+- "clocks.max.sm" or "clocks.max.sm"：SM（流式多处理器）时钟的最大频率。
+- "clocks.max.memory" or "clocks.max.mem"：内存时钟的最大频率。
+- "mig.mode"：一个标志，表明MIG模式是否启用。可能是“Enabled”或“Disabled”。更改MIG模式需要GPU重置。
+- "mig.mode.current"：GPU当前正在运行的MIG模式。
+- "mig.mode.pending"：GPU重置后将操作的MIG模式。
+- "fabric.state"：GPU织物注册过程的当前状态。
+- "fabric.status"：错误状态，仅在GPU织物注册状态为“completed”时有效。
+
+----性能----
+top_p:0.85  temperature: 0.7
+原文长度:19763    译文长度:21181 总结长度: 14095
+翻译耗时: 1078.1243954sec 负载:67.42186 已用显存:21633.71 显卡功耗:247.76509
+总结耗时:728.1033189sec 负载:62.846592 已用显存:21668.596 显卡功耗:257.05576
+
