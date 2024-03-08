@@ -21,7 +21,7 @@ namespace glm_api_call_test.api
 
         public config Config { get; private set; } = new config();
 
-        public string Name => "qwen";
+        public string Name => "qwen_1_5_7b";
 
         public int MaxLength => Config.max_length;
 
