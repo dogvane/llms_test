@@ -19,6 +19,7 @@
     <Folder Include="txt\llama2\" />
     <Folder Include="txt\Yi_34b_4bit\" />
     <Folder Include="txt\Yi_6b\" />
+    <Folder Include="txt\Yi_9b\" />
     <Folder Include="txt\yulan\" />
   </ItemGroup>
 

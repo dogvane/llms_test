@@ -21,7 +21,7 @@ namespace glm_api_call_test.api
 
         public config Config { get; private set; } = new config();
 
-        public string Name => "Yi_34b_4bit";
+        public string Name => "Yi_9b";
 
         public int MaxLength => Config.max_length;
 

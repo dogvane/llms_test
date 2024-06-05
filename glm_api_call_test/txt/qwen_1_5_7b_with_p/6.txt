@@ -1,0 +1,1371 @@
+对于 "--query-gpu" 选项的有效属性列表如下：
+
+1. "timestamp"：查询时间，格式为 "YYYY/MM/DD HH:MM:SS.msec"。
+2. "driver_version"：安装的NVIDIA显卡驱动版本，是一个字母数字字符串。
+3. "vgpu_driver_capability"：获取驱动级别特性信息。
+   - "heterogeneous_multivGPU"：检查驱动是否支持多GPU异构计算。
+   - "count"：系统中NVIDIA GPU的数量。
+   - "name" 或 "gpu_name"：GPU的官方产品名，全字母数字。
+   - "serial" 或 "gpu_serial"：每个板载GPU的唯一物理序列号，全局唯一且是字母数字值。
+   - "uuid" 或 "gpu_uuid"：GPU的全局唯一、不可变的字母数字标识符，与主板上的物理标签无关。
+   - "pci.bus_id" 或 "gpu_bus_id"：PCI总线ID，形式为 "domain:bus:device.function"，以十六进制表示。
+   - "pci.domain"：PCI域号，十六进制。
+   - "pci.bus"：PCI总线号，十六进制。
+   - "pci.device"：PCI设备号，十六进制。
+   - "pci.device_id"：PCI供应商设备ID，十六进制。
+   - "pci.sub_device_id"：PCI子系统ID，十六进制。
+
+4. "vgpu_device_capability"：获取设备级别特性信息。
+   - "fractional_multiVgpu"：此GPU是否支持使用在多GPU配置中的分数vGPU。
+   - "heterogeneous_timeSlice_profile"：是否支持不同类型的timesliced vGPU并发执行。
+   - "heterogeneous_timeSlice_sizes"：是否支持不同大小的timesliced vGPU并发执行。
+   - "pcie.link.gen.current"：当前PCI-E链路代号（已废弃，建议使用gpucurrent）
+   - "pcie.link.gen.gpucurrent"：当前PCI-E链路代号，当GPU未使用时可能会降低。
+   - "pcie.link.gen.max"：此GPU和系统配置下可能的最大PCI-E链路代号。
+   - "pcie.link.gen.gpumax"：此GPU支持的最大PCI-E链路代号。
+   - "pcie.link.gen.hostmax"：与该GPU对应的根端口支持的最大PCI-E链路代号。
+   - "pcie.link.width.current"：当前PCI-E链路宽度。
+   - "pcie.link.width.max"：此GPU和系统配置下可能的最大PCI-E链路宽度。
+
+5. "driver_model"：Windows上支持的驱动模型，包括TCC（适用于计算应用）和WDDM（适用于图形应用）。Linux不支持多个模型，值为"N/A"。
+   - "driver_model.current"：当前使用的驱动模型，Linux始终为"N/A"。
+   - "driver_model.pending"：下次重启后将使用的驱动模型，Linux始终为"N/A"。
+
+6. "vbios_version"：GPU主板BIOS版本。
+每个GPU板内存储对象的版本号。inforom是一个小型、持久的存储空间，用于存储GPU的配置和状态数据。了解这些版本号很有用，因为有些GPU功能只有在特定版本或更高版本的inforom中可用。
+
+"inforom.img" 或 "inforom.image"
+全局inforom映像版本。与VBIOS版本一样，inforom映像版本独特地描述了主板上实际刷写的infoROM的精确版本，而对象版本仅表示支持的功能。
+
+"inforom.oem"
+OEM配置数据的版本号。
+
+"inforom.ecc"
+ECC记录数据的版本号。
+
+"inforom.pwr" 或 "inforom.power"
+电源管理数据的版本号。
+
+关于gom属性的部分：
+gom（图形优化模式）允许通过禁用GPU功能来减少能耗和优化性能。每个gom都是为满足特定用户需求设计的。
+- "All On"模式：所有功能都开启并以全速运行。
+- "Compute"模式：专为执行计算任务设计，不支持图形操作。
+- "Low Double Precision"模式：用于运行对高速双精度需求不高的图形应用。
+
+gom的当前使用情况（gom.current）和下次重启时将使用的gom（gom.pending）可以通过--gom标志进行更改。
+
+"fan.speed"
+风扇速度值是设备风扇目前打算以产品最大噪音容忍度百分比运行的速度。在某些情况下，该值可能超过100%。注意：报告的速度是打算运行的风扇速度。如果风扇物理阻挡无法旋转，该输出可能不匹配实际风扇速度。许多部件不报告风扇速度，因为它们依赖于周围机箱中的风扇散热。
+
+"pstate"
+GPU的当前性能状态，范围从P0（最高性能）到P12（最低性能）。
+
+关于clocks_throttle_reasons属性的部分：
+获取影响时钟频率降低的因素信息。如果所有限速原因显示为"未活动"，表示时钟运行在尽可能高的频率。
+
+"clocks_throttle_reasons.supported"
+支持的时钟限速位图，更多细节见nvml.h文件。
+
+"clocks_throttle_reasons.active"
+活跃的时钟限速位图，更多细节见nvml.h文件。
+
+"clocks_throttle_reasons.gpu_idle"
+GPU无运行任务，时钟降为闲置状态。这可能是后续版本中移除的限制。
+
+"clocks_throttle_reasons.applications_clocks_setting"
+GPU时钟受到应用程序设置的限制，例如可以使用nvidia-smi --applications-clocks=命令调整。
+
+"clocks_throttle_reasons.sw_power_cap"
+软件功率缩放算法因GPU耗电过多而将时钟降低至请求值以下。
+
+"clocks_throttle_reasons.hw_slowdown"
+硬件减速（核心时钟降低2倍以上）启用，这可能表明：
+- 温度过高导致硬件降频
+- 外部电源制动断开（如系统电源供应器触发）
+- 电力消耗过高，快速保护机制降低了时钟
+- 可能在PState或时钟改变期间报告
+
+"clocks_throttle_reasons.hw_thermal_slowdown"
+硬件温度过高导致的硬件降频
+
+"clocks_throttle_reasons.hw_power_brake_slowdown"
+外部电源制动断开（如系统电源供应器触发）导致的硬件减速
+
+"clocks_throttle_reasons.sw_thermal_slowdown"
+软件热限制算法因GPU温度超过最大工作温度而降低时钟
+
+"clocks_throttle_reasons.sync_boost"
+同步增强：GPU已通过nvidia-smi或DCGM添加到同步增强组中，目的是以每瓦特最佳性能最大化性能。整个同步增强组的其他GPU将一起将时钟降低到最低。
+
+关于内存属性的部分：
+主板内存信息。总内存报告值受到ECC状态的影响。如果启用ECC，由于需要额外的奇偶校验位，总可用内存会减少几个百分点。驱动程序也可能在没有GPU活动时保留一小部分内存作为内部使用。 
+
+"memory.total"
+安装的GPU内存总量。
+
+"memory.reserved"
+NVIDIA驱动和固件预留的总内存。
+
+"memory.used"
+已分配给活跃上下文的内存总量。
+
+"memory.free"
+剩余的未分配内存。
+
+"compute_mode"
+计算模式标志指示单个或多个计算应用程序是否可以在GPU上运行。
+- 0: 默认，允许每个设备上有多个上下文。
+- 1: 弃用的Exclusive_Thread，推荐使用Exclusive_Process。
+- 2: 禁止，每个设备不允许有任何上下文（无计算应用）。
+- 3: Exclusive_Process，每个设备仅允许一个上下文，但可以从多个线程同时使用。
+"retired_pages"
+This property represents the number of pages that have been retired or swapped out due to memory pressure or other reasons. It provides information about the memory management and usage within the GPU.
+
+"retired_pages.global_device_memory"
+Number of global device memory pages retired.
+
+"retired_pages.dram"
+Number of DRAM pages retired.
+
+"retired_pages.register_file"
+Number of register file pages retired.
+
+"retired_pages.l1_cache"
+Number of L1 cache pages retired.
+
+"retired_pages.l2_cache"
+Number of L2 cache pages retired.
+
+"retired_pages.texture_memory"
+Number of texture memory pages retired.
+
+"retired_pages.cbu"
+Number of CBU (compute buffer) pages retired.
+
+"retired_pages.sram"
+Number of global SRAM pages retired.
+
+"retired_pages.total"
+Total number of retired pages across the entire GPU.
+NVIDIA GPU可以在内存不可靠时回收页面。这可能发生在同一页面发生多比特错误，或者在双比特错误时。当页面被回收时，NVIDIA驱动程序会隐藏它，以防止任何驱动程序或应用程序内存分配访问它。
+
+"retired_pages.single_bit_ecc.count" 或 "retired_pages.sbe"
+由于单比特错误回收的GPU设备内存页面数量。
+
+"retired_pages.double_bit.count" 或 "retired_pages.dbe"
+由于双比特错误回收的GPU设备内存页面数量。
+
+"retired_pages.pending"
+检查下次重启时是否有待回收的GPU设备内存页面。这些页面仍可以分配，可能会导致更多可靠性问题。
+
+"temperature.gpu"
+核心GPU温度，单位为摄氏度。
+
+"temperature.memory"
+HBM内存温度，单位为摄氏度。
+
+"power.management"
+一个标志，指示电源管理是否启用。可能是"Supported"或"[Not Supported]"。需要Inforom PWR对象版本3.0或Kepler设备支持。
+
+"power.draw"
+整个板子上最后一次测量到的功率消耗，单位为瓦特。仅在支持电源管理时可用。读数误差在±5瓦以内。
+
+"power.limit"
+软件设置的功率限制，单位为瓦特。通过nvidia-smi等软件设置。在Kepler设备上，可以通过[-pl | --power-limit=]开关调整Power Limit。
+
+"enforced.power.limit"
+电源管理算法的功率上限，单位为瓦特。总板子功率由电源管理算法调节，保持在此值以下。这是各种功率限制器的最小值。
+
+"power.default_limit"
+默认电源管理算法的功率上限，单位为瓦特。驱动卸载后，Power Limit将恢复为默认功率限制。
+
+"power.min_limit"
+电源限制可以设置的最低值，单位为瓦特。
+
+"power.max_limit"
+电源限制可以设置的最大值，单位为瓦特。
+
+"clocks.current.graphics" 或 "clocks.gr"
+图形（着色器）时钟当前频率。
+
+"clocks.current.sm" 或 "clocks.sm"
+SM（流处理单元）时钟当前频率。
+
+"clocks.current.memory" 或 "clocks.mem"
+内存时钟当前频率。
+
+"clocks.current.video" 或 "clocks.video"
+视频编码/解码时钟当前频率。
+
+关于clocks.applications属性段：
+应用运行的用户指定频率，可使用[-ac | --applications-clocks]开关更改。
+
+"clocks.applications.graphics" 或 "clocks.applications.gr"
+应用图形（着色器）时钟的用户指定频率。
+
+"clocks.applications.memory" 或 "clocks.applications.mem"
+应用内存时钟的用户指定频率。
+
+关于clocks.default_applications属性段：
+默认应用运行的频率，通过[-ac | --applications-clocks]开关可更改。使用[-rac | --reset-applications-clocks]开关可以重置应用时钟至默认值。
+
+"clocks.default_applications.graphics" 或 "clocks.default_applications.gr"
+默认应用图形（着色器）时钟频率。
+
+"clocks.default_applications.memory" 或 "clocks.default_applications.mem"
+默认应用内存时钟频率。
+
+关于clocks.max属性段：
+GPU设计的最大运行速度。
+
+"clocks.max.graphics" 或 "clocks.max.gr"
+图形（着色器）时钟的最大频率。
+
+"clocks.max.sm" 或 "clocks.max.sm"
+SM（流处理单元）时钟的最大频率。
+
+"clocks.max.memory" 或 "clocks.max.mem"
+内存时钟的最大频率。
+
+关于mig.mode属性段：
+指示MIG模式是否启用，可能是"Enabled"或"Disabled"。更改MIG模式需要重新启动GPU。 
+
+"mig.mode.current"
+GPU当前运行的MIG模式。
+
+"mig.mode.pending"
+GPU重启后将要运行的MIG模式。
+
+"fabric.state"
+GPU布线注册过程的当前状态。
+
+"fabric.status"
+只有在GPU布线注册状态为"完成"时才有效的错误状态。
+
+----总结----
+本文介绍了`--query-gpu`选项用于查询NVIDIA显卡相关的信息，主要包括以下有效属性：
+
+1. 查询时间（timestamp）：指定时间戳格式。
+2. NVIDIA显卡驱动版本（driver_version）：驱动的字母数字标识。
+3. 硬件特性信息：
+   - 多GPU异构计算支持（heterogeneous_multivGPU）
+   - GPU数量（count）、名称（name/serial/uuid）、PCI配置（pci.*）
+   - 设备级特性，如分数vGPU、timesliced vGPU并发执行等
+4. 驱动模型（driver_model）：Windows的TCC和WDDM，Linux为"N/A"。
+5. BIOS版本（vbios_version、inforom.*、inforom.oem、inforom.ecc、inforom.pwr）：GPU和主板的配置数据版本。
+6. GOM（图形优化模式）：包括All On、Compute和Low Double Precision，以及gom.current和gom.pending。
+7. 风扇速度（fan.speed）和GPU性能状态（pstate）
+8. 时钟限速原因（clocks_throttle_reasons）：影响时钟频率降低的因素列表。
+
+内存属性包括总内存、预留内存、已分配内存、剩余内存、计算模式（compute_mode）以及退役页面信息（retired_pages）。
+
+这些属性提供了对GPU驱动、硬件能力、系统状态以及内存管理的深入洞察，用于监控和优化显卡性能。
+这段文本介绍了NVIDIA GPU的一些性能监控和电源管理相关指标。当内存出现错误时，GPU会进行页面回收，通过"retired_pages.single_bit_ecc.count"和"retired_pages.double_bit.count"来统计因单比特和双比特错误回收的内存页面数量。"retired_pages.pending"则关注待回收的页面。温度方面，提供了GPU核心和内存的温度，以及电源管理的状态，如"power.management"、"power.draw"和功率限制设置。如"power.limit"可以通过特定命令调整，而"enforced.power.limit"则是由电源管理算法设定的上限。
+
+时钟频率是另一个重要参数，包括图形、SM和内存的当前频率，以及用户可指定的"clocks.applications"频率。此外，还有默认应用的频率，以及GPU设计的最大运行速度。
+
+MIG模式的启用状态在"mig.mode"属性中有记录，更改此模式通常需要重启GPU。"fabric.state"和"fabric.status"关注GPU布线的注册和错误状态，只有在布线完成且无错误时才有效。总的来说，这些信息用于诊断和优化GPU的性能和稳定性。
+
+----性能----
+top_p:0.85  temperature: 0.7
+原文长度:19763    译文长度:6488 总结长度: 1230
+翻译耗时: 183.0773017sec 负载:57.88398 已用显存:20002.691 显卡功耗:205.19618
+总结耗时:41.9777553sec 负载:61.357143 已用显存:20520.096 显卡功耗:210.24571
+
+对于 "--query-gpu" 选项的有效属性列表如下：
+
+1. "timestamp"：查询时间，格式为 "YYYY/MM/DD HH:MM:SS.msec"。
+2. "driver_version"：安装的NVIDIA显卡驱动版本，是一个字母数字字符串。
+3. "vgpu_driver_capability.heterogeneous_multigpu"：判断驱动是否支持多GPU异构计算。
+4. "count"：系统中NVIDIA GPU的数量。
+5. "name" 或 "gpu_name"：GPU的官方产品名称，全字母数字。
+6. "serial" 或 "gpu_serial"：每个板载GPU的唯一物理序列号，全局唯一且为字母数字值。
+7. "uuid" 或 "gpu_uuid"：GPU的全局唯一且不可变的字母数字标识符，与板载标签无关。
+8. "pci.bus_id" 或 "gpu_bus_id"：以 "domain:bus:device.function" 的十六进制格式表示的PCI总线ID。
+9. "pci.domain"：PCI域编号，也是十六进制。
+10. "pci.bus"：PCI总线编号，同样为十六进制。
+11. "pci.device"：PCI设备编号，十六进制。
+12. "pci.device_id"：PCI供应商设备ID，十六进制。
+13. "pci.sub_device_id"：PCI子系统ID，也是十六进制。
+
+关于 "vgpu_device_capability" 属性部分，用于获取设备级别的能力信息：
+
+1. "fractional_multiVgpu"：表示GPU是否支持分数vGPU配置。
+2. "heterogeneous_timeSlice_profile"：检查是否支持不同类型的时切vGPU同时执行。
+3. "heterogeneous_timeSlice_sizes"：确认是否支持不同大小的时切vGPU并发运行。
+4. "pcie.link.gen.current"（已废弃）：当前PCI-E链接代际，可能在GPU未使用时降低。
+5. "pcie.link.gen.gpucurrent"：当前GPU支持的PCI-E链接代际。
+6. "pcie.link.gen.max"：该GPU和系统配置下可能的最大PCI-E链接代际。
+7. "pcie.link.gen.gpumax"：该GPU支持的最大PCI-E链接代际。
+8. "pcie.link.gen.hostmax"：根端口对应的GPU支持的最大PCI-E链接代际。
+9. "pcie.link.width.current"：当前PCI-E带宽。
+10. "pcie.link.width.max"：该GPU和系统配置下的最大PCI-E带宽。
+
+关于 "driver_model" 属性，仅在Windows上有效，支持TCC和WDDM驱动模型。通过(-dm)或(-fdm)标志可以改变模型。Linux不支持多个驱动模型，其值始终为"N/A"。
+
+11. "driver_model.current"：当前使用的驱动模型，Linux始终为"N/A"。
+12. "driver_model.pending"：下次重启时将使用的驱动模型，Linux始终为"N/A"。
+13. "vbios_version"：GPU主板BIOS版本。
+GPU板内存储的每个对象版本号。inforom是一个小型、持久的存储空间，用于存储GPU的配置和状态数据。所有inforom版本字段都是数值型的，了解这些版本号可能有助于知道哪些GPU功能需要特定版本或更高版本的inforom才能使用。
+
+"inforom.img" 或 "inforom.image"
+全局inforom映像版本。与VBIOS版本一样，infoROM映像版本独特地描述了主板上已刷写的infoROM的精确版本，而infoROM对象版本仅表示支持的功能。
+
+"inforom.oem"
+OEM配置数据的版本号。
+
+"inforom.ecc"
+ECC记录数据的版本号。
+
+"inforom.pwr" 或 "inforom.power"
+电源管理数据的版本号。
+
+关于gom属性的部分
+gom（GPU操作模式）允许通过禁用GPU功能来降低功耗并优化性能。它针对不同的用户需求进行设计，有“全开”模式（所有功能都开启并以最高速度运行）、“计算”模式（仅限于计算任务，不允许图形操作）以及“低双精度”模式（适用于不需高带宽双精度的图形应用）。
+
+"gom.current" 或 "gpu_operation_mode.current"
+当前使用的gom。
+
+"gom.pending" 或 "gpu_operation_mode.pending"
+下次重启时将要使用的gom。
+
+"fan.speed"
+风扇速度值是设备风扇目前打算运行的百分比，最高可达到产品最大噪音容许值。注意：报告的速度是预期的风扇速度，如果风扇物理阻挡无法转动，此输出可能与实际风扇速度不符。许多部件不会报告风扇速度，因为它们依赖于周围机箱内的风扇冷却。
+
+"pstate"
+GPU的当前性能状态，范围从P0（最大性能）到P12（最小性能）。
+
+关于clocks_throttle_reasons属性的部分
+获取影响时钟频率降低的因素信息。如果所有限速原因显示为“未活动”，则表示时钟正在尽可能高处运行。
+
+"clocks_throttle_reasons.supported"
+支持的时钟限速原因的位掩码，详细信息见nvml.h文件。
+
+"clocks_throttle_reasons.active"
+活动的时钟限速原因的位掩码，更多细节见nvml.h文件。
+
+"clocks_throttle_reasons.gpu_idle"
+GPU无运行任务且进入闲置状态，该限制在后续版本中可能会被移除。
+
+"clocks_throttle_reasons.applications_clocks_setting"
+GPU时钟受到应用程序设置的限制，例如可以使用nvidia-smi --applications-clocks=命令更改。
+
+"clocks_throttle_reasons.sw_power_cap"
+由于GPU消耗过多电力，软件功率缩放算法正在将时钟降低至请求值以下。例如，可以使用nvidia-smi --power-limit=命令调整SW功率限制。
+
+"clocks_throttle_reasons.hw_slowdown"
+硬件降频（核心时钟降低2倍或更多），这可能是：
+- 温度过高导致的硬件降频
+- 外部电源制动断言触发（例如系统电源供应器）
+- 电力消耗过高，快速保护机制降低了时钟
+- 在PState或时钟更改期间也可能报告
+
+"clocks_throttle_reasons.hw_thermal_slowdown"
+硬件温度过高导致的降频
+
+"clocks_throttle_reasons.hw_power_brake_slowdown"
+外部电源制动断言触发（如系统电源供应器）导致的硬件降频
+
+"clocks_throttle_reasons.sw_thermal_slowdown"
+由于GPU温度超过最大工作温度，软件热限制算法正在降低时钟。
+
+"clocks_throttle_reasons.sync_boost"
+同步增强：GPU已被添加到nvidia-smi或DCGM设置的同步增强组中，目的是以每瓦特的最大性能运行。同步增强组中的所有GPU都会将整个组的时钟降低到最低。查看系统中其他GPU的限速原因来了解为何它们会将此GPU保持在较低时钟下。
+"retired_pages"
+This property represents the number of pages that have been retired or retired due to ECC (Error Correction Code) errors. Retired pages refer to memory pages that have been marked as invalid due to hardware failures or ECC corrections.
+
+"retired_pages.volatile.device_memory"
+Number of retired pages in global device memory due to ECC errors.
+
+"retired_pages.volatile.dram"
+Number of retired pages in global device memory due to ECC.
+
+"retired_pages.volatile.register_file"
+Number of retired pages in register file memory.
+
+"retired_pages.volatile.l1_cache"
+Number of retired pages in the L1 cache.
+
+"retired_pages.volatile.l2_cache"
+Number of retired pages in the L2 cache.
+
+"retired_pages.volatile.texture_memory"
+Number of retired pages in texture memory due to ECC.
+
+"retired_pages.volatile.cbu"
+Number of retired pages in CBU (Control Bus Unit).
+
+"retired_pages.volatile.sram"
+Number of retired pages in global SRAMs.
+
+"retired_pages.aggregate.device_memory"
+Total number of retired pages in global device memory across the entire chip.
+
+"retired_pages.aggregate.dram"
+Total number of retired pages in global device memory across the chip.
+
+"retired_pages.aggregate.register_file"
+Total number of retired pages in register file memory.
+
+"retired_pages.aggregate.l1_cache"
+Total number of retired pages in the L1 cache.
+
+"retired_pages.aggregate.l2_cache"
+Total number of retired pages in the L2 cache.
+
+"retired_pages.aggregate.texture_memory"
+Total number of retired pages in texture memory due to ECC.
+
+"retired_pages.aggregate.cbu"
+Total number of retired pages in CBU.
+
+"retired_pages.aggregate.sram"
+Total number of retired pages in global SRAMs.
+
+"retired_pages.aggregate.total"
+Total number of retired pages across the entire chip due to ECC.
+NVIDIA GPU可以在内存不可靠时回收页面。这可能由于同一页面出现多次单比特错误或双比特错误导致。当页面被回收时，NVIDIA驱动会隐藏它，使得任何驱动程序或应用程序内存分配都无法访问它。
+
+"retired_pages.single_bit_ecc.count" 或 "retired_pages.sbe"
+由于单比特错误回收的GPU设备内存页面数量。
+
+"retired_pages.double_bit.count" 或 "retired_pages.dbe"
+由于双比特错误回收的GPU设备内存页面数量。
+
+"retired_pages.pending"
+检查下次重启时是否有待回收的GPU内存页面。这些页面仍可分配，可能会导致进一步的可靠性问题。
+
+"temperature.gpu"
+核心GPU温度，单位为摄氏度。
+
+"temperature.memory"
+HBM内存温度，单位为摄氏度。
+
+"power.management"
+一个标志，表示电源管理是否启用。可能是"Supported"或"[Not Supported]"。需要Inforom PWR对象版本3.0或更高，或者Kepler设备。
+
+"power.draw"
+整个板子上最后一次测量的功率消耗，单位为瓦特。仅在支持电源管理时可用。此读数的精度在±5瓦以内。
+
+"power.limit"
+软件设定的功率限制，单位为瓦特。通过nvidia-smi等软件设置。在Kepler设备上，可以通过[-pl | --power-limit=]开关调整Power Limit。
+
+"enforced.power.limit"
+电源管理算法的功率上限，单位为瓦特。总板子功率由电源管理算法调节，以保持在此值以下。这是各种功率限制器的最小值。
+
+"power.default_limit"
+默认电源管理算法的功率上限，单位为瓦特。驱动卸载后，Power Limit将恢复到默认功率限制。
+
+"power.min_limit"
+功率限制可以设定的最小值，单位为瓦特。
+
+"power.max_limit"
+功率限制可以设定的最大值，单位为瓦特。
+
+"clocks.current.graphics" 或 "clocks.gr"
+当前图形（着色器）时钟频率。
+
+"clocks.current.sm" 或 "clocks.sm"
+当前SM（流处理单元）时钟频率。
+
+"clocks.current.memory" 或 "clocks.mem"
+当前内存时钟频率。
+
+"clocks.current.video" 或 "clocks.video"
+视频编码/解码时钟频率。
+
+关于clocks.applications属性的部分
+用户指定的应用程序运行时的频率。可以通过[-ac | --applications-clocks]开关进行更改。
+
+"clocks.applications.graphics" 或 "clocks.applications.gr"
+用户指定的图形（着色器）时钟频率。
+
+"clocks.applications.memory" 或 "clocks.applications.mem"
+用户指定的内存时钟频率。
+
+关于clocks.default_applications属性的部分
+默认的应用程序运行时频率。应用时钟可以通过[-ac | --applications-clocks]开关进行设置，使用[-rac | --reset-applications-clocks]开关可重置为默认值。
+
+"clocks.default_applications.graphics" 或 "clocks.default_applications.gr"
+默认的应用程序图形（着色器）时钟频率。
+
+"clocks.default_applications.memory" 或 "clocks.default_applications.mem"
+默认的应用程序内存时钟频率。
+
+关于clocks.max属性的部分
+GPU设计能运行的最高频率。
+
+"clocks.max.graphics" 或 "clocks.max.gr"
+图形（着色器）时钟的最高频率。
+
+"clocks.max.sm" 或 "clocks.max.sm"
+SM（流处理单元）时钟的最高频率。
+
+"clocks.max.memory" 或 "clocks.max.mem"
+内存时钟的最高频率。
+
+关于mig.mode属性的部分
+一个指示MIG模式是否启用的标志。可能是"Enabled"或"Disabled"。更改MIG模式需要重置GPU。 
+
+"mig.mode.current"
+GPU当前运行的MIG模式。
+
+"mig.mode.pending"
+GPU重启后将要运行的MIG模式。
+
+"fabric.state"
+GPU布线注册状态的当前状态。
+
+"fabric.status"
+只有在GPU布线注册状态为"completed"时才有效的错误状态。
+
+----总结----
+这篇文章主要介绍了`--query-gpu`选项可用于查询NVIDIA显卡的相关属性，包括时间戳、驱动版本、多GPU支持能力、GPU数量等基本信息。此外，还详细列出了`vgpu_device_capability`属性，用于获取设备级别的能力信息，如vGPU配置、时切vGPU支持、PCI-E链接代际等。对于Windows上的`driver_model`属性，只支持TCC和WDDM驱动模型。最后，文章提到了`gom`（GPU操作模式）以及`clocks_throttle_reasons`属性，用于监控GPU的功耗和性能限制情况，以及内存错误和退休页面信息。这些属性可用于系统维护、性能优化和问题排查。
+这段文本是关于NVIDIA GPU的一些性能监控和管理相关的系统信息。它提供了几个关键指标和属性的描述：
+
+1. **Memory ECC Recovery**: NVIDIA GPU能够处理内存错误，如单比特错误("retired_pages.single_bit_ecc.count")和双比特错误("retired_pages.double_bit.count")，回收不再可靠的页面。
+2. **Temperature**: 提供了GPU核心(GPU)和HBM内存的温度信息。
+3. **Power Management**: 文章指出需要特定的Inforom PWR对象版本才能检查电源管理状态，以及如何通过命令行调整功率限制。
+4. **Power Consumption**: "power.draw"显示总功率消耗，"power.limit"和"enforced.power.limit"是软件设定和实际管理的功率上限。
+5. **Clocks**: 显示GPU的各个部分（图形、SM、内存和视频）的当前时钟频率，可以通过命令行进行调整。
+6. **MIG Mode**: 提供了MIG模式是否启用的标志以及重启后将要运行的模式。
+7. **Fabric State and Status**: 关于GPU布线注册的状态和可能的错误状态。
+
+总体来说，这段内容关注的是GPU的健康状况、性能控制和潜在问题的监控。
+
+----性能----
+top_p:0.75  temperature: 0.6
+原文长度:19763    译文长度:7100 总结长度: 920
+翻译耗时: 184.7388758sec 负载:58.065933 已用显存:19958 显卡功耗:206.55045
+总结耗时:32.2052964sec 负载:63.4375 已用显存:20390.438 显卡功耗:211.60782
+
+查询 "--query-gpu" 选项的有效属性列表：
+
+1. "timestamp"：查询时间，格式为 "YYYY/MM/DD HH:MM:SS.msec"。
+2. "driver_version"：安装的NVIDIA显卡驱动版本，是一个字母数字字符串。
+3. "vgpu_driver_capability"：获取驱动级别的能力信息。
+   - "heterogeneous_multivGPU"：检查驱动是否支持多GPU异构计算。
+   - "count"：系统中NVIDIA GPU的数量。
+   - "name" 或 "gpu_name"：GPU的官方产品名称，全字母数字。
+   - "serial" 或 "gpu_serial"：每个板载GPU的唯一物理序列号，全局唯一，字母数字。
+   - "uuid" 或 "gpu_uuid"：GPU的全局唯一、不可变的字母数字标识符，不对应于主板上的任何物理标签。
+   - "pci.bus_id" 或 "gpu_bus_id"：PCI总线ID，格式为 "domain:bus:device.function"，十六进制表示。
+   - "pci.domain"：PCI域号，十六进制。
+   - "pci.bus"：PCI总线号，十六进制。
+   - "pci.device"：PCI设备号，十六进制。
+   - "pci.device_id"：PCI供应商设备ID，十六进制。
+   - "pci.sub_device_id"：PCI子系统ID，十六进制。
+
+4. "vgpu_device_capability"：获取设备级别的能力信息。
+   - "fractional_multiVgpu"：此GPU是否支持使用分数多GPU配置。
+   - "heterogeneous_timeSlice_profile"：支持不同类型的时切vGPU同时执行。
+   - "heterogeneous_timeSlice_sizes"：支持不同帧缓冲大小的时切vGPU并发执行。
+   - "pcie.link.gen.current"（已废弃）：当前PCI-E链路代号。推荐使用 "pcie.link.gen.gpucurrent"。
+   - "pcie.link.gen.gpucurrent"：当前PCI-E链路代号，可能在GPU未使用时降低。
+   - "pcie.link.gen.max"：此GPU和系统配置下可能的最大PCI-E链路代号。
+   - "pcie.link.gen.gpumax"：此GPU支持的最大PCI-E链路代号。
+   - "pcie.link.gen.hostmax"：与该GPU对应的根端口支持的最大PCI-E链路代号。
+   - "pcie.link.width.current"：当前PCI-E链路宽度。
+   - "pcie.link.width.max"：此GPU和系统配置下的最大PCI-E链路宽度。
+   - "index"：GPU的零基索引，每次重启后可能会改变。
+   - "display_mode"：指示GPU连接到物理显示（如显示器）的连接状态，"Enabled" 表示已连接，"Disabled" 表示未连接。
+   - "display_active"：指示GPU是否初始化了显示，即使没有物理显示器连接也会有活动显示，"Enabled" 表示已初始化，"Disabled" 表示未初始化。
+   - "persistence_mode"：检查GPU是否启用了持久化模式。值为 "Enabled" 或 "Disabled"，当启用时，即使没有运行客户端（如X11或nvidia-smi），NVIDIA驱动也会保持加载，以减少依赖应用的启动延迟。
+   - "accounting.mode"：检查GPU是否启用了计费模式。值为 "Enabled" 或 "Disabled"，统计每个计算进程在GPU上的执行时间。
+   - "accounting.buffer_size"：用于存储计费统计信息的循环缓冲区大小，即最多存储的进程数。
+
+5. "driver_model"：Windows上支持的驱动模型，包括 TCC 和 WDDM。使用 (-dm) 或 (-fdm) 标志更改。TCC 适用于计算应用，WDDM 用于图形应用，Linux 不支持多模型，值始终为 "N/A"。
+   - "driver_model.current"：当前使用的驱动模型，Linux 上始终为 "N/A"。
+   - "driver_model.pending"：下次重启时将使用的驱动模型，Linux 上始终为 "N/A"。
+   - "vbios_version"：GPU主板BIOS版本。
+GPU板上的信息存储对象的版本号。信息存储区（inforom）是一个持久的存储区域，用于存储GPU的配置和状态数据。了解这些版本号可能有用，因为一些GPU功能只有在特定版本或更高版本的inforom中可用。
+
+"inforom.img" 或 "inforom.image"
+全局信息存储映像的版本。与VBIOS版本一样，信息存储映像版本唯一地描述了主板上已刷写的infoROM的精确版本，而infoROM对象版本仅是支持功能的指示器。
+
+"inforom.oem"
+OEM配置数据的版本号。
+
+"inforom.ecc"
+错误校验记录数据的版本号。
+
+"inforom.pwr" 或 "inforom.power"
+电源管理数据的版本号。
+
+关于gom属性的部分：
+gom（图形优化模式）允许通过禁用GPU功能来减少功耗并优化GPU性能，以满足特定用户需求。"所有打开"模式下，所有功能都处于启用并全速运行状态。"计算"模式专为执行计算任务设计，不支持图形操作。"低双精度"模式适用于不需要高带宽双精度的图形应用。
+
+gom可以使用--gom标志进行更改。
+
+"gom.current" 或 "gpu_operation_mode.current"
+当前使用的gom。
+
+"gom.pending" 或 "gpu_operation_mode.pending"
+下次重启时将要使用的gom。
+
+"fan.speed"
+风扇速度值是设备风扇目前打算以产品最大噪音容许速度运行的百分比。在某些情况下，这个值可能超过100%。注意：报告的速度是预期的风扇速度。如果风扇物理阻塞无法旋转，此输出可能与实际风扇速度不符。许多部件不会报告风扇速度，因为它们依赖于周围机箱中的风扇冷却。
+
+"pstate"
+GPU当前的性能状态，范围从P0（最大性能）到P12（最小性能）。
+
+关于clocks_throttle_reasons属性的部分：
+获取影响时钟频率降低的因素。如果所有限速原因显示为"未活动"，则表示时钟正在尽可能高地运行。
+
+"clocks_throttle_reasons.supported"
+支持的限速原因位掩码，更多细节见nvml.h文件。
+
+"clocks_throttle_reasons.active"
+活动的限速原因位掩码，详情参考nvml.h文件。
+
+"clocks_throttle_reasons.gpu_idle"
+GPU无运行任务且时钟降为闲置状态。这可能在后续版本中移除。
+
+"clocks_throttle_reasons.applications_clocks_setting"
+GPU时钟受到应用程序设置的限制，例如可以通过nvidia-smi --applications-clocks=调整。
+
+"clocks_throttle_reasons.sw_power_cap"
+由于GPU消耗过多电力，软件功率缩放算法正在将时钟降低到请求级别。例如，可以使用nvidia-smi --power-limit=更改SW功率限制。
+
+"clocks_throttle_reasons.hw_slowdown"
+硬件减速（核心时钟降低2倍以上）被激活，这可能是由于：
+- 温度过高（硬件热慢）
+- 外部电源制动（例如系统电源供应器触发）
+- 电力消耗过高，快速保护会降低时钟
+- 可能在PState或时钟更改期间报告
+
+"clocks_throttle_reasons.hw_thermal_slowdown"
+硬件温度过热导致的减速（核心时钟降低2倍以上）
+
+"clocks_throttle_reasons.hw_power_brake_slowdown"
+外部电源制动（例如系统电源供应器触发）导致的硬件减速（核心时钟降低2倍以上）
+
+"clocks_throttle_reasons.sw_thermal_slowdown"
+由于GPU温度超过最大运行温度，软件热限制算法正在降低时钟。
+
+"clocks_throttle_reasons.sync_boost"
+同步增强：该GPU已通过nvidia-smi或DCGM添加到同步增强组，目的是在每瓦特性能最大化的同时，整个组内的所有GPU都将降至最低可能的时钟。查看系统中其他GPU的限速原因以了解为何它们会保持较低的时钟。
+"retired_pages"
+This section likely refers to the number of pages that have been retired or reclaimed by the GPU. It could be used to monitor memory management and identify any issues with page replacement or deallocations. The specific property might be in the form of "retired_pages.count" or "retired_pages.rate" to indicate the count of pages retired within a certain time frame or the rate at which they are retired.
+
+Section about performance counters
+Performance counters provide detailed information about various aspects of GPU performance, such as clock cycles, transactions, or resource usage. Some examples of properties in this section might include:
+
+- "performance counters.timestamp"
+- "performance_counters.gpu_clock_rate"
+- "performance_counters.transfers.gpu_to_host"
+- "performance_counters.transfers.host_to_gpu"
+- "performance_counters.utilization.gpu.load"
+
+These counters can help measure the GPU's workload, identify bottlenecks, and optimize performance.
+
+Section about temperature properties
+Temperature properties likely refer to the temperature readings of the GPU. They help monitor the GPU's health and ensure it operates within safe limits. Some properties might include:
+
+- "temperature.gpu.current"
+- "temperature.gpu.max"
+- "temperature.gpu.warning_threshold"
+- "temperature.gpu.error_threshold"
+
+These properties allow users to check the current temperature, the maximum allowed limit, and set thresholds for triggering warnings or errors in case the temperature gets too high.
+NVIDIA GPU可以在内存不可靠时回收页面。这可能发生在单个位错误多次发生于同一页面，或双位错误发生时。当页面被回收时，NVIDIA驱动会隐藏它，使得任何驱动程序或应用程序的内存分配都无法访问。
+
+"retired_pages.single_bit_ecc.count" 或 "retired_pages.sbe"
+由于单个位错误回收的GPU设备内存页面数量。
+
+"retired_pages.double_bit.count" 或 "retired_pages.dbe"
+由于双位错误回收的GPU设备内存页面数量。
+
+"retired_pages.pending"
+检查下次重启时是否有页面处于待回收状态。这些页面仍可分配，可能会导致进一步的可靠性问题。
+
+"temperature.gpu"
+核心GPU温度，单位为摄氏度。
+
+"temperature.memory"
+HBM内存温度，单位为摄氏度。
+
+"power.management"
+一个标志，表示电源管理是否启用。可能是"Supported"或"[Not Supported]"。需要Inforom PWR对象版本3.0或更高，或者Kepler设备。
+
+"power.draw"
+整个主板上最后一次测量到的功率消耗，单位为瓦特。仅在支持电源管理时可用。这个读数的精度在±5瓦以内。
+
+"power.limit"
+软件设定的功率限制，以瓦特为单位。通过nvidia-smi等软件设置。在Kepler设备上，可以通过[-pl | --power-limit=]开关调整Power Limit。
+
+"enforced.power.limit"
+由电源管理算法设定的功率上限，以瓦特为单位。整个主板的总功率会受到管理算法的控制，以保持在这个值以下。这是各种功率限制器的最小值。
+
+"power.default_limit"
+默认电源管理算法的功率上限，以瓦特为单位。驱动卸载后，Power Limit将恢复到默认值。
+
+"power.min_limit"
+功率限制可以设定的最低值，单位为瓦特。
+
+"power.max_limit"
+功率限制可以设定的最大值，单位为瓦特。
+
+"clocks.current.graphics" 或 "clocks.gr"
+当前图形（着色器）时钟频率。
+
+"clocks.current.sm" 或 "clocks.sm"
+当前SM（流处理单元）时钟频率。
+
+"clocks.current.memory" 或 "clocks.mem"
+当前内存时钟频率。
+
+"clocks.current.video" 或 "clocks.video"
+视频编码/解码时钟频率。
+
+关于clocks.applications属性的部分：
+用户指定应用运行的频率，可以通过[-ac | --applications-clocks]开关进行更改。
+
+"clocks.applications.graphics" 或 "clocks.applications.gr"
+用户指定的图形（着色器）时钟频率。
+
+"clocks.applications.memory" 或 "clocks.applications.mem"
+用户指定的内存时钟频率。
+
+关于clocks.default_applications属性的部分：
+默认应用运行的频率。应用时钟可以通过[-ac | --applications-clocks]开关进行设置，使用[-rac | --reset-applications-clocks]开关可以重置为默认值。
+
+"clocks.default_applications.graphics" 或 "clocks.default_applications.gr"
+默认应用的图形（着色器）时钟频率。
+
+"clocks.default_applications.memory" 或 "clocks.default_applications.mem"
+默认应用的内存时钟频率。
+
+关于clocks.max属性的部分：
+GPU设计的最大运行速度。
+
+"clocks.max.graphics" 或 "clocks.max.gr"
+最大图形（着色器）时钟频率。
+
+"clocks.max.sm" 或 "clocks.max.sm"
+最大SM（流处理单元）时钟频率。
+
+"clocks.max.memory" 或 "clocks.max.mem"
+最大内存时钟频率。
+
+关于mig.mode属性的部分：
+一个标志，表示MIG模式是否启用。可能是"Enabled"或"Disabled"。更改MIG模式需要重置GPU。
+
+"mig.mode.current"
+GPU当前运行的MIG模式。
+
+"mig.mode.pending"
+GPU重启后将要运行的MIG模式。
+
+"fabric.state"
+GPU布线注册过程的当前状态。
+
+"fabric.status"
+只有在GPU布线注册状态为"completed"时才有效的错误状态。
+
+----总结----
+这段文本提供了关于使用`--query-gpu`选项查询NVIDIA显卡驱动和GPU详细信息的方法。选项支持多种有效属性，包括时间戳、驱动版本、驱动能力（如多GPU支持、PCI信息等）、设备级能力（如分数多GPU配置、时切技术等）、驱动模型、BIOS版本、GPU操作模式（如gom）、风扇速度、性能状态、限速原因以及内存管理相关数据。此外，还提到了性能计数器和温度监控属性，用于分析GPU性能和健康状况。通过这些信息，用户可以诊断和优化GPU的性能和能效。
+这段文本主要介绍了NVIDIA GPU的一些性能监控和电源管理相关的指标。当内存出现错误时，GPU会回收页面，这通过"retired_pages.single_bit_ecc.count"和"retired_pages.double_bit.count"来统计因单个位错误或双位错误回收的页面数量。"retired_pages.pending"则关注待回收的页面。温度方面，有GPU核心和内存的温度监控，以及电源管理的状态，如"power.management"、"power.draw"和功率限制设置。
+
+GPU的时钟频率是另一个重要参数，包括图形（着色器）、SM流处理单元、内存和视频的当前频率，可以通过命令行选项进行自定义设置。"clocks.applications"属性允许用户指定特定应用的运行频率，而"clocks.default_applications"则是默认应用的频率。
+
+MIG模式的启用状态用"mig.mode"属性表示，更改此模式通常需要重置GPU。"fabric.state"和"fabric.status"则与GPU的布线注册过程相关，"fabric.status"只有在布线完成时才有意义。
+
+总之，这段文本提供了对NVIDIA GPU性能监控、故障处理、电源管理以及超频设置的详细描述。
+
+----性能----
+top_p:0.65  temperature: 0.5
+原文长度:19763    译文长度:7425 总结长度: 793
+翻译耗时: 194.7186436sec 负载:58.229168 已用显存:20007.979 显卡功耗:206.75266
+总结耗时:31.1045665sec 负载:64.451614 已用显存:20384.064 显卡功耗:213.81775
+
+查询 "--query-gpu" 选项的有效属性列表：
+
+1. "timestamp"
+   查询时间戳，格式为 "YYYY/MM/DD HH:MM:SS.msec"。
+
+2. "driver_version"
+   安装的NVIDIA显卡驱动版本，是一个字母数字字符串。
+
+3. "vgpu_driver_capability.heterogeneous_multivGPU"
+   判断驱动是否支持多GPU异构计算。
+
+4. "count"
+   系统中NVIDIA GPU的数量。
+
+5. "name" 或 "gpu_name"
+   显卡的官方产品名称，为字母数字字符串，适用于所有产品。
+
+6. "serial" 或 "gpu_serial"
+   每块板上的唯一物理序列号，全局唯一且为字母数字值。
+
+7. "uuid" 或 "gpu_uuid"
+   显卡的全局唯一、不可变的字母数字标识符，不对应于主板上的任何物理标签。
+
+8. "pci.bus_id" 或 "gpu_bus_id"
+   PCI总线ID，格式为 "domain:bus:device.function"，以十六进制表示。
+
+9. "pci.domain"
+   PCI域号，以十六进制表示。
+
+10. "pci.bus"
+    PCI总线号，以十六进制表示。
+
+11. "pci.device"
+    PCI设备号，以十六进制表示。
+
+12. "pci.device_id"
+    PCI供应商设备ID，以十六进制表示。
+
+13. "pci.sub_device_id"
+    PCI子系统ID，以十六进制表示。
+
+关于 "vgpu_device_capability" 属性部分：
+用于获取设备级别的能力信息：
+
+14. "fractional_multiVgpu"
+   显示器是否支持在多GPU配置中使用分数vGPU。
+
+15. "heterogeneous_timeSlice_profile"
+   支持并发执行不同类型的时切vGPU配置。
+
+16. "heterogeneous_timeSlice_sizes"
+   支持并发执行不同帧缓冲大小的时切vGPU配置。
+
+17. "pcie.link.gen.current" 和 "pcie.link.gen.gpucurrent"
+   替代项，用于获取当前PCI-E链接代际，可能在无GPU使用时降低。
+
+18. "pcie.link.gen.max"、"pcie.link.gen.gpumax"、"pcie.link.gen.hostmax" 和 "pcie.link.width.current"、"pcie.link.width.max"
+   分别对应PCI-E链接的最大代际、GPU支持的最大代际、系统支持的最大代际和当前带宽。
+
+19. "index"
+   GPU的零基索引，每次启动可能会改变。
+
+20. "display_mode"
+   检查GPU连接的物理显示器是否启用。"Enabled" 表示已连接，"Disabled" 表示未连接。
+
+21. "display_active"
+   检查GPU是否初始化并分配了显示内存，即使没有物理显示器连接也可能有活动显示。
+
+22. "persistence_mode"
+   检查GPU是否启用了持久模式。值为 "Enabled" 或 "Disabled"，当启用时，即使没有运行客户端，NVIDIA驱动也会保持加载，减少应用程序启动时的延迟。
+
+23. "accounting.mode"
+   检查是否启用了会计模式。值为 "Enabled" 或 "Disabled"，会计模式会记录每个计算进程的统计信息。
+
+24. "accounting.buffer_size"
+   记录会计统计信息的循环缓冲区大小，即最多存储的进程数。
+
+关于 "driver_model" 属性：
+Windows 上支持 TCC 和 WDDM 驱动模型，通过 (-dm) 或 (-fdm) 参数更改。TCC 优化了计算应用性能，而 WDDM 专为图形应用设计，不推荐用于计算。Linux 不支持多个驱动模型，始终显示 "N/A"。仅限特定产品，请参阅NVML文档中的功能矩阵。
+
+25. "driver_model.current"
+   当前使用的驱动模型，Linux 上始终为 "N/A"。
+
+26. "driver_model.pending"
+   下次重启将使用的驱动模型，Linux 上始终为 "N/A"。
+
+27. "vbios_version"
+   显卡主板BIOS版本。
+GPU板上的信息存储的每个对象版本号。信息存储区（inforom）是一个持久的配置和状态数据存储，用于存储GPU的详细信息。了解这些版本号可能很有用，因为某些GPU功能只有在特定版本或更高版本的inforom中可用。
+
+"inforom.img" 或 "inforom.image"
+全局信息存储映像版本。与VBIOS版本一样，信息存储映像版本唯一标识了主板上实际刷写的infoROM的精确版本，而对象版本仅表示支持的功能。
+
+"inforom.oem"
+OEM配置数据的版本号。
+
+"inforom.ecc"
+ECC记录数据的版本号。
+
+"inforom.pwr" 或 "inforom.power"
+电源管理数据的版本号。
+
+关于gom属性的部分
+gom（GPU操作模式）允许通过禁用GPU功能来减少功耗并优化性能。它针对特定用户需求进行设计，有“全开”模式（所有功能都开启并以全速运行）、“计算”模式（仅限于计算任务，不允许图形操作）和“低双精度”模式（适用于不需要高带宽双精度的图形应用）。
+
+"gom.current" 或 "gpu_operation_mode.current"
+当前使用的gom。
+
+"gom.pending" 或 "gpu_operation_mode.pending"
+下次重启时将要使用的gom。
+
+"fan.speed"
+风扇速度值是设备风扇目前打算以产品最大噪音容忍度百分比运行的速度。在某些情况下，这个值可能会超过100%。注意：报告的速度是意图中的速度。如果风扇物理阻塞无法旋转，此输出可能不匹配实际风扇速度。许多组件不会报告风扇速度，因为它们依赖于周围机箱内的风扇冷却。
+
+"pstate"
+GPU当前的性能状态，范围从P0（最大性能）到P12（最小性能）。
+
+关于clocks_throttle_reasons属性的部分
+获取影响时钟频率降低的因素。如果所有限速原因显示为“未活动”，则意味着时钟正在尽可能地运行在最高频率。
+
+"clocks_throttle_reasons.supported"
+支持的限速原因位掩码，更多细节见nvml.h文件。
+
+"clocks_throttle_reasons.active"
+活动的限速原因位掩码，更多细节见nvml.h文件。
+
+"clocks_throttle_reasons.gpu_idle"
+GPU无运行任务，时钟降为闲置状态。这可能在后续版本中移除。
+
+"clocks_throttle_reasons.applications_clocks_setting"
+GPU时钟受到应用程序设置的限制，例如可以使用nvidia-smi --applications-clocks=命令更改。
+
+"clocks_throttle_reasons.sw_power_cap"
+由于GPU消耗过多电力，软件功率缩放算法正在将时钟频率降低到请求值以下。例如，可以使用nvidia-smi --power-limit=命令调整SW功率限制。
+
+"clocks_throttle_reasons.hw_slowdown"
+硬件减速（核心时钟降低2倍或更多）启用，这可能是由于：
+- 温度过高（硬件温度降速）
+- 外部电源制动（例如系统电源供应器触发）
+- 电力消耗过高，快速保护措施降低了时钟
+- 可能在PState或时钟更改期间报告
+
+"clocks_throttle_reasons.hw_thermal_slowdown"
+硬件温度过热导致的减速（核心时钟降低2倍或更多）
+
+"clocks_throttle_reasons.hw_power_brake_slowdown"
+外部电源制动（硬件）导致的减速（核心时钟降低2倍或更多）
+
+"clocks_throttle_reasons.sw_thermal_slowdown"
+由于GPU温度高于最大运行温度，软件温控算法正在降低时钟。
+
+"clocks_throttle_reasons.sync_boost"
+同步增强：该GPU已通过nvidia-smi或DCGM添加到同步增强组中，目的是在每瓦特性能最大化下，整个组中的所有GPU都将降低到最低可能的时钟。查看系统中其他GPU的限速原因以了解为何它们会保持较低的时钟。
+"retired_pages"
+This property represents the number of pages that have been retired or returned to system memory due to various reasons, such as completion of a kernel execution or ECC correction. It provides insight into the memory management and usage within the GPU.
+
+"retired_pages.device_memory"
+Number of device memory pages retired.
+
+"retired_pages.dram"
+Number of DRAM pages retired.
+
+"retired_pages.register_file"
+Number of register file pages retired.
+
+"retired_pages.l1_cache"
+Number of L1 cache pages retired.
+
+"retired_pages.l2_cache"
+Number of L2 cache pages retired.
+
+"retired_pages.texture_memory"
+Number of texture memory pages retired.
+
+"retired_pages.cbu"
+Number of CBU (Control Buffers) pages retired.
+
+"retired_pages.sram"
+Number of global SRAM pages retired.
+
+"retired_pages.total"
+Total number of pages retired across the entire chip.
+NVIDIA GPU可以在内存不可靠时回收页面。这可能发生在单个位错误多次发生于同一页面，或双位错误发生时。当页面被回收时，NVIDIA驱动会隐藏它，使得任何驱动程序或应用程序内存分配都无法访问。
+
+"retired_pages.single_bit_ecc.count" 或 "retired_pages.sbe"
+由于单个位错误回收的GPU设备内存页面数量。
+
+"retired_pages.double_bit.count" 或 "retired_pages.dbe"
+由于双位错误回收的GPU设备内存页面数量。
+
+"retired_pages.pending"
+检查下次重启时是否有页面处于待回收状态。这些页面仍可分配，可能会导致进一步的可靠性问题。
+
+"temperature.gpu"
+核心GPU温度，单位为摄氏度。
+
+"temperature.memory"
+HBM内存温度，单位为摄氏度。
+
+"power.management"
+一个标志，表示电源管理是否启用。可能是"Supported"或"[Not Supported]"。需要Inforom PWR对象版本3.0或更高，或者Kepler设备。
+
+"power.draw"
+整个板子上最后一次测量的功率消耗，单位为瓦特。仅在支持电源管理时可用。读数精确到±5瓦。
+
+"power.limit"
+软件设定的功率限制，单位为瓦特。通过nvidia-smi等软件设置。在Kepler设备上，可以通过[-pl | --power-limit=]开关调整Power Limit。
+
+"enforced.power.limit"
+电源管理算法的功率上限，单位为瓦特。总板子功率由电源管理算法调节，以保持在这个值以下。这是各种功率限制器的最小值。
+
+"power.default_limit"
+默认电源管理算法的功率上限，单位为瓦特。驱动卸载后，Power Limit将恢复到默认功率限制。
+
+"power.min_limit"
+电源限制可以设定的最低值，单位为瓦特。
+
+"power.max_limit"
+电源限制可以设定的最大值，单位为瓦特。
+
+"clocks.current.graphics" 或 "clocks.gr"
+当前图形（着色器）时钟频率。
+
+"clocks.current.sm" 或 "clocks.sm"
+当前SM（流处理单元）时钟频率。
+
+"clocks.current.memory" 或 "clocks.mem"
+当前内存时钟频率。
+
+"clocks.current.video" 或 "clocks.video"
+视频编码/解码时钟频率。
+
+关于clocks.applications属性的部分：
+用户指定的应用程序运行频率。可以通过[-ac | --applications-clocks]开关进行更改。
+
+"clocks.applications.graphics" 或 "clocks.applications.gr"
+用户指定的图形（着色器）时钟频率。
+
+"clocks.applications.memory" 或 "clocks.applications.mem"
+用户指定的内存时钟频率。
+
+关于clocks.default_applications属性的部分：
+默认的应用程序运行频率。应用时钟可以通过[-ac | --applications-clocks]开关进行设置，使用[-rac | --reset-applications-clocks]开关可以重置为默认值。
+
+"clocks.default_applications.graphics" 或 "clocks.default_applications.gr"
+默认的应用程序图形（着色器）时钟频率。
+
+"clocks.default_applications.memory" 或 "clocks.default_applications.mem"
+默认的应用程序内存时钟频率。
+
+关于clocks.max属性的部分：
+GPU设计的最大运行频率。
+
+"clocks.max.graphics" 或 "clocks.max.gr"
+图形（着色器）时钟的最大频率。
+
+"clocks.max.sm" 或 "clocks.max.sm"
+SM（流处理单元）时钟的最大频率。
+
+"clocks.max.memory" 或 "clocks.max.mem"
+内存时钟的最大频率。
+
+关于mig.mode属性的部分：
+一个标志，表示MIG模式是否启用。可能是"Enabled"或"Disabled"。更改MIG模式需要重置GPU。 
+
+"mig.mode.current"
+GPU当前运行的MIG模式。
+
+"mig.mode.pending"
+GPU重启后将要运行的MIG模式。
+
+"fabric.state"
+GPU布线注册过程的当前状态。
+
+"fabric.status"
+只有在GPU布线注册状态为"completed"时才有效的错误状态。
+
+----总结----
+这段文本提供了关于使用`--query-gpu`选项查询NVIDIA显卡时有效属性的详细列表。这些属性包括时间戳、驱动版本、多GPU支持能力、GPU数量、显卡名称/序列号、PCI信息等。此外，还提到了设备级别的能力信息，如多GPU配置支持、PCI-E链接代际、GPU操作模式（gom）、风扇速度、时钟频率限制原因等。对于Linux系统，还特别指出了驱动模型的选择（TCC和WDDM），以及一些与BIOS和电源管理相关的版本号。最后，还给出了"retired_pages"属性，用于监控GPU中退役的页面数量，以评估内存管理和使用情况。
+这段文本主要介绍了NVIDIA GPU的一些性能监控和电源管理相关指标。当GPU内存出现单个位错误（retired_pages.single_bit_ecc.count或retired_pages.sbe）或双位错误（retired_pages.double_bit.count或retired_pages.dbe）时，NVIDIA驱动会回收这些页面并隐藏它们，防止访问。"retired_pages.pending"则检查是否有待回收的页面。温度方面，有GPU核心和内存的温度监控，以及电源管理的状态，如"power.management"表示是否支持电源管理，"power.draw"是功率消耗，"power.limit"和"enforced.power.limit"是设定的功率限制，"power.default_limit"是默认限制，"power.min_limit"和"power.max_limit"是限制范围。GPU的时钟频率可以通过"clocks"属性进行调整，包括图形、SM和内存的当前频率，以及默认应用程序的频率。"mig.mode"属性表示MIG模式的启用状态，而"fabric.state"和"fabric.status"则关注GPU布线的注册和状态。更改这些设置可能需要特定的命令或重启。
+
+----性能----
+top_p:0.55  temperature: 0.4
+原文长度:19763    译文长度:6700 总结长度: 829
+翻译耗时: 187.2399901sec 负载:58.254055 已用显存:20003.055 显卡功耗:206.60475
+总结耗时:30.7161887sec 负载:64.23333 已用显存:20421.467 显卡功耗:212.41467
+
+查询 "--query-gpu" 选项的有效属性列表：
+
+1. "timestamp"
+   查询时间戳，格式为 "YYYY/MM/DD HH:MM:SS.msec"。
+
+2. "driver_version"
+   安装的NVIDIA显卡驱动版本，是一个字母数字字符串。
+
+3. "vgpu_driver_capability.heterogeneous_multivGPU"
+   判断驱动是否支持多GPU异构计算。
+
+4. "count"
+   系统中NVIDIA GPU的数量。
+
+5. "name" 或 "gpu_name"
+   显卡的官方产品名称，为字母数字字符串，适用于所有产品。
+
+6. "serial" 或 "gpu_serial"
+   每块板上的唯一物理序列号，全局唯一且为字母数字值。
+
+7. "uuid" 或 "gpu_uuid"
+   显卡的全局唯一、不可变的字母数字标识符，不对应于主板上的任何物理标签。
+
+8. "pci.bus_id" 或 "gpu_bus_id"
+   PCI总线ID，格式为 "domain:bus:device.function"，以十六进制表示。
+
+9. "pci.domain"
+   PCI域号，以十六进制表示。
+
+10. "pci.bus"
+    PCI总线号，以十六进制表示。
+
+11. "pci.device"
+    PCI设备号，以十六进制表示。
+
+12. "pci.device_id"
+    PCI供应商设备ID，以十六进制表示。
+
+13. "pci.sub_device_id"
+    PCI子系统ID，以十六进制表示。
+
+关于 "vgpu_device_capability" 属性的部分：
+用于获取设备级别的能力信息：
+
+14. "fractional_multiVgpu"
+   表示该GPU是否支持使用分数vGPU配置进行多GPU配置。
+
+15. "heterogeneous_timeSlice_profile"
+   判断是否支持不同类型的时切vGPU同时执行。
+
+16. "heterogeneous_timeSlice_sizes"
+   判断是否支持不同大小的时切vGPU同时运行。
+
+17. "pcie.link.gen.current" 和 "pcie.link.gen.gpucurrent"
+   虽然这两个属性表示PCI-E链接的当前和GPU占用的最高速度，但它们已被废弃，推荐使用 "pcie.link.gen" 和 "pcie.link.gen.gpumax"。
+
+18. "pcie.link.gen.max" 和 "pcie.link.gen.gpumax"
+   分别表示系统和GPU支持的PCI-E链接最大速度。
+
+19. "pcie.link.gen.hostmax"
+   与之对应的根端口支持的PCI-E链接最大速度。
+
+20. "pcie.link.width.current" 和 "pcie.link.width.max"
+   类似地，这些属性也已废弃，应使用 "pcie.link.width"。
+
+21. "index"
+   GPU的零基索引，每次启动可能会改变。
+
+22. "display_mode"
+   检查GPU连接的物理显示器是否启用。"Enabled" 表示已连接，"Disabled" 表示未连接。
+
+23. "display_active"
+   检查GPU是否初始化并分配了显示内存，即使没有物理显示器连接也会有此状态。
+
+24. "persistence_mode"
+   指示GPU是否启用了持久化模式。值为 "Enabled" 或 "Disabled"，在Linux上仅适用于NVIDIA驱动。
+
+25. "accounting.mode"
+   指示是否启用了会计模式。值为 "Enabled" 或 "Disabled"，统计计算进程在GPU上的执行时间。
+
+26. "accounting.buffer_size"
+   计算器用于存储可以查询会计统计信息的进程列表的循环缓冲区大小，即最多存储的进程数。
+
+关于 "driver_model" 属性：
+Windows上支持TCC（针对计算应用优化）和WDDM（图形应用）驱动模型，可以通过命令行参数更改。Linux不支持多个驱动模型，始终为 "N/A"。仅适用于特定产品，请参阅NVML文档中的功能矩阵。
+
+27. "driver_model.current"
+   当前使用的驱动模型，Linux上始终为 "N/A"。
+
+28. "driver_model.pending"
+   下一次重启将使用的驱动模型，Linux上始终为 "N/A"。
+
+29. "vbios_version"
+   显卡主板BIOS版本。
+GPU板内存储的每个对象版本号。inforom是一个持久的存储空间，用于存储GPU的配置和状态数据。了解这些版本号可能有用，因为某些GPU功能只有在特定版本或更高版本的inforom中可用。
+
+"inforom.img" 或 "inforom.image"
+全局inforom映像版本。与VBIOS版本一样，inforom映像版本唯一地描述了主板上实际刷写的inforom的精确版本，而对象版本仅是支持功能的指示器。
+
+"inforom.oem"
+OEM配置数据的版本号。
+
+"inforom.ecc"
+ECC记录数据的版本号。
+
+"inforom.pwr" 或 "inforom.power"
+电源管理数据的版本号。
+
+关于gom属性的部分
+gom（GPU操作模式）允许通过禁用GPU功能来减少功耗并优化性能。每个gom都是为满足特定用户需求设计的。
+
+- "All On"模式：所有功能都启用并以全速运行。
+- "Compute"模式：仅用于计算任务，不允许图形操作。
+- "Low Double Precision"模式：专为不需高带宽双精度的图形应用设计。
+
+gom可以使用--gom标志进行更改。
+
+"gom.current" 或 "gpu_operation_mode.current"
+当前使用的gom。
+
+"gom.pending" 或 "gpu_operation_mode.pending"
+下次重启时将要使用的gom。
+
+"fan.speed"
+风扇速度值是设备风扇目前打算以产品最大噪音容忍度百分比运行的速度。在某些情况下，这个值可能会超过100%。注意：报告的速度是意图中的风扇速度。如果风扇物理阻塞无法旋转，此输出可能与实际风扇速度不符。许多部件不会报告风扇速度，因为它们依赖于周围机箱内的风扇冷却。
+
+"pstate"
+GPU的当前性能状态，范围从P0（最大性能）到P12（最小性能）。
+
+关于clocks_throttle_reasons属性的部分
+获取影响时钟频率降低的因素信息。如果所有限速原因显示为"未活动"，则表示时钟正在尽可能高处运行。
+
+"clocks_throttle_reasons.supported"
+支持的限速原因位掩码，更多细节见nvml.h文件。
+
+"clocks_throttle_reasons.active"
+活动的限速原因位掩码，更多细节见nvml.h文件。
+
+"clocks_throttle_reasons.gpu_idle"
+GPU无运行任务，时钟降为闲置状态。这在后续版本中可能被移除。
+
+"clocks_throttle_reasons.applications_clocks_setting"
+GPU时钟受到应用程序设置的限制，例如通过nvidia-smi --applications-clocks=命令调整。
+
+"clocks_throttle_reasons.sw_power_cap"
+由于GPU消耗过多电力，软件功率缩放算法正在将时钟降低到请求值以下。例如，可以通过nvidia-smi --power-limit=命令更改SW功率限制。
+
+"clocks_throttle_reasons.hw_slowdown"
+硬件减速（核心时钟降低2倍或更多）已启用，这可能是：
+- 温度过高导致的硬件降频
+- 外部电源制动断言触发（例如，由系统电源供应）
+- 电力消耗过高，快速保护措施降低了时钟
+- 可能在PState或时钟更改期间报告
+
+"clocks_throttle_reasons.hw_thermal_slowdown"
+硬件温度过高导致的硬件降频
+
+"clocks_throttle_reasons.hw_power_brake_slowdown"
+外部电源制动断言触发（如系统电源供应）导致的硬件减速
+
+"clocks_throttle_reasons.sw_thermal_slowdown"
+由于GPU温度高于最大运行温度，软件热限制算法正在将时钟降低到请求值以下。
+
+"clocks_throttle_reasons.sync_boost"
+同步增强：该GPU已通过nvidia-smi或DCGM添加到同步增强组中，目的是在每瓦特性能最大化的情况下。同步增强组中的所有GPU都将降低整个组的最低时钟。查看系统中其他GPU的限速原因以了解为何它们会将此GPU保持在较低时钟下。
+"retired_pages"
+This property represents the number of pages that have been retired or removed from the system's memory due to various reasons, such as memory management or system maintenance. It provides insight into the memory usage and management activities.
+
+"retired_pages.device_memory"
+Number of device memory pages retired.
+
+"retired_pages.dram"
+Number of DRAM (global memory) pages retired.
+
+"retired_pages.register_file"
+Number of register file pages retired.
+
+"retired_pages.l1_cache"
+Number of L1 cache pages retired.
+
+"retired_pages.l2_cache"
+Number of L2 cache pages retired.
+
+"retired_pages.texture_memory"
+Number of texture memory pages retired.
+
+"retired_pages.cbu"
+Number of CBU (constant buffer) pages retired.
+
+"retired_pages.sram"
+Number of global SRAM pages retired.
+
+"retired_pages.total"
+Total number of retired pages across all memory types.
+NVIDIA GPU可以在内存不可靠时回收页面。这可能发生在单个位错误多次发生于同一页面，或双位错误发生时。当页面被回收时，NVIDIA驱动会隐藏它，使得任何驱动程序或应用程序内存分配都无法访问。
+
+"retired_pages.single_bit_ecc.count" 或 "retired_pages.sbe"
+由于单个位错误回收的GPU设备内存页面数量。
+
+"retired_pages.double_bit.count" 或 "retired_pages.dbe"
+由于双位错误回收的GPU设备内存页面数量。
+
+"retired_pages.pending"
+检查下次重启时是否有页面处于待回收状态。这些页面仍可分配，可能会导致进一步的可靠性问题。
+
+"temperature.gpu"
+核心GPU温度，单位为摄氏度。
+
+"temperature.memory"
+HBM内存温度，单位为摄氏度。
+
+"power.management"
+一个标志，表示电源管理是否启用。可能是"Supported"或"[Not Supported]"。需要Inforom PWR对象版本3.0或更高，或者Kepler设备。
+
+"power.draw"
+整个板子上最后一次测量到的功率消耗，单位为瓦特。仅在支持电源管理时可用。读数精确到±5瓦。
+
+"power.limit"
+软件设定的功率限制，以瓦特为单位。通过nvidia-smi等软件设置。在Kepler设备上，可以通过[-pl | --power-limit=]开关调整Power Limit。
+
+"enforced.power.limit"
+电源管理算法的功率上限，以瓦特为单位。总板子功率由电源管理算法调节，保持在这个值以下。这是各种功率限制器的最小值。
+
+"power.default_limit"
+默认电源管理算法的功率上限，以瓦特为单位。驱动卸载后，Power Limit将恢复到默认功率限制。
+
+"power.min_limit"
+电源限制可以设定的最低值，单位为瓦特。
+
+"power.max_limit"
+电源限制可以设定的最大值，单位为瓦特。
+
+"clocks.current.graphics" 或 "clocks.gr"
+当前图形（着色器）时钟频率。
+
+"clocks.current.sm" 或 "clocks.sm"
+当前SM（流处理单元）时钟频率。
+
+"clocks.current.memory" 或 "clocks.mem"
+当前内存时钟频率。
+
+"clocks.current.video" 或 "clocks.video"
+视频编码/解码时钟频率。
+
+关于clocks.applications属性的部分：
+用户指定的应用程序运行频率。可以通过[-ac | --applications-clocks]开关进行更改。
+
+"clocks.applications.graphics" 或 "clocks.applications.gr"
+用户指定的图形（着色器）时钟频率。
+
+"clocks.applications.memory" 或 "clocks.applications.mem"
+用户指定的内存时钟频率。
+
+关于clocks.default_applications属性的部分：
+默认的应用程序运行频率。应用时钟可以通过[-ac | --applications-clocks]开关进行设置，使用[-rac | --reset-applications-clocks]开关可以重置为默认值。
+
+"clocks.default_applications.graphics" 或 "clocks.default_applications.gr"
+默认的应用程序图形（着色器）时钟频率。
+
+"clocks.default_applications.memory" 或 "clocks.default_applications.mem"
+默认的应用程序内存时钟频率。
+
+关于clocks.max属性的部分：
+GPU设计的最大运行频率。
+
+"clocks.max.graphics" 或 "clocks.max.gr"
+图形（着色器）时钟的最大频率。
+
+"clocks.max.sm" 或 "clocks.max.sm"
+SM（流处理单元）时钟的最大频率。
+
+"clocks.max.memory" 或 "clocks.max.mem"
+内存时钟的最大频率。
+
+关于mig.mode属性的部分：
+一个指示MIG模式是否启用的标志。可能是"Enabled"或"Disabled"。更改MIG模式需要重置GPU。 
+
+"mig.mode.current"
+GPU当前运行的MIG模式。
+
+"mig.mode.pending"
+GPU重启后将要运行的MIG模式。
+
+"fabric.state"
+GPU布线注册过程的当前状态。
+
+"fabric.status"
+只有当GPU布线注册状态为"completed"时才有效的错误状态。
+
+----总结----
+该文介绍了`--query-gpu`选项可用于查询NVIDIA显卡的相关属性，包括但不限于时间戳、驱动版本、多GPU支持能力、GPU数量、设备详细信息等。这些属性分为两类：通用属性和设备级别能力，以及特定于Windows和Linux的驱动模型和gom（GPU操作模式）信息。此外，还提到了clocks_throttle_reasons属性，用于获取影响GPU时钟频率的因素。文中还列举了几个与内存管理和页面回收相关的属性，展示了系统中已退休的内存页面数量。总体上，这些信息对于监控和诊断GPU性能问题非常有用。
+这段文本主要介绍了NVIDIA GPU的一些性能监控和电源管理相关的指标。当内存出现错误时，GPU会回收页面，通过"retired_pages.single_bit_ecc.count"和"retired_pages.double_bit.count"来统计因单个位错误或双位错误回收的页面数量。"retired_pages.pending"则关注待回收的页面。温度方面，有GPU核心和HBM内存的温度监控，以及电源管理的状态，如"power.management"、"power.draw"和功率限制设置。
+
+GPU的时钟频率是另一个重要参数，包括图形、SM、内存和视频编码/解码的当前频率，可以通过命令行工具进行调整。"clocks.applications"属性允许用户自定义特定应用的运行频率，而"clocks.default_applications"则是默认应用的频率。"clocks.max"代表GPU设计的最大运行频率。
+
+MIG模式的启用状态用"mig.mode"属性表示，更改此模式通常需要重置GPU。"fabric.state"和"fabric.status"则与GPU的布线注册过程相关，"fabric.status"只有在布线完成时才有意义。总的来说，这段文本提供了对NVIDIA GPU硬件状态和管理的多维度观察。
+
+----性能----
+top_p:0.1  temperature: 0.01
+原文长度:19763    译文长度:6837 总结长度: 830
+翻译耗时: 190.4522013sec 负载:58.090427 已用显存:20014.51 显卡功耗:206.77069
+总结耗时:31.0476778sec 负载:63.935482 已用显存:20431.678 显卡功耗:213.48613
+

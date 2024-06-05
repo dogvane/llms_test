@@ -20,7 +20,7 @@ namespace glm_api_call_test.api
 
         public config Config { get; private set; } = new config();
 
-        public string Name => "chatglm3";
+        public string Name => "chatglm4";
 
         public int MaxLength => Config.max_length;
 

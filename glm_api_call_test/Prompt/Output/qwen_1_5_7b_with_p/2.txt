@@ -1,0 +1,248 @@
+------ prompt ------
+将下面段落翻译成中文，对于代码，指令，不要进行翻译，以下是正文：
+------ ------
+Casting性能优化
+
+在.NET 8中，我们对casting的性能进行了多项改进。
+
+dotnet/runtime#75816针对密封类型T的T[]使用情况提高了性能。JIT（Just-In-Time编译器）有一个名为CORINFO_HELP_ISINSTANCEOFARRAY的辅助工具来判断对象是否为特定数组类型，但当T是密封的时，JIT可以不使用这个辅助，直接生成类似`obj != null && obj.GetType() == typeof(T[])`的代码。这种情况下，动态程序优化（Dynamic Profile Guided Optimization，PGO）的效果显著，因此基准测试展示了有和无PGO的改进差异。
+
+```sh
+dotnet run -c Release -f net7.0 --filter "*"
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+
+var config = DefaultConfig.Instance
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TieredPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8").WithRuntime(CoreRuntime.Core80));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+```
+
+接下来的基准测试展示了两种获取数组元素的方式：
+
+```sh
+dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+```
+
+```csharp
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly string[] _strings = new string[1];
+
+    [Benchmark]
+    public string Get1() => _strings[0]; // 直接读取数组元素
+
+    [Benchmark]
+    public string Get2() => Volatile.Read(ref _strings[0]); // 返回引用到数组元素
+}
+```
+
+在.NET 7中，Get1的汇编代码如下：
+
+```assembly
+; Tests.Get1()
+       sub       rsp,28
+       mov       rax,[rcx+8]   ; Load the element
+       cmp       dword ptr [rax+8],0   ; Check if 0th element is null or zero
+       jbe       short M00_L00
+       mov       rax,[rax+10]  ; Load the element
+       add       rsp,28
+       ret
+M00_L00:
+       call      CORINFO_HELP_RNGCHKFAIL
+       int       3
+; Total bytes of code 29
+```
+
+而Get2的汇编代码多了些内存操作：
+
+```assembly
+; Tests.Get2()
+       sub       rsp,28
+       mov       rcx,[rcx+8]   ; Load the array pointer
+       xor       edx,edx       ; Initialize variable for memory ordering
+       mov       r8,offset MT_System.String  ; Load String reference
+       call      CORINFO_HELP_LDELEMA_REF  ; Load the reference to the 0th element
+       nop
+       add       rsp,28
+       ret
+; Total bytes of code 31
+```
+
+可以看出，Get2的性能略低于Get1，因为其包含了额外的内存一致性检查。
+
+------ ------
+原文长度:2808    译文长度:2408
+
+------ prompt ------
+翻译下面段落成中文，不要翻译代码，指令。以下是正文： 
+------ ------
+.NET 8 中的 casting 性能进行了多项改进：
+
+dotnet/runtime#75816 优化了当 T 是密封类型时使用 `is T[]` 的性能。JIT（Just-In-Time 编译器）使用 CORINFO_HELP_ISINSTANCEOFARRAY 辅助来判断对象是否为指定数组类型，但当 T 是密封的，JIT 可以直接生成不依赖辅助的代码，就像 obj 不为 null 且 obj.GetType() 等于 typeof(T[]) 那样。动态多目标优化（Dynamic Profile Guided Optimization，PGO）在这里也有可测量的影响，因此基准测试展示了有和无 PGO 的改进。
+
+```bash
+dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+```
+
+以下是在 .NET 7、8（不使用 PGO）和 8 上运行的 `Tests` 类的基准测试结果：
+
+```csharp
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly object _obj = new string[1];
+
+    [Benchmark]
+    public bool IsStringArray() => _obj is string[];
+}
+
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[BenchmarkCaseSource(typeof(Tests).Assembly)]
+public class Tests
+{
+    private readonly string[] _strings = new string[1];
+
+    [Benchmark]
+    public string Get1() => _strings[0];
+
+    [Benchmark]
+    public string Get2() => Volatile.Read(ref _strings[0]);
+}
+```
+
+`Get1` 方法只是简单地从数组读取并返回第一个元素，而 `Get2` 方法返回的是数组的第一个元素的引用。下面是 .NET 7 中这两个方法的汇编代码：
+
+- `Get1`：
+```assembly
+; ... (29 bytes)
+```
+
+- `Get2`：
+```assembly
+; ... (31 bytes)
+```
+
+可以看到，`Get1` 比 `Get2` 要少一些代码，这是由于 `Get1` 不需要进行内存访问的原子性检查。在 .NET 8 中，随着 PGO 的启用，`Get2` 的性能得到了显著提升，比 .NET 7 约减少了 75%。
+
+------ ------
+原文长度:2808    译文长度:1293
+
+------ prompt ------
+Translate the following paragraph into Chinese. Do not translate the code and instructions. Here is the main text:
+------ ------
+翻译：
+
+.NET 8对铸造性能进行了多项改进。
+
+dotnet/runtime#75816提高了sealed类型的T[]使用时的性能。JIT（Just-In-Time编译器）有一个名为CORINFO_HELP_ISINSTANCEOFARRAY的辅助函数来判断对象是否为特定数组类型，但当T是sealed时，JIT可以不使用该辅助函数，直接生成类似于`if (obj != null && obj.GetType() == typeof(T[]))`的代码。动态多级并行优化（Dynamic Profile Guided Optimization，PGO）在这里也能产生可测量的影响，因此基准测试展示了有和无PGO的情况。
+
+```bash
+// dotnet run -c Release -f net7.0 --filter "*"
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+
+var config = DefaultConfig.Instance
+    .AddJob(Job.Default.WithId(".NET 7").WithRuntime(CoreRuntime.Core70).AsBaseline())
+    .AddJob(Job.Default.WithId(".NET 8 w/o PGO").WithRuntime(CoreRuntime.Core80).WithEnvironmentVariable("DOTNET_TieredPGO", "0"))
+    .AddJob(Job.Default.WithId(".NET 8").WithRuntime(CoreRuntime.Core80));
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args, config);
+```
+
+```csharp
+[HideColumns("Error", "StdDev", "Median", "RatioSD", "EnvironmentVariables", "Runtime")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly object _obj = new string[1];
+
+    [Benchmark]
+    public bool IsStringArray() => _obj is string[];
+}
+```
+
+方法   任务   平均值   比例
+IsStringArray   .NET 7   1.2290 ns   1.00
+IsStringArray   .NET 8 w/o PGO   0.2365 ns   0.19
+IsStringArray   .NET 8   0.0825 ns   0.07
+
+接下来看这个基准测试：
+
+```bash
+// dotnet run -c Release -f net7.0 --filter "*" --runtimes net7.0 net8.0
+
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
+```
+
+```csharp
+[HideColumns("Error", "StdDev", "Median", "RatioSD")]
+[DisassemblyDiagnoser(maxDepth: 0)]
+public class Tests
+{
+    private readonly string[] _strings = new string[1];
+
+    [Benchmark]
+    public string Get1() => _strings[0];
+
+    [Benchmark]
+    public string Get2() => Volatile.Read(ref _strings[0]);
+}
+```
+
+这里Get1只是从数组中读取并返回第0个元素，而Get2返回的是对数组中第0个元素的引用。在.NET 7中的汇编代码如下：
+
+```assembly
+; Tests.Get1()
+       sub       rsp,28
+       mov       rax,[rcx+8]    ; Load the 0th element
+       cmp       dword ptr [rax+8],0   ; Check if empty
+       jbe       short M00_L00
+       mov       rax,[rax+10]   ; Load the address of the string
+       add       rsp,28
+       ret
+M00_L00:
+       call      CORINFO_HELP_RNGCHKFAIL
+       int       3
+; Total bytes of code 29
+
+; Tests.Get2()
+       sub       rsp,28
+       mov       rcx,[rcx+8]    ; Load the reference
+       xor       edx,edx
+       mov       r8,offset MT_System.String
+       call      CORINFO_HELP_LDELEMA_REF
+       nop
+       add       rsp,28
+       ret
+; Total bytes of code 31
+```
+
+可以看到，Get1的代码量更少，因为它不需要处理引用操作。
+
+------ ------
+原文长度:2808    译文长度:2689
+
+----性能----
+top_p:0.85  temperature: 0.7
+翻译耗时: 143.577333sec 负载:56.070423 已用显存:19640.154 显卡功耗:202.55612
+

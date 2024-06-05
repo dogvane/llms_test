@@ -15,22 +15,22 @@ internal class Program
     {
         GPUInfoUtils.StartRecord();
 
-        // 翻译成中文();
+        //翻译成中文();
 
         // 逐行翻译();
         // 翻译成中文();
         //信息提取();        
         // 特定词语不翻译();
 
-        var test = new TestApi(new qwen());
+        var test = new TestApi(new chatglm());
         test.Test();
 
-        var test2 = new PromptTransTest(new qwen());
+        var test2 = new PromptTransTest(new chatglm());
         test2.Test();
 
-        Console.WriteLine("end.");
-        GPUInfoUtils.StopRecord();
-        Console.WriteLine(  "end stop");
+        //Console.WriteLine("end.");
+        //GPUInfoUtils.StopRecord();
+        //Console.WriteLine(  "end stop");
     }
 
     static void 特定词语不翻译()

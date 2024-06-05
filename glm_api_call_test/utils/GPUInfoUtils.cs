@@ -150,6 +150,9 @@ namespace glm_api_call_test.utils
             {
                 gpuInfos = gpuInfoQueue.SelectMany(x => x).Where(x => x.Time >= start && x.Time <= end).ToList();
             }
+            if (gpuInfos.Count == 0)
+                gpuInfos.Add(new GPUInfo() {
+                });
             return gpuInfos;
         }
     }

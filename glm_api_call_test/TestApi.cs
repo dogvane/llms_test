@@ -45,6 +45,7 @@ namespace glm_api_call_test
             var outFolder = new DirectoryInfo(Path.Combine(basePath,"../" + api.Name)).FullName;
             Directory.CreateDirectory(outFolder);
             api.Translation("hello world.");
+            
 
             foreach (var file in Directory.GetFiles(basePath, "*.txt"))
             {
@@ -61,10 +62,15 @@ namespace glm_api_call_test
                 // 第一行是文本的url地址，或者内容的来源，不参与翻译
                 var lines = File.ReadAllLines(file).Skip(1).ToList();
                 var sb = new StringBuilder();
+                Console.WriteLine($"file: {file}");
+                var tpCount = api.GetTestTP().Length;
+                var index = 0;
 
                 foreach (var item in api.GetTestTP())
                 {
                     api.SetTP(item);
+                    
+                    Console.WriteLine($"{index++}/{tpCount}");
 
                     var start = DateTime.Now;
 
@@ -77,6 +83,7 @@ namespace glm_api_call_test
 
                     var 翻译耗时 = stopwatch.Elapsed.TotalSeconds;
                     var infos = GPUInfoUtils.GetGpuInfos(start, DateTime.Now);
+
                     var 平均负债 = infos.Average(o => o.利用率);
                     var 已用内存 = infos.Average(o => o.已使用内存);
                     var 显卡功耗 = infos.Average(o => o.功耗);
@@ -84,8 +91,7 @@ namespace glm_api_call_test
                     start = DateTime.Now;
                     stopwatch.Restart();
 
-                    string summary = TxtSpilteAndCall(trans.Split("\r\n").ToList(), (int)(api.MaxLength * 0.7),
-                        api.Summary);
+                    string summary = TxtSpilteAndCall(trans.Split("\r\n").ToList(), (int)(api.MaxLength * 0.7), api.Summary);
 
                     stopwatch.Stop();
                     var 总结耗时 = stopwatch.Elapsed.TotalSeconds;

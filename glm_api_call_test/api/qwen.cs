@@ -14,25 +14,25 @@ namespace glm_api_call_test.api
         {
             public string url { get; set; } = "http://127.0.0.1:8001/";
 
-            public double temperature { get; set; } = 0.0;
+            public double temperature { get; set; } = 0.7;
             public double top_p { get; set; } = 0.5;
             public int max_length { get; set; } = 1000 * 8;
         }
 
         public config Config { get; private set; } = new config();
 
-        public string Name => "qwen_1_5_7b";
+        public string Name => "qwen_1_5_7b_with_p";
 
         public int MaxLength => Config.max_length;
 
         public LLMTestTP[] GetTestTP()
         {
             return new[] {
+                new LLMTestTP(){ top_p = 0.85f, temperature = 0.7f },
+                new LLMTestTP(){ top_p = 0.75f, temperature = 0.6f },
+                new LLMTestTP(){ top_p = 0.65f, temperature = 0.5f },
+                new LLMTestTP(){ top_p = 0.55f, temperature = 0.4f },
                 new LLMTestTP(){ top_p = 0.1f, temperature = 0.01f },
-                new LLMTestTP(){ top_p = 0.85f, temperature = 0.01f },
-                new LLMTestTP(){ top_p = 0.75f, temperature = 0.01f },
-                new LLMTestTP(){ top_p = 0.65f, temperature = 0.01f },
-                new LLMTestTP(){ top_p = 0.55f, temperature = 0.01f },
             };
         }
         public void SetTP(LLMTestTP configItem)
@@ -81,7 +81,7 @@ namespace glm_api_call_test.api
         }
 
         public ChatCompletionResponse ChatCompletion(string messages, string history = null)
-        {
+        {            
             using (var client = new HttpClient())
             {
                 client.Timeout = TimeSpan.FromMinutes(10);
@@ -92,10 +92,11 @@ namespace glm_api_call_test.api
                     //history = new[] { history },
                     Config.top_p,
                     Config.max_length,
-                    //Config.temperature,
+                    temperature = Config.temperature,
                     stream = false
                 };
-                Console.WriteLine($"request.length: {messages.Length}");
+
+                Console.WriteLine($"request.length: {messages.Length} {Config.temperature}");
                 var json = JsonConvert.SerializeObject(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = client.PostAsync(Config.url + "", content);
